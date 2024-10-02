@@ -6,13 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".view.view.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to"
+            android:textSize="35sp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/coolvetica"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WanderSync!"
+            android:textSize="59sp"
+            android:textColor="@color/lightBlue"
+            android:fontFamily="@font/silvertones"
+            />
+
+        <Button
+            android:id="@+id/start_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Start"
+            android:backgroundTint="@color/bluegray"
+            />
+
+        <Button
+            android:id="@+id/quit_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Quit"
+            android:backgroundTint="@color/lightBluegray"
+            />
+
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
