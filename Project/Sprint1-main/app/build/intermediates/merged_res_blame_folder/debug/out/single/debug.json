@@ -24,6 +24,10 @@
         "source": "/Users/samanthamau/.gradle/daemon/8.2/com.example.sprintproject.app-main-33:/mipmap-xxxhdpi/ic_launcher_round.webp"
     },
     {
+        "merged": "com.example.sprintproject.app-merged_res-31:/font_coolvetica.otf.flat",
+        "source": "com.example.sprintproject.app-main-33:/font/coolvetica.otf"
+    },
+    {
         "merged": "/Users/samanthamau/.gradle/daemon/8.2/com.example.sprintproject.app-merged_res-31:/layout_activity_main.xml.flat",
         "source": "/Users/samanthamau/.gradle/daemon/8.2/com.example.sprintproject.app-main-33:/layout/activity_main.xml"
     },
@@ -70,5 +74,9 @@
     {
         "merged": "/Users/samanthamau/.gradle/daemon/8.2/com.example.sprintproject.app-merged_res-31:/mipmap-xhdpi_ic_launcher.webp.flat",
         "source": "/Users/samanthamau/.gradle/daemon/8.2/com.example.sprintproject.app-main-33:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.sprintproject.app-merged_res-31:/font_silvertones.ttf.flat",
+        "source": "com.example.sprintproject.app-main-33:/font/silvertones.ttf"
     }
 ]

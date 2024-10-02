@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="bluegray">#659dab</color>
+    <color name="lightBlue">#2a8ca3</color>
+    <color name="lightBluegray">#94adb3</color>
     <color name="white">#FFFFFFFF</color>
     <string name="app_name">SprintProject</string>
     <style name="Base.Theme.SprintProject" parent="Theme.Material3.DayNight.NoActionBar">

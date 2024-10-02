@@ -1,9 +1,16 @@
 R_DEF: Internal format may change without notice
 local
 color black
+color bluegray
+color lightBlue
+color lightBluegray
 color white
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+font coolvetica
+font silvertones
+id quit_button
+id start_button
 layout activity_main
 mipmap ic_launcher
 mipmap ic_launcher_round

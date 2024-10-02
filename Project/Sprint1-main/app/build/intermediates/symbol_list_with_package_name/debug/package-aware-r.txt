@@ -1355,6 +1355,7 @@ color background_floating_material_light
 color background_material_dark
 color background_material_light
 color black
+color bluegray
 color bright_foreground_disabled_material_dark
 color bright_foreground_disabled_material_light
 color bright_foreground_inverse_material_dark
@@ -1415,6 +1416,8 @@ color foreground_material_dark
 color foreground_material_light
 color highlighted_text_material_dark
 color highlighted_text_material_light
+color lightBlue
+color lightBluegray
 color m3_appbar_overlay_color
 color m3_assist_chip_icon_tint_color
 color m3_assist_chip_stroke_color
@@ -3069,6 +3072,8 @@ drawable notify_panel_notification_icon_bg
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
+font coolvetica
+font silvertones
 id ALT
 id BOTTOM_END
 id BOTTOM_START
@@ -3422,6 +3427,7 @@ id postLayout
 id pressed
 id progress_circular
 id progress_horizontal
+id quit_button
 id radio
 id ratio
 id rectangles
@@ -3487,6 +3493,7 @@ id start
 id startHorizontal
 id startToEnd
 id startVertical
+id start_button
 id staticLayout
 id staticPostLayout
 id stop
