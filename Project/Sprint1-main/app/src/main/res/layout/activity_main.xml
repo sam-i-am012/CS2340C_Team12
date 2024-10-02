@@ -30,23 +30,23 @@
             android:fontFamily="@font/silvertones"
             />
 
-        <Button
-            android:id="@+id/start_button"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Start"
-            android:backgroundTint="@color/bluegray"
-            />
+<!--        <Button-->
+<!--            android:id="@+id/start_button"-->
+<!--            android:layout_width="300dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:text="Start"-->
+<!--            android:backgroundTint="@color/bluegray"-->
+<!--            />-->
 
-        <Button
-            android:id="@+id/quit_button"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="Quit"
-            android:backgroundTint="@color/lightBluegray"
-            />
+<!--        <Button-->
+<!--            android:id="@+id/quit_button"-->
+<!--            android:layout_width="300dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:text="Quit"-->
+<!--            android:backgroundTint="@color/lightBluegray"-->
+<!--            />-->
 
 
 
