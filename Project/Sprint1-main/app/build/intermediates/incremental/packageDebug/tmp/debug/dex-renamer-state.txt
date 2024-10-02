@@ -1,10 +1,10 @@
-#Wed Oct 02 09:37:34 EDT 2024
-base.0=/Users/samanthamau/Desktop/school/cs2340/CS2340C_Team12/Project/Sprint1-main/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
-base.1=/Users/samanthamau/Desktop/school/cs2340/CS2340C_Team12/Project/Sprint1-main/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
-base.2=/Users/samanthamau/Desktop/school/cs2340/CS2340C_Team12/Project/Sprint1-main/app/build/intermediates/dex/debug/mergeProjectDexDebug/13/classes.dex
+#Wed Oct 02 14:27:38 EDT 2024
+base.0=/Users/jacksonian/GT/CS_2340/CS2340C_Team12/Project/Sprint1-main/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
+base.1=/Users/jacksonian/GT/CS_2340/CS2340C_Team12/Project/Sprint1-main/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
+base.2=/Users/jacksonian/GT/CS_2340/CS2340C_Team12/Project/Sprint1-main/app/build/intermediates/dex/debug/mergeProjectDexDebug/4/classes.dex
 path.0=classes.dex
 path.1=0/classes.dex
-path.2=13/classes.dex
+path.2=4/classes.dex
 renamed.0=classes.dex
 renamed.1=classes2.dex
 renamed.2=classes3.dex
