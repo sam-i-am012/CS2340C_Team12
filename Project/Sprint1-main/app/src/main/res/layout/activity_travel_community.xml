@@ -4,11 +4,11 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/diningHeader"
+        android:id="@+id/travelHeader"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:gravity="center"
-        android:text="Dining establishments screen"
+        android:text="Travel Community Screen"
         android:textSize="20sp" />
 
 </LinearLayout>
