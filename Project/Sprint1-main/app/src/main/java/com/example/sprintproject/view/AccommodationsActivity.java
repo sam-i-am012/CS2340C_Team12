@@ -18,7 +18,7 @@ public class AccommodationsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_destinations);
+        setContentView(R.layout.activity_accommodations);
 
         ImageButton diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
         ImageButton destinationsButton = findViewById(R.id.destinationsButton);
