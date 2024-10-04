@@ -17,4 +17,68 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Navigation Bar -->
+    <LinearLayout
+        android:id="@+id/navigationBarLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:paddingVertical="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" >
+
+        <!-- Destinations Button -->
+        <ImageButton
+            android:id="@+id/destinationsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_destinations"
+            android:layout_weight="1"
+            app:tint="@color/lightBluegray" />
+            <!-- CHANGE YOUR SCREEN'S RESPECTIVE ImageButton's TINT TO THIS -->
+
+        <!-- Dining Establishments Button -->
+        <ImageButton
+            android:id="@+id/diningEstablishmentsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_dining_establishments"
+            android:layout_weight="1"
+            app:tint="#35464b" />
+
+        <!-- Accommodations Button -->
+        <ImageButton
+            android:id="@+id/accommodationsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_accommodations"
+            android:layout_weight="1"
+            app:tint="#35464b" />
+
+        <!-- Logistics Button -->
+        <ImageButton
+            android:id="@+id/logisticsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_logistics"
+            android:layout_weight="1"
+            app:tint="#35464b" />
+
+        <!-- Travel Community Button -->
+        <ImageButton
+            android:id="@+id/travelCommunityButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_travel_community"
+            android:layout_weight="1"
+            app:tint="#35464b" />
+    </LinearLayout>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
