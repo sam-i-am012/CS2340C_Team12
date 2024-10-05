@@ -32,13 +32,13 @@
             android:orientation="vertical"
             android:gravity="center">
 
-            <!-- Log in -->
+            <!-- Create an Account Tit -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create Account"
+                android:text="Create an Account"
                 android:textSize="40sp"
-                android:textColor="@color/darkBlue"
+                android:textColor="#29445e"
                 android:fontFamily="@font/coolvetica"
                 android:layout_marginBottom="25dp"
                 />
@@ -63,7 +63,13 @@
                 android:padding="10dp"
                 android:layout_marginBottom="24dp" />
 
-            <!-- login button -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!-- create button -->
             <Button
                 android:id="@+id/createAccountButton"
                 android:layout_width="300dp"
@@ -73,21 +79,31 @@
                 android:backgroundTint="@color/bluegray"
                 />
 
+            <!-- return to login clickable text-->
             <TextView
                 android:id="@+id/returnToLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="return"
+                android:text="Already have an account? Click here"
                 android:backgroundTint="@color/bluegray"
                 android:fontFamily="@font/coolvetica"
                 android:textSize="18sp"
-                android:background="?attr/selectableItemBackground"
                 />
-
-
 
         </LinearLayout>
 
+<!--        <Button-->
+<!--            android:id="@+id/exitButton"-->
+<!--            android:layout_width="90dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:layout_gravity="bottom|start"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginBottom="16dp"-->
+<!--            android:backgroundTint="@color/lightBluegray"-->
+<!--            android:text="Exit"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textStyle="bold" />-->
 
     </FrameLayout>
 
