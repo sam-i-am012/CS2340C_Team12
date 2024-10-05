@@ -7,21 +7,87 @@
     android:layout_height="match_parent"
     tools:context=".view.LoginActivity">
 
-    <LinearLayout
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:padding="16dp">
 
+        <!-- WanderSync -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="login"
-            android:textSize="35sp"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/coolvetica"
+            android:text="WanderSync"
+            android:textSize="50sp"
+            android:textColor="@color/lightBlue"
+            android:fontFamily="@font/silvertones"
+            android:layout_marginBottom="200dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="20dp"
             />
 
-    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Log in -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Log in"
+                android:textSize="40sp"
+                android:textColor="@color/darkBlue"
+                android:fontFamily="@font/coolvetica"
+                android:layout_marginBottom="25dp"
+                />
+
+            <!-- email -->
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- password -->
+            <EditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Login Button -->
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/bluegray"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/closeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_button"
+            android:text="X"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_gravity="bottom|start"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
