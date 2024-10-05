@@ -55,7 +55,7 @@
 
             <!-- password -->
             <EditText
-                android:id="@+id/password_login"
+                android:id="@+id/passwordEditText"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="Password"
@@ -82,8 +82,7 @@
                 android:backgroundTint="@color/bluegray"
                 android:fontFamily="@font/coolvetica"
                 android:textSize="18sp"
-                android:background="?attr/selectableItemBackground"
-                />
+                android:background="?attr/selectableItemBackground" />
 
         </LinearLayout>
 
@@ -99,7 +98,6 @@
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
-
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
