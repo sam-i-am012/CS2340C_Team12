@@ -28,7 +28,7 @@ public class LogisticsActivity extends AppCompatActivity {
         diningEstablishmentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent diningEstablishmentsIntent = new Intent(AccommodationsActivity.this,
+                Intent diningEstablishmentsIntent = new Intent(LogisticsActivity.this,
                         DiningEstablishmentsActivity.class);
                 startActivity(diningEstablishmentsIntent);
             }
@@ -37,7 +37,7 @@ public class LogisticsActivity extends AppCompatActivity {
         destinationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent destinationsIntent = new Intent(AccommodationsActivity.this,
+                Intent destinationsIntent = new Intent(LogisticsActivity.this,
                         DestinationsActivity.class);
                 startActivity(destinationsIntent);
             }
@@ -55,7 +55,7 @@ public class LogisticsActivity extends AppCompatActivity {
         travelCommunityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent travelCommunityIntent = new Intent(AccommodationsActivity.this,
+                Intent travelCommunityIntent = new Intent(LogisticsActivity.this,
                         TravelCommunityActivity.class);
                 startActivity(travelCommunityIntent);
             }

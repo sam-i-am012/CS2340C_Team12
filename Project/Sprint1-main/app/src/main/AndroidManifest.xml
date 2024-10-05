@@ -16,9 +16,6 @@
             android:name=".view.LogisticsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.CreateLoginActivity"
-            android:exported="false"/>
-        <activity
             android:name=".view.TravelCommunityActivity"
             android:exported="false"/>
         <activity
@@ -29,6 +26,9 @@
             android:exported="false" />
         <activity
             android:name=".view.DestinationsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.CreateAccountActivity"
             android:exported="false" />
         <activity
             android:name=".view.LoginActivity"

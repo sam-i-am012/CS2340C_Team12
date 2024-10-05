@@ -1,4 +1,6 @@
 package com.example.sprintproject.view;
 
-public class TravelCommunityActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class TravelCommunityActivity extends AppCompatActivity {
 }
