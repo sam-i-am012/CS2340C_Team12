@@ -36,7 +36,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log in"
+                android:text="Create Account"
                 android:textSize="40sp"
                 android:textColor="@color/darkBlue"
                 android:fontFamily="@font/coolvetica"
@@ -45,7 +45,7 @@
 
             <!-- email -->
             <EditText
-                android:id="@+id/email_login"
+                android:id="@+id/email_createAccount"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="Email"
@@ -55,7 +55,7 @@
 
             <!-- password -->
             <EditText
-                android:id="@+id/password_login"
+                android:id="@+id/password_createAccount"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="Password"
@@ -65,40 +65,29 @@
 
             <!-- login button -->
             <Button
-                android:id="@+id/loginButton"
+                android:id="@+id/createAccountButton"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
-                android:text="Login"
+                android:text="Create Account"
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/bluegray"
                 />
 
-            <!-- create account button -->
             <TextView
-                android:id="@+id/accountCreationPage"
+                android:id="@+id/returnToLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Don't have an account? Click here"
+                android:text="return"
                 android:backgroundTint="@color/bluegray"
                 android:fontFamily="@font/coolvetica"
                 android:textSize="18sp"
                 android:background="?attr/selectableItemBackground"
                 />
 
+
+
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/exitButton"
-            android:layout_width="90dp"
-            android:layout_height="40dp"
-            android:layout_gravity="bottom|start"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/white_exit"
-            android:text="X"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
 
     </FrameLayout>
 

@@ -31,6 +31,9 @@
             android:name=".view.DestinationsActivity"
             android:exported="false" />
         <activity
+            android:name=".view.CreateAccountActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.LoginActivity"
             android:exported="false" />
         <activity
