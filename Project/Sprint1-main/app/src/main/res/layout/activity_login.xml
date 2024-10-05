@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".view.LoginActivity">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp">
@@ -63,30 +63,39 @@
                 android:padding="10dp"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Login Button -->
+            <!-- login button -->
             <Button
                 android:id="@+id/loginButton"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:text="Login"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/bluegray"
+                />
+
+            <!-- create accoutn button -->
+            <Button
+                android:id="@+id/createAccountButton"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:text="Create an Account"
                 android:backgroundTint="@color/bluegray"
                 />
 
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/closeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_button"
-            android:text="X"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
             android:layout_gravity="bottom|start"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginStart="16dp" />
+            android:background="@drawable/white_exit"
+            android:text="X"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
     </FrameLayout>
 
