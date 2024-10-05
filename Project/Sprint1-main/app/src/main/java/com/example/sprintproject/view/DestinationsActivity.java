@@ -30,6 +30,7 @@ public class DestinationsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent diningEstablishmentsIntent = new Intent(DestinationsActivity.this,
                         DiningEstablishmentsActivity.class);
+                startActivity(diningEstablishmentsIntent);
             }
         });
 
@@ -38,6 +39,7 @@ public class DestinationsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent accommodationsIntent = new Intent(DestinationsActivity.this,
                         AccommodationsActivity.class);
+                startActivity(accommodationsIntent);
             }
         });
 
@@ -46,6 +48,7 @@ public class DestinationsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent logisticsIntent = new Intent(DestinationsActivity.this,
                         LogisticsActivity.class);
+                startActivity(logisticsIntent);
             }
         });
 
@@ -54,6 +57,7 @@ public class DestinationsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent travelCommunityIntent = new Intent(DestinationsActivity.this,
                         TravelCommunityActivity.class);
+                startActivity(travelCommunityIntent);
             }
         });
     }

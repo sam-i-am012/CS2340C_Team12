@@ -30,14 +30,16 @@ public class AccommodationsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent diningEstablishmentsIntent = new Intent(AccommodationsActivity.this,
                         DiningEstablishmentsActivity.class);
+                startActivity(diningEstablishmentsIntent);
             }
         });
 
         destinationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent accommodationsIntent = new Intent(AccommodationsActivity.this,
-                        AccommodationsActivity.class);
+                Intent destinationsIntent = new Intent(AccommodationsActivity.this,
+                        DestinationsActivity.class);
+                startActivity(destinationsIntent);
             }
         });
 
@@ -46,6 +48,7 @@ public class AccommodationsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent logisticsIntent = new Intent(AccommodationsActivity.this,
                         LogisticsActivity.class);
+                startActivity(logisticsIntent);
             }
         });
 
@@ -54,6 +57,7 @@ public class AccommodationsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent travelCommunityIntent = new Intent(AccommodationsActivity.this,
                         TravelCommunityActivity.class);
+                startActivity(travelCommunityIntent);
             }
         });
     }
