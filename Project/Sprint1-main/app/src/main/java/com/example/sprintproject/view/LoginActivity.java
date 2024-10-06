@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 
 import com.example.sprintproject.R;
+import com.example.sprintproject.viewmodel.LoginViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,92 +29,56 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText editTextEmail, editTextPassword;
-    Button loginBtn;
-    FirebaseAuth mAuth;
-    ProgressBar progressBar;
-    private static final String TAG = "LoginActivity"; // defining tag
+    private LoginViewModel loginViewModel;
+    private EditText editTextEmail, editTextPassword;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mAuth = FirebaseAuth.getInstance();
 
-        // finding IDs
-        editTextEmail = findViewById(R.id.email_login); // email from text
-        editTextPassword = findViewById(R.id.password_login); // password from text
-        loginBtn = findViewById(R.id.loginButton); // login button
+        // Initialize UI components
+        editTextEmail = findViewById(R.id.email_login);
+        editTextPassword = findViewById(R.id.password_login);
         progressBar = findViewById(R.id.progressBar);
+        Button loginBtn = findViewById(R.id.loginButton);
         ImageButton quitButton = findViewById(R.id.exitButton);
         TextView createAccount = findViewById(R.id.accountCreationPage);
 
-        // quit application
-        quitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // finish activity
-                LoginActivity.this.finish();
+        // Initialize ViewModel
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-                // exit activity
-                System.exit(0);
-            }
-        });
-
-        // go to account creation page
-        createAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
-                startActivity(intent);
+        // Observe ViewModel changes
+        loginViewModel.getLoginResult().observe(this, loginResult -> {
+            progressBar.setVisibility(View.GONE);
+            if (loginResult.isSuccess()) {
+                // Navigate to next screen
+                startActivity(new Intent(getApplicationContext(), LogisticsActivity.class));
                 finish();
+            } else {
+                // Show error message
+                Toast.makeText(LoginActivity.this, loginResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        // login button
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = editTextEmail.getText().toString().trim();
-                String password = editTextPassword.getText().toString().trim();
+        // Login button click
+        loginBtn.setOnClickListener(view -> {
+            String email = editTextEmail.getText().toString().trim();
+            String password = editTextPassword.getText().toString().trim();
+            loginViewModel.login(email, password);
+        });
 
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (TextUtils.isEmpty(password)) { // nested to make sure both messages don't pop up at the same time
-                    Toast.makeText(getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
+        // Quit button click
+        quitButton.setOnClickListener(view -> {
+            finish();
+            System.exit(0);
+        });
 
-                // sign in with email and password
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    // Sign in success
-                                    Log.d(TAG, "signInWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(LoginActivity.this, "Login successful",
-                                            Toast.LENGTH_SHORT).show();
-
-                                    // go to landing page (logistics screen)
-                                    Intent intent = new Intent(getApplicationContext(), LogisticsActivity.class);
-                                    startActivity(intent);
-                                    finish();
-
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Login failed",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            }
+        // Navigate to account creation
+        createAccount.setOnClickListener(view -> {
+            startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
+            finish();
         });
     }
 }
