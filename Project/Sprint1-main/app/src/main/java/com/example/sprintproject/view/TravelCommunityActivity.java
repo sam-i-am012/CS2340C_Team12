@@ -1,5 +1,6 @@
 package com.example.sprintproject.view;
 
+<<<<<<< HEAD
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -62,3 +63,9 @@ public class TravelCommunityActivity extends AppCompatActivity {
         });
     }
 }
+=======
+import androidx.appcompat.app.AppCompatActivity;
+
+public class TravelCommunityActivity extends AppCompatActivity {
+}
+>>>>>>> 0f68686e63d3d90bcb9a6532820ea8c3924fc0ec
