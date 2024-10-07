@@ -1,5 +1,6 @@
 package com.example.sprintproject.model;
 
+import com.example.sprintproject.view.CreateAccountActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.Task;
@@ -11,9 +12,12 @@ public class FirebaseAuthManager {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    // Returning a Task to let the ViewModel handle the async result directly
     public Task<AuthResult> login(String email, String password) {
         return mAuth.signInWithEmailAndPassword(email, password);
+    }
+
+    public Task<AuthResult> createAccount(String email, String password) {
+        return mAuth.createUserWithEmailAndPassword(email, password);
     }
 }
 
