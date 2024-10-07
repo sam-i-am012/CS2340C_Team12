@@ -1,7 +1,5 @@
 package com.example.sprintproject.model;
 
-import android.widget.Toast;
-
 import com.example.sprintproject.view.CreateAccountActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
