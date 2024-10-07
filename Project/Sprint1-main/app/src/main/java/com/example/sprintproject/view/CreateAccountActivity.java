@@ -17,7 +17,8 @@ import android.widget.Button;
 public class CreateAccountActivity extends AppCompatActivity {
 
     private CreateAccountViewModel createAccountViewModel;
-    private EditText editTextEmail, editTextPassword;
+    private EditText editTextEmail;
+    private EditText editTextPassword;
     private ProgressBar progressBar;
     private Button createAccountBtn;
     private TextView returnToLogin;
@@ -41,12 +42,14 @@ public class CreateAccountActivity extends AppCompatActivity {
         createAccountViewModel.getCreateAccountResult().observe(this, createAccountResult -> {
             if (createAccountResult.isSuccess()) {
                 // Navigate to the next screen
-                Toast.makeText(CreateAccountActivity.this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateAccountActivity.this,
+                        "Account Created Successfully!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 finish();
             } else {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(), "Account creation failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),
+                        "Account creation failed", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -57,9 +60,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             // Validation logic
             if (TextUtils.isEmpty(email)) {
-                Toast.makeText(getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),
+                        "Please enter an email address", Toast.LENGTH_SHORT).show();
             } else if (TextUtils.isEmpty(password)) {
-                Toast.makeText(getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),
+                        "Please enter a password", Toast.LENGTH_SHORT).show();
             } else {
                 progressBar.setVisibility(View.VISIBLE);
                 createAccountViewModel.createAccount(email, password);

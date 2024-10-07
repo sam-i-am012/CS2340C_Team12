@@ -1,6 +1,5 @@
 package com.example.sprintproject.model;
 
-import com.example.sprintproject.view.CreateAccountActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.Task;
