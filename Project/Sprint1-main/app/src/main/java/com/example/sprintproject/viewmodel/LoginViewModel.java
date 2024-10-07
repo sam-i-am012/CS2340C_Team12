@@ -1,7 +1,5 @@
 package com.example.sprintproject.viewmodel;
 
-import android.text.TextUtils;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -24,7 +22,8 @@ public class LoginViewModel extends ViewModel {
                     if (task.isSuccessful()) {
                         loginResult.setValue(new Result(true, null));
                     } else {
-                        loginResult.setValue(new Result(false, task.getException().getMessage()));
+                        loginResult.setValue(new Result(false,
+                                task.getException().getMessage()));
                     }
                 });
     }

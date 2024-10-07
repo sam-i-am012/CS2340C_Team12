@@ -18,7 +18,8 @@ import android.widget.TextView;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
-    private EditText editTextEmail, editTextPassword;
+    private EditText editTextEmail;
+    private EditText editTextPassword;
     private ProgressBar progressBar;
 
     @Override
@@ -41,12 +42,14 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.getLoginResult().observe(this, loginResult -> {
             if (loginResult.isSuccess()) {
                 // Navigate to the next screen
-                Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this,
+                        "Login Successful!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), LogisticsActivity.class));
                 finish();
             } else {
                 progressBar.setVisibility(View.VISIBLE);
-                Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),
+                        "Login failed", Toast.LENGTH_SHORT).show();
             }
             progressBar.setVisibility(View.GONE);
         });
@@ -58,9 +61,11 @@ public class LoginActivity extends AppCompatActivity {
 
             // Validation logic
             if (TextUtils.isEmpty(email)) {
-                Toast.makeText(getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),
+                        "Please enter an email address", Toast.LENGTH_SHORT).show();
             } else if (TextUtils.isEmpty(password)) {
-                Toast.makeText(getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),
+                        "Please enter a password", Toast.LENGTH_SHORT).show();
             } else {
                 progressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(email, password);

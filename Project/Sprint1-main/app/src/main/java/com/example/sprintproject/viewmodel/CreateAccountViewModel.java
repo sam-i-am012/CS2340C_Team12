@@ -11,7 +11,9 @@ public class CreateAccountViewModel extends ViewModel {
     private final MutableLiveData<Result> createAccountResult = new MutableLiveData<>();
     private final FirebaseAuthManager createAccountManager = new FirebaseAuthManager();
 
-    public LiveData<Result> getCreateAccountResult() { return createAccountResult; }
+    public LiveData<Result> getCreateAccountResult() {
+        return createAccountResult;
+    }
 
     public void createAccount(String email, String password) {
         createAccountManager.createAccount(email, password)
@@ -19,7 +21,8 @@ public class CreateAccountViewModel extends ViewModel {
                     if (task.isSuccessful()) {
                         createAccountResult.setValue(new Result(true, null));
                     } else {
-                        createAccountResult.setValue(new Result(false, task.getException().getMessage()));
+                        createAccountResult.setValue(new Result(false,
+                                task.getException().getMessage()));
                     }
                 });
     }
