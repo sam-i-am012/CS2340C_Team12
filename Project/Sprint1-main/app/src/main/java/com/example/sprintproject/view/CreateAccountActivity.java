@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +19,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     private CreateAccountViewModel createAccountViewModel;
     private EditText editTextEmail, editTextPassword;
     private ProgressBar progressBar;
+    private Button createAccountBtn;
+    private TextView returnToLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +31,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.email_createAccount);
         editTextPassword = findViewById(R.id.password_createAccount);
         progressBar = findViewById(R.id.progressBar);
-        Button createAccountBtn = findViewById(R.id.createAccountButton);
+        createAccountBtn = findViewById(R.id.createAccountButton);
+        returnToLogin = findViewById(R.id.returnToLogin);
 
         // Initialize ViewModel
         createAccountViewModel = new ViewModelProvider(this).get(CreateAccountViewModel.class);
@@ -60,6 +64,13 @@ public class CreateAccountActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 createAccountViewModel.createAccount(email, password);
             }
+        });
+
+        // return to login page button
+        returnToLogin.setOnClickListener(view ->  {
+            Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 }
