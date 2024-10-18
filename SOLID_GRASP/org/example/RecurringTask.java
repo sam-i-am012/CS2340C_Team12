@@ -17,4 +17,13 @@ public class RecurringTask extends Task {
     public void execute() {
         // Handles execution for recurring tasks
     }
+
+    // ------------- Getter and setters -------------
+    public int getInterval() {
+        return interval;
+    }
+    
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
 }
