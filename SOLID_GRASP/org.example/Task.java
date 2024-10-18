@@ -1,3 +1,5 @@
+package org.example; 
+
 import java.time.LocalDate;
 
 // O -- Task class is open for extension by introducing child classes such as
@@ -15,11 +17,12 @@ public abstract class Task {
     private String status;
     private String priority;
 
-    public Task(String title, String description, LocalDate dueDate,
+    protected Task(String title, String description, LocalDate dueDate,
                 String status, String priority) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
+        this.status = status; 
         this.priority = priority;
     }
 
