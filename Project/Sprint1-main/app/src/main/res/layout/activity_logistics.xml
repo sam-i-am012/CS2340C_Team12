@@ -96,6 +96,10 @@
             android:src="@drawable/ic_travel_community"
             android:layout_weight="1"
             app:tint="#35464b" />
+
+
+        <!-- invite other users button -->
+
     </LinearLayout>
 
 
