@@ -5,8 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,6 +35,20 @@
             android:layout_gravity="top|center_horizontal"
             app:layout_constraintTop_toBottomOf="@id/logisticsTitle" />
     </FrameLayout>
+
+    <!-- invite other users button -->
+    <ImageButton
+        android:id="@+id/addUsersBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:src="@drawable/add_users"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/navigationBarLL"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"/>
+
     <!-- Navigation Bar -->
     <LinearLayout
         android:id="@+id/navigationBarLL"
@@ -96,6 +108,7 @@
             android:src="@drawable/ic_travel_community"
             android:layout_weight="1"
             app:tint="#35464b" />
+
     </LinearLayout>
 
 
