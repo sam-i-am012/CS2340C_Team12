@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +21,7 @@ public class LogisticsActivity extends AppCompatActivity {
         ImageButton destinationsButton = findViewById(R.id.destinationsButton);
         ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
         ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
+        ImageButton addUsersButton = findViewById(R.id.addUsersBtn);
 
         diningEstablishmentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,14 @@ public class LogisticsActivity extends AppCompatActivity {
                 Intent travelCommunityIntent = new Intent(LogisticsActivity.this,
                         TravelCommunityActivity.class);
                 startActivity(travelCommunityIntent);
+            }
+        });
+
+        // add users button
+        addUsersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Pressing add users button", Toast.LENGTH_SHORT).show();
             }
         });
     }
