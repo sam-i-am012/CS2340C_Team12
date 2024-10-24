@@ -12,19 +12,19 @@
             android:id="@+id/buttonsLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/destinationsTV"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/destinationsTV">
 
             <TextView
                 android:id="@+id/destinationsTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:fontFamily="@font/coolvetica"
                 android:layout_marginBottom="16dp"
+                android:fontFamily="@font/coolvetica"
+                android:gravity="center"
                 android:text="Destinations"
                 android:textSize="50sp" />
 
@@ -33,66 +33,176 @@
                 android:layout_width="273dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="20sp"
-                android:backgroundTint="@color/bluegray"
                 android:layout_marginBottom="10dp"
-                android:text="Log Travel" />
+                android:backgroundTint="@color/bluegray"
+                android:text="Log Travel"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/travelLocationsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/coolvetica"
+                android:gravity="start"
+                android:text="Travel Location:"
+                android:textSize="20sp"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/travelLocationsET"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="16dp"
+                android:padding="10dp"
+                android:textSize="15dp"
+                android:visibility="gone" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:id="@+id/estimatedStartTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:fontFamily="@font/coolvetica"
+                    android:gravity="start"
+                    android:text="Estimated Start:"
+                    android:textSize="20sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/estimatedStartET"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp"
+                    android:textSize="15dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/estimatedStartTV" />
+
+                <TextView
+                    android:id="@+id/estimatedEndTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="36dp"
+                    android:fontFamily="@font/coolvetica"
+                    android:gravity="start"
+                    android:text="Estimated End:"
+                    android:textSize="20sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@id/estimatedStartTV"
+                    app:layout_constraintTop_toTopOf="@id/estimatedStartTV" />
+
+                <EditText
+                    android:id="@+id/estimatedEndET"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp"
+                    android:textSize="15dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@id/estimatedStartET"
+                    app:layout_constraintTop_toBottomOf="@id/estimatedEndTV" />
+
+                <Button
+                    android:id="@+id/cancelButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="@color/bluegray"
+                    android:text="Cancel"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/estimatedStartET" />
+
+                <Button
+                    android:id="@+id/submitButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="@color/bluegray"
+                    android:text="Submit"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@id/cancelButton"
+                    app:layout_constraintTop_toBottomOf="@id/estimatedEndET" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
                 android:id="@+id/calcVacationTimeButton"
                 android:layout_width="273dp"
                 android:layout_height="wrap_content"
-                android:text="Calculate Vacation Time"
                 android:layout_gravity="center"
-                android:textSize="20sp"
-                android:backgroundTint="@color/bluegray" />
+                android:backgroundTint="@color/bluegray"
+                android:text="Calculate Vacation Time"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/startDateET"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Start Date (MM/DD/YYYY)"
-                android:textSize="15dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="16dp"
+                android:hint="Start Date (MM/DD/YYYY)"
                 android:inputType="date"
                 android:padding="10dp"
-                android:layout_marginBottom="16dp"
+                android:textSize="15dp"
                 android:visibility="gone" />
 
             <EditText
                 android:id="@+id/endDateET"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:hint="End Date (MM/DD/YYYY)"
-                android:textSize="15dp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:hint="End Date (MM/DD/YYYY)"
                 android:inputType="date"
                 android:padding="10dp"
-                android:layout_marginBottom="16dp"
+                android:textSize="15dp"
                 android:visibility="gone" />
 
             <EditText
                 android:id="@+id/durationET"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:hint="Duration (Days)"
-                android:textSize="15dp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:hint="Duration (Days)"
                 android:inputType="number"
                 android:padding="10dp"
-                android:layout_marginBottom="10dp"
+                android:textSize="15dp"
                 android:visibility="gone" />
 
             <Button
                 android:id="@+id/calculateButton"
                 android:layout_width="200dp"
                 android:layout_height="40dp"
-                android:text="Calculate"
                 android:layout_gravity="center"
-                android:textSize="15sp"
-                android:backgroundTint="@color/bluegray"
                 android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/bluegray"
+                android:text="Calculate"
+                android:textSize="15sp"
                 android:visibility="gone" />
         </LinearLayout>
     </ScrollView>

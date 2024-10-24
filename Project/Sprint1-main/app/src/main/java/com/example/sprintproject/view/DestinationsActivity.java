@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.sprintproject.R;
@@ -23,12 +24,50 @@ public class DestinationsActivity extends AppCompatActivity {
         ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
         ImageButton logisticsButton = findViewById(R.id.logisticsButton);
         ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
+        //calculate vacation time ----
         Button calcVacationTimeButton = findViewById(R.id.calcVacationTimeButton);
         EditText startDateET = findViewById(R.id.startDateET);
         EditText endDateET = findViewById(R.id.endDateET);
         EditText durationET = findViewById(R.id.durationET);
         Button calculateButton = findViewById(R.id.calculateButton);
+        //log travel ----
+        Button logTravelButton = findViewById(R.id.logTravelButton);
+        TextView travelLocationTV = findViewById(R.id.travelLocationsTV);
+        EditText travelLocationET = findViewById(R.id.travelLocationsET);
+        TextView estimatedStartTV = findViewById(R.id.estimatedStartTV);
+        EditText estimatedStartET = findViewById(R.id.estimatedStartET);
+        TextView estimatedEndTV = findViewById(R.id.estimatedEndTV);
+        EditText estimatedEndET = findViewById(R.id.estimatedEndET);
+        Button cancelButton = findViewById(R.id.cancelButton);
+        Button submitButton = findViewById(R.id.submitButton);
 
+
+        logTravelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (travelLocationTV.getVisibility() == View.GONE) {
+                    // Make dialog elements visible
+                    for (TextView textView : Arrays.asList(travelLocationTV, estimatedStartTV, estimatedEndTV)) {
+                        textView.setVisibility(View.VISIBLE);
+                    }
+                    for (EditText editText : Arrays.asList(travelLocationET, estimatedStartET, estimatedEndET)) {
+                        editText.setVisibility(View.VISIBLE);
+                    }
+                    cancelButton.setVisibility(View.VISIBLE);
+                    submitButton.setVisibility(View.VISIBLE);
+                } else {
+                    // Hide dialog elements
+                    for (TextView textView : Arrays.asList(travelLocationTV, estimatedStartTV, estimatedEndTV)) {
+                        textView.setVisibility(View.GONE);
+                    }
+                    for (EditText editText : Arrays.asList(travelLocationET, estimatedStartET, estimatedEndET)) {
+                        editText.setVisibility(View.GONE);
+                    }
+                    cancelButton.setVisibility(View.GONE);
+                    submitButton.setVisibility(View.GONE);
+                }
+            }
+        });
         /*
         Code for handling when the Calculate Vacation Time button is pressed
          */
