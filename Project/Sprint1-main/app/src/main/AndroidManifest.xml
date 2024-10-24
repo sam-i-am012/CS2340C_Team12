@@ -26,6 +26,7 @@
             android:exported="false" />
         <activity
             android:name=".view.DestinationsActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".view.CreateAccountActivity"
