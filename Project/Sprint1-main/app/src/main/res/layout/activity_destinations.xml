@@ -204,6 +204,17 @@
                 android:text="Calculate"
                 android:textSize="15sp"
                 android:visibility="gone" />
+
+            <!-- Add the RecyclerView here -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:paddingBottom="16dp"
+                android:scrollbars="vertical" />
         </LinearLayout>
     </ScrollView>
 

@@ -9,16 +9,41 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sprintproject.R;
+import com.example.sprintproject.model.FirestoreSingleton;
+import com.example.sprintproject.viewmodel.DestinationsViewModel;
+import com.example.sprintproject.viewmodel.LoginViewModel;
 
 import java.util.Arrays;
 
 public class DestinationsActivity extends AppCompatActivity {
 
+    private RecyclerView recyclerView;
+    private TravelLogAdapter adapter;
+    private DestinationsViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_destinations);
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        viewModel = new ViewModelProvider(this).get(DestinationsViewModel.class);
+
+        viewModel.getTravelLogs().observe(this, travelLogs -> {
+            adapter = new TravelLogAdapter(travelLogs);
+            recyclerView.setAdapter(adapter);
+        });
+
+        // Call method to populate the database and fetch logs
+        FirestoreSingleton firestore = FirestoreSingleton.getInstance();
+        firestore.prepopulateDatabase();
 
         ImageButton diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
         ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
@@ -41,6 +66,8 @@ public class DestinationsActivity extends AppCompatActivity {
         Button cancelButton = findViewById(R.id.cancelButton);
         Button submitButton = findViewById(R.id.submitButton);
 
+        // Initialize ViewModel
+        DestinationsViewModel destinationsViewModel = new ViewModelProvider(this).get(DestinationsViewModel.class);
 
         logTravelButton.setOnClickListener(new View.OnClickListener() {
             @Override
