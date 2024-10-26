@@ -55,7 +55,7 @@
             android:background="@null"
             android:src="@drawable/ic_accommodations"
             android:layout_weight="1"
-            app:tint="@color/lightBluegray" />
+            app:tint="#35464b" />
 
         <!-- Logistics Button -->
         <ImageButton
@@ -65,7 +65,7 @@
             android:background="@null"
             android:src="@drawable/ic_logistics"
             android:layout_weight="1"
-            app:tint="#35464b" />
+            app:tint="@color/lightBluegray" />
 
         <!-- Travel Community Button -->
         <ImageButton
