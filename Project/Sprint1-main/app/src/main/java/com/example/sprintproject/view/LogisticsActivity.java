@@ -1,8 +1,11 @@
 package com.example.sprintproject.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -63,8 +66,33 @@ public class LogisticsActivity extends AppCompatActivity {
         addUsersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Pressing add users button", Toast.LENGTH_SHORT).show();
+                showAddUserDialog();
             }
         });
+    }
+
+    private void showAddUserDialog() {
+        // create an EditText for user input
+        final EditText emailInput = new EditText(this);
+        emailInput.setHint("Enter email");
+
+        // build the dialog
+        new AlertDialog.Builder(this)
+                .setTitle("Invite User")
+                .setMessage("Enter the email of the user you want to invite:")
+                .setView(emailInput)
+                .setPositiveButton("Invite", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String email = emailInput.getText().toString();
+                        if (!email.isEmpty()) {
+                            // TODO: pass to view model
+                            Toast.makeText(LogisticsActivity.this, "Invitation sent to: " + email, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LogisticsActivity.this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 }
