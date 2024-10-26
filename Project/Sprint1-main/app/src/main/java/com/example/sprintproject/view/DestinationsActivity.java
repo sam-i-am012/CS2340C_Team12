@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.FirestoreSingleton;
+import com.example.sprintproject.model.Result;
 import com.example.sprintproject.viewmodel.DestinationsViewModel;
-import com.example.sprintproject.viewmodel.LoginViewModel;
 
 import java.util.Arrays;
 
@@ -66,9 +67,9 @@ public class DestinationsActivity extends AppCompatActivity {
         Button cancelButton = findViewById(R.id.cancelButton);
         Button submitButton = findViewById(R.id.submitButton);
 
-        // Initialize ViewModel
-        DestinationsViewModel destinationsViewModel = new ViewModelProvider(this).get(DestinationsViewModel.class);
-
+        /*
+         * Code for handling when Log Travel button is pressed
+         */
         logTravelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,64 +97,81 @@ public class DestinationsActivity extends AppCompatActivity {
             }
         });
         /*
-        Code for handling when the Calculate Vacation Time button is pressed
+         * Code for handling when the Calculate Vacation Time button is pressed
          */
-        calcVacationTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (startDateET.getVisibility() == View.GONE) {
-                    // Make dialog elements visible
-                    for (EditText editText : Arrays.asList(startDateET, endDateET, durationET)) {
-                        editText.setVisibility(View.VISIBLE);
-                    }
-                    calculateButton.setVisibility(View.VISIBLE);
-                } else {
-                    // Hide dialog elements
-                    for (EditText editText : Arrays.asList(startDateET, endDateET, durationET)) {
-                        editText.setVisibility(View.GONE);
-                    }
-                    calculateButton.setVisibility(View.GONE);
+        calcVacationTimeButton.setOnClickListener(v -> {
+            if (startDateET.getVisibility() == View.GONE) {
+                // Make dialog elements visible
+                for (EditText editText : Arrays.asList(startDateET, endDateET, durationET)) {
+                    editText.setVisibility(View.VISIBLE);
                 }
+                calculateButton.setVisibility(View.VISIBLE);
+            } else {
+                // Hide dialog elements
+                for (EditText editText : Arrays.asList(startDateET, endDateET, durationET)) {
+                    editText.setVisibility(View.GONE);
+                }
+                calculateButton.setVisibility(View.GONE);
             }
         });
 
         /*
-        Code for handling when buttons are pressed in the navigation bar
+         * Code for when Calculate button is pressed
          */
-        diningEstablishmentsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent diningEstablishmentsIntent = new Intent(DestinationsActivity.this,
-                        DiningEstablishmentsActivity.class);
-                startActivity(diningEstablishmentsIntent);
+        calculateButton.setOnClickListener(v -> {
+            String startDate = startDateET.getText().toString();
+            String endDate = endDateET.getText().toString();
+            String duration = durationET.getText().toString();
+            String entry;
+
+            Result missingEntry = viewModel.getMissingEntry(startDate, endDate, duration);
+            Toast.makeText(DestinationsActivity.this, missingEntry.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+            if (missingEntry.isSuccess()) {
+                switch (missingEntry.getMessage()) {
+                    case "Start Date":
+                        entry = viewModel.calculateMissingEntry(endDate, duration);
+                        startDateET.setText(entry);
+                        break;
+                    case "End Date":
+                        entry = viewModel.calculateMissingEntry(startDate, duration);
+                        endDateET.setText(entry);
+                        break;
+                    case "Duration":
+                        entry = viewModel.calculateMissingEntry(startDate, endDate);
+                        durationET.setText(entry);
+                        break;
+                }
+
+                // Add startDate, endDate, and duration to database
             }
         });
 
-        accommodationsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent accommodationsIntent = new Intent(DestinationsActivity.this,
-                        AccommodationsActivity.class);
-                startActivity(accommodationsIntent);
-            }
+        /*
+         * Code for handling when buttons are pressed in the navigation bar
+         */
+        diningEstablishmentsButton.setOnClickListener(view -> {
+            Intent diningEstablishmentsIntent = new Intent(DestinationsActivity.this,
+                    DiningEstablishmentsActivity.class);
+            startActivity(diningEstablishmentsIntent);
         });
 
-        logisticsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent logisticsIntent = new Intent(DestinationsActivity.this,
-                        LogisticsActivity.class);
-                startActivity(logisticsIntent);
-            }
+        accommodationsButton.setOnClickListener(view -> {
+            Intent accommodationsIntent = new Intent(DestinationsActivity.this,
+                    AccommodationsActivity.class);
+            startActivity(accommodationsIntent);
         });
 
-        travelCommunityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent travelCommunityIntent = new Intent(DestinationsActivity.this,
-                        TravelCommunityActivity.class);
-                startActivity(travelCommunityIntent);
-            }
+        logisticsButton.setOnClickListener(view -> {
+            Intent logisticsIntent = new Intent(DestinationsActivity.this,
+                    LogisticsActivity.class);
+            startActivity(logisticsIntent);
+        });
+
+        travelCommunityButton.setOnClickListener(view -> {
+            Intent travelCommunityIntent = new Intent(DestinationsActivity.this,
+                    TravelCommunityActivity.class);
+            startActivity(travelCommunityIntent);
         });
     }
 }
