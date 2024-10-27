@@ -111,6 +111,16 @@ public class DestinationsActivity extends AppCompatActivity {
                     }
                     cancelButton.setVisibility(View.VISIBLE);
                     submitButton.setVisibility(View.VISIBLE);
+                } else {
+                    // Hide dialog elements
+                    for (TextView textView : Arrays.asList(travelLocationTV, estimatedStartTV, estimatedEndTV)) {
+                        textView.setVisibility(View.GONE);
+                    }
+                    for (EditText editText : Arrays.asList(travelLocationET, estimatedStartET, estimatedEndET)) {
+                        editText.setVisibility(View.GONE);
+                    }
+                    cancelButton.setVisibility(View.GONE);
+                    submitButton.setVisibility(View.GONE);
                 }
             }
         });
