@@ -205,6 +205,55 @@
                 android:textSize="15sp"
                 android:visibility="gone" />
 
+            <!-- Total Days Spent Screen -->
+            <LinearLayout
+                android:layout_width="239dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
+                android:background="@drawable/result_background"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone">
+
+
+                <!-- Title for Result -->
+                <TextView
+                    android:id="@+id/resultTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Result:"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+
+                <!-- Result Value -->
+                <TextView
+                    android:id="@+id/resultValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
+                    android:text="XX\ndays"
+                    android:textSize="25sp" />
+
+
+                <!-- Reset Button -->
+                <Button
+                    android:id="@+id/resetButton"
+                    android:layout_width="104dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/bluegray"
+                    android:text="Reset"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+
+
             <!-- Add the RecyclerView here -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
