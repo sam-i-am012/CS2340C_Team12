@@ -17,14 +17,22 @@ import com.example.sprintproject.R;
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.viewmodel.DestinationsViewModel;
 import com.example.sprintproject.viewmodel.LoginViewModel;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.sprintproject.R;
+import com.example.sprintproject.model.Trip;
+import com.example.sprintproject.viewmodel.TripViewModel;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class DestinationsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private TravelLogAdapter adapter;
     private DestinationsViewModel viewModel;
+    private TripViewModel tripViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,5 +163,19 @@ public class DestinationsActivity extends AppCompatActivity {
                 startActivity(travelCommunityIntent);
             }
         });
+
+        // database stuff
+        tripViewModel = new ViewModelProvider(this).get(TripViewModel.class);
+
+        // Observe LiveData from the ViewModel
+        tripViewModel.getTripsLiveData().observe(this, new Observer<List<Trip>>() {
+            @Override
+            public void onChanged(List<Trip> trips) {
+                // Update the UI with the list of trips
+            }
+        });
+
+        // Fetch the trips
+        tripViewModel.fetchTrips();
     }
 }

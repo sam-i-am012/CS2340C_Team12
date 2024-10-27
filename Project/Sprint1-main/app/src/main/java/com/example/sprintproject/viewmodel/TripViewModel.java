@@ -55,8 +55,10 @@ public class TripViewModel extends ViewModel {
         }
     }
 
-    // Function to add a user to the trip
-    public void addUserToTrip(String tripId, String userId) {
-        databaseRef.child(tripId).child("users").child(userId).setValue(true);
+    // to check if a user has access to a trip
+    public void hasUserAccessToTrip(String tripId, String userId, ValueEventListener listener) {
+        DatabaseReference userAccessRef = databaseRef.child(tripId).child("users").child(userId);
+        userAccessRef.addListenerForSingleValueEvent(listener);
     }
+
 }
