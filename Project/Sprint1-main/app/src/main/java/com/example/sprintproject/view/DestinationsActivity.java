@@ -141,6 +141,27 @@ public class DestinationsActivity extends AppCompatActivity {
             }
         });
 
+        // Set Up Calculate Button Press
+        // Get reference to the result layout
+        View resultLayout = findViewById(R.id.resultLayout);
+
+        // Initially set result layout to not visible
+        resultLayout.setVisibility(View.GONE);
+        calculateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Calculation Code
+
+                // Set result layout to visible
+                resultLayout.setVisibility(View.VISIBLE);
+
+                // Set the result text
+                TextView resultText = findViewById(R.id.resultText);
+                resultText.setText("Calculated days: XX");  // Replace "XX" with actual calculation result
+            }
+        });
+
+
         // Set up the button click listener
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
