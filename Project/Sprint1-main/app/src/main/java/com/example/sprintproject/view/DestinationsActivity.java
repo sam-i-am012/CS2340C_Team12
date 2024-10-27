@@ -2,6 +2,7 @@ package com.example.sprintproject.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,12 +20,12 @@ import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Result;
 import com.example.sprintproject.viewmodel.DestinationsViewModel;
 
+import java.text.ParseException;
 import java.util.Arrays;
 
 public class DestinationsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private TravelLogAdapter adapter;
     private DestinationsViewModel viewModel;
 
     @Override
@@ -37,14 +38,8 @@ public class DestinationsActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(DestinationsViewModel.class);
 
-        viewModel.getTravelLogs().observe(this, travelLogs -> {
-            adapter = new TravelLogAdapter(travelLogs);
-            recyclerView.setAdapter(adapter);
-        });
-
         // Call method to populate the database and fetch logs
         FirestoreSingleton firestore = FirestoreSingleton.getInstance();
-        firestore.prepopulateDatabase();
 
         ImageButton diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
         ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
@@ -56,6 +51,7 @@ public class DestinationsActivity extends AppCompatActivity {
         EditText endDateET = findViewById(R.id.endDateET);
         EditText durationET = findViewById(R.id.durationET);
         Button calculateButton = findViewById(R.id.calculateButton);
+        Button submitTimeButton = findViewById(R.id.submitTimeButton);
         //log travel ----
         Button logTravelButton = findViewById(R.id.logTravelButton);
         TextView travelLocationTV = findViewById(R.id.travelLocationsTV);
@@ -92,7 +88,6 @@ public class DestinationsActivity extends AppCompatActivity {
                         editText.setVisibility(View.GONE);
                     }
                     cancelButton.setVisibility(View.GONE);
-                    submitButton.setVisibility(View.GONE);
                 }
             }
         });
@@ -106,12 +101,15 @@ public class DestinationsActivity extends AppCompatActivity {
                     editText.setVisibility(View.VISIBLE);
                 }
                 calculateButton.setVisibility(View.VISIBLE);
+                submitTimeButton.setVisibility(View.VISIBLE);
             } else {
                 // Hide dialog elements
                 for (EditText editText : Arrays.asList(startDateET, endDateET, durationET)) {
                     editText.setVisibility(View.GONE);
                 }
                 calculateButton.setVisibility(View.GONE);
+                submitTimeButton.setVisibility(View.GONE);
+
             }
         });
 
@@ -124,13 +122,15 @@ public class DestinationsActivity extends AppCompatActivity {
             String duration = durationET.getText().toString();
             String entry;
 
-            Result missingEntry = viewModel.getMissingEntry(startDate, endDate, duration);
-            Toast.makeText(DestinationsActivity.this, missingEntry.getMessage(),
-                    Toast.LENGTH_SHORT).show();
+            Result missingEntry = viewModel.validateMissingEntry(startDate, endDate, duration);
             if (missingEntry.isSuccess()) {
                 switch (missingEntry.getMessage()) {
+                    case "None":
+                        Toast.makeText(DestinationsActivity.this,
+                                "All entries already populated", Toast.LENGTH_SHORT).show();
+                        break;
                     case "Start Date":
-                        entry = viewModel.calculateMissingEntry(endDate, duration);
+                        entry = viewModel.calculateMissingEntry(duration, endDate);
                         startDateET.setText(entry);
                         break;
                     case "End Date":
@@ -138,12 +138,19 @@ public class DestinationsActivity extends AppCompatActivity {
                         endDateET.setText(entry);
                         break;
                     case "Duration":
-                        entry = viewModel.calculateMissingEntry(startDate, endDate);
-                        durationET.setText(entry);
-                        break;
+                        Result dateRangeValid = viewModel.validateDateRange(startDate, endDate);
+                        if (dateRangeValid.isSuccess()) {
+                            entry = viewModel.calculateMissingEntry(startDate, endDate);
+                            durationET.setText(entry);
+                            break;
+                        } else {
+                            Toast.makeText(DestinationsActivity.this,
+                                    dateRangeValid.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                 }
-
-                // Add startDate, endDate, and duration to database
+            } else {
+                Toast.makeText(DestinationsActivity.this, missingEntry.getMessage(),
+                        Toast.LENGTH_SHORT).show();
             }
         });
 

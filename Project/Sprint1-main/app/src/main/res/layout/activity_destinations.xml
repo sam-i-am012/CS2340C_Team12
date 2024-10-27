@@ -28,6 +28,7 @@
                 android:text="Destinations"
                 android:textSize="50sp" />
 
+            <!-- Log Travel Button -->
             <Button
                 android:id="@+id/logTravelButton"
                 android:layout_width="273dp"
@@ -148,6 +149,7 @@
                     app:layout_constraintTop_toBottomOf="@id/estimatedEndET" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- Calculate Vacation Time Button -->
             <Button
                 android:id="@+id/calcVacationTimeButton"
                 android:layout_width="273dp"
@@ -199,9 +201,19 @@
                 android:layout_width="200dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
                 android:backgroundTint="@color/bluegray"
                 android:text="Calculate"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/submitTimeButton"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/bluegray"
+                android:text="Submit"
                 android:textSize="15sp"
                 android:visibility="gone" />
 
