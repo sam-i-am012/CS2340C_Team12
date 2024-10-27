@@ -57,17 +57,13 @@ public class FirestoreSingleton {
         firestore.collection("travelLogs").add(log).addOnCompleteListener(listener);
     }
 
-    public LiveData<List<TravelLog>> getTravelLogs() {
-        return travelLogsLiveData; // Return the LiveData that listens for updates
-    }
-
     public void prepopulateDatabase() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             return;
         }
         String userId = user.getUid();
-        getTravelLogs().observeForever(logs -> {
+        getTravelLogsByUser(userId).observeForever(logs -> {
             if (logs.size() < 2) {
                 addTravelLog(new TravelLog(userId, "Paris", "2023-12-01", "2023-12-10"), null);
                 addTravelLog(new TravelLog(userId, "New York", "2023-11-15", "2023-11-20"), null);
