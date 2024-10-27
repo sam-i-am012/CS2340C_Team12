@@ -161,15 +161,6 @@ public class DestinationsActivity extends AppCompatActivity {
             }
         });
 
-
-        // Set up the button click listener
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addTravelLog();
-            }
-        });
-
         // Handle navigation bar button presses
         diningEstablishmentsButton.setOnClickListener(view -> {
             Intent diningEstablishmentsIntent = new Intent(DestinationsActivity.this,
