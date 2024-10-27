@@ -1,9 +1,12 @@
 package com.example.sprintproject.view;
 
 import android.app.AlertDialog;
+import android.util.Patterns;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,13 +15,17 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.TravelLog;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.SignInMethodQueryResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,8 +115,8 @@ public class LogisticsActivity extends AppCompatActivity {
                     String email = emailInput.getText().toString();
                     String selectedLocation = (String) locationSpinner.getSelectedItem();
                     if (!email.isEmpty() && selectedLocation != null) {
-                        // handle the invite logic, including the selected location
-                        Toast.makeText(LogisticsActivity.this, "Invitation sent to: " + email + " for location: " + selectedLocation, Toast.LENGTH_SHORT).show();
+                        // method below verifies the email exists before inviting
+                        inviteUserToTrip(email, selectedLocation);
                     } else {
                         Toast.makeText(LogisticsActivity.this, "Please enter a valid email and select a location", Toast.LENGTH_SHORT).show();
                     }
@@ -136,9 +143,44 @@ public class LogisticsActivity extends AppCompatActivity {
         });
     }
 
-    // Function to handle the invite logic, like adding the invited user to Firestore or sending an invite
+    // function to handle the invite logic
     private void inviteUserToTrip(String email, String location) {
-        // TODO: Implement Firestore logic for inviting a user (e.g., add the user to a trip collection)
+        // check if email is valid before making the firebase call
+        if (!isValidEmail(email)) {
+            Toast.makeText(LogisticsActivity.this, "Please enter a valid email address.", Toast.LENGTH_SHORT).show();
+            return; // stop the method if email is invalid
+        }
+        firestoreSingleton.checkEmailExists(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (!task.getResult().isEmpty()) {
+                            // email exists! add user to the trip
+                            String uid = task.getResult().getDocuments().get(0).getId(); // Get the UID from the document ID
+                            addUserToTrip(email, location, uid);
+                        } else {
+                            // No matching email found
+                            Toast.makeText(LogisticsActivity.this, "No account found for this email.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        // Handle failure
+                        Log.e("FirestoreError", "Error checking email: ", task.getException());
+                        Toast.makeText(LogisticsActivity.this, "Failed to check email. Try again later.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+    }
+
+    // helper method to check if the email is valid
+    private boolean isValidEmail(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    // method to add the user to the trip once email is verified
+    private void addUserToTrip(String email, String location, String uid) {
+        // TODO: Implement Firestore logic for inviting a user
         Toast.makeText(this, "Invitation sent to " + email + " for location " + location, Toast.LENGTH_SHORT).show();
     }
+
+
 }
