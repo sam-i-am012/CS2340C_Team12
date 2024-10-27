@@ -207,6 +207,7 @@
 
             <!-- Total Days Spent Screen -->
             <LinearLayout
+                android:id="@+id/resultLayout"
                 android:layout_width="239dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -231,7 +232,7 @@
 
                 <!-- Result Value -->
                 <TextView
-                    android:id="@+id/resultValue"
+                    android:id="@+id/resultText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
