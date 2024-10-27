@@ -22,6 +22,9 @@ import com.example.sprintproject.viewmodel.DestinationsViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 public class DestinationsActivity extends AppCompatActivity {
@@ -107,17 +110,31 @@ public class DestinationsActivity extends AppCompatActivity {
                     }
                     cancelButton.setVisibility(View.VISIBLE);
                     submitButton.setVisibility(View.VISIBLE);
-                } else {
-                    // Hide dialog elements
-                    for (TextView textView : Arrays.asList(travelLocationTV, estimatedStartTV, estimatedEndTV)) {
-                        textView.setVisibility(View.GONE);
-                    }
-                    for (EditText editText : Arrays.asList(travelLocationET, estimatedStartET, estimatedEndET)) {
-                        editText.setVisibility(View.GONE);
-                    }
-                    cancelButton.setVisibility(View.GONE);
-                    submitButton.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        // Set up the button click listener
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hide dialog elements
+                for (TextView textView : Arrays.asList(travelLocationTV, estimatedStartTV, estimatedEndTV)) {
+                    textView.setVisibility(View.GONE);
+                }
+                for (EditText editText : Arrays.asList(travelLocationET, estimatedStartET, estimatedEndET)) {
+                    editText.setVisibility(View.GONE);
+                }
+                cancelButton.setVisibility(View.GONE);
+                submitButton.setVisibility(View.GONE);
+            }
+        });
+
+        // Set up the button click listener
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTravelLog();
             }
         });
 
@@ -193,18 +210,19 @@ public class DestinationsActivity extends AppCompatActivity {
             return;
         }
         String userId = user.getUid();
-        String destination = travelLocationET.getText().toString();
-        String startDate = estimatedStartET.getText().toString();
-        String endDate = estimatedEndET.getText().toString();
+        String destination = travelLocationET.getText().toString().trim();
+        String startDate = estimatedStartET.getText().toString().trim();
+        String endDate = estimatedEndET.getText().toString().trim();
 
         if (TextUtils.isEmpty(destination) || TextUtils.isEmpty(startDate) || TextUtils.isEmpty(endDate)) {
             Toast.makeText(getApplicationContext(),
                     "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
-        } else if (isDateFormatInvalid(estimatedStartET.getText().toString().trim()) ||
-                isDateFormatInvalid(estimatedEndET.getText().toString().trim())) {
+        } else if (isDateFormatInvalid(startDate) ||
+                isDateFormatInvalid(endDate) ||
+                calculateDays(startDate, endDate) < 0) {
             Toast.makeText(getApplicationContext(),
-                    "Please enter a valid date (YYYY-MM-DD)", Toast.LENGTH_SHORT).show();
+                    "Please enter valid dates (YYYY-MM-DD)", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -252,5 +270,13 @@ public class DestinationsActivity extends AppCompatActivity {
         travelLocationET.setText("");
         estimatedStartET.setText("");
         estimatedEndET.setText("");
+    }
+
+    private int calculateDays(String startDate, String endDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate start = LocalDate.parse(startDate, formatter);
+        LocalDate end = LocalDate.parse(endDate, formatter);
+
+        return (int) ChronoUnit.DAYS.between(start, end);
     }
 }
