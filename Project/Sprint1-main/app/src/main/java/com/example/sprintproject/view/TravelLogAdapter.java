@@ -54,7 +54,7 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
             destinationTextView = itemView.findViewById(R.id.destinationTextView);
             daysTextView = itemView.findViewById(R.id.daysTextView);
         }
-    }
+    }//
 
     private int calculateDays(String startDate, String endDate) {
         // Implement your date calculation logic here
