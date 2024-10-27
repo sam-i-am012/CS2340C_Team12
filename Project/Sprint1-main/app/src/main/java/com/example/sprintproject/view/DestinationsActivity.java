@@ -21,6 +21,7 @@ import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.viewmodel.DestinationsViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.example.sprintproject.model.Result;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -112,6 +113,16 @@ public class DestinationsActivity extends AppCompatActivity {
                     }
                     cancelButton.setVisibility(View.VISIBLE);
                     submitButton.setVisibility(View.VISIBLE);
+                } else {
+                    // Hide dialog elements
+                    for (TextView textView : Arrays.asList(travelLocationTV, estimatedStartTV, estimatedEndTV)) {
+                        textView.setVisibility(View.GONE);
+                    }
+                    for (EditText editText : Arrays.asList(travelLocationET, estimatedStartET, estimatedEndET)) {
+                        editText.setVisibility(View.GONE);
+                    }
+                    cancelButton.setVisibility(View.GONE);
+                    submitButton.setVisibility(View.GONE);
                 }
             }
         });
@@ -160,6 +171,11 @@ public class DestinationsActivity extends AppCompatActivity {
             }
         });
 
+
+        /*
+         * Code for handling when Calculate button is pressed
+         */
+
         // Set Up Calculate Button Press
         // Get reference to the result layout
         View resultLayout = findViewById(R.id.resultLayout);
@@ -168,8 +184,11 @@ public class DestinationsActivity extends AppCompatActivity {
         resultLayout.setVisibility(View.GONE);
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // Calculation Code
+            public void onClick(View view) {
+                String startDate = startDateET.getText().toString();
+                String endDate = endDateET.getText().toString();
+                String duration = durationET.getText().toString();
+                String entry;
 
                 // Set result layout to visible
                 resultLayout.setVisibility(View.VISIBLE);
@@ -177,9 +196,37 @@ public class DestinationsActivity extends AppCompatActivity {
                 // Set the result text
                 TextView resultText = findViewById(R.id.resultText);
                 resultText.setText("Calculated days: XX");  // Replace "XX" with actual calculation result
+
+                Result missingEntry = viewModel.validateMissingEntry(startDate, endDate, duration);
+                if (missingEntry.isSuccess()) {
+                    switch (missingEntry.getMessage()) {
+                        case "None":
+                            Toast.makeText(DestinationsActivity.this,
+                                    "All entries already populated", Toast.LENGTH_SHORT).show();
+                            break;
+                        case "Start Date":
+                            entry = viewModel.calculateMissingEntry(duration, endDate);
+                            startDateET.setText(entry);
+                            break;
+                        case "End Date":
+                            entry = viewModel.calculateMissingEntry(startDate, duration);
+                            endDateET.setText(entry);
+                            break;
+                        case "Duration":
+                            Result dateRangeValid = viewModel.validateDateRange(startDate, endDate);
+                            if (dateRangeValid.isSuccess()) {
+                                entry = viewModel.calculateMissingEntry(startDate, endDate);
+                                durationET.setText(entry);
+                                break;
+                            } else {
+                                Toast.makeText(DestinationsActivity.this,
+                                        dateRangeValid.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                    }
+                }
             }
         });
-
+      
         // Set up the Reset button to hide the result layout when clicked
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override

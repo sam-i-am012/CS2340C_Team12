@@ -2,19 +2,19 @@ package com.example.sprintproject.model;
 
 public class Result {
     private final boolean success;
-    private final String errorMessage;
+    private final String message;
 
-    public Result(boolean success, String errorMessage) {
+    public Result(boolean success, String message) {
         this.success = success;
-        this.errorMessage = errorMessage;
+        this.message = message;
     }
 
     public boolean isSuccess() {
         return success;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getMessage() {
+        return message;
     }
 }
 

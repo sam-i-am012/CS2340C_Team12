@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.sprintproject.model.FirestoreSingleton;
+import com.example.sprintproject.model.Result;
 import com.example.sprintproject.model.TravelLog;
+import com.example.sprintproject.model.VacationTimeCalculator;
+import com.example.sprintproject.model.ValidationManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -13,6 +16,8 @@ import java.util.List;
 public class DestinationsViewModel extends ViewModel {
     private FirestoreSingleton repository;
     private LiveData<List<TravelLog>> travelLogs;
+    private VacationTimeCalculator vtCalculator = new VacationTimeCalculator();
+    private com.example.sprintproject.model.ValidationManager ValidationManager = new ValidationManager();
 
     public DestinationsViewModel() {
         repository = FirestoreSingleton.getInstance();
@@ -33,5 +38,17 @@ public class DestinationsViewModel extends ViewModel {
 
     public void addTravelLog(TravelLog log) {
         repository.addTravelLog(log, null);
+    }
+
+    public Result validateMissingEntry(String startDate, String endDate, String duration) {
+        return ValidationManager.validateMissingEntry(startDate, endDate, duration);
+    }
+
+    public Result validateDateRange(String startDate, String endDate) {
+        return ValidationManager.validateDateRange(startDate, endDate);
+    }
+
+    public String calculateMissingEntry(String entry1, String entry2) {
+        return vtCalculator.calculateEntry(entry1, entry2);
     }
 }

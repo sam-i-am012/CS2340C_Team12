@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,6 +28,7 @@
                 android:text="Destinations"
                 android:textSize="50sp" />
 
+            <!-- Log Travel Button -->
             <Button
                 android:id="@+id/logTravelButton"
                 android:layout_width="273dp"
@@ -148,6 +149,7 @@
                     app:layout_constraintTop_toBottomOf="@id/estimatedEndET" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- Calculate Vacation Time Button -->
             <Button
                 android:id="@+id/calcVacationTimeButton"
                 android:layout_width="273dp"
@@ -218,7 +220,6 @@
                 android:padding="16dp"
                 android:visibility="gone">
 
-
                 <!-- Title for Result -->
                 <TextView
                     android:id="@+id/resultTitle"
@@ -229,7 +230,6 @@
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
-
                 <!-- Result Value -->
                 <TextView
                     android:id="@+id/resultText"
@@ -239,7 +239,6 @@
                     android:gravity="center"
                     android:text="XX\ndays"
                     android:textSize="25sp" />
-
 
                 <!-- Reset Button -->
                 <Button
@@ -253,19 +252,16 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-
-
             <!-- Add the RecyclerView here -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="0dp"
                 android:layout_weight="1"
+                android:layout_marginTop="16dp"
                 android:clipToPadding="false"
                 android:paddingBottom="16dp"
-                android:scrollbars="vertical"
-                android:nestedScrollingEnabled="true" />
+                android:scrollbars="vertical" />
         </LinearLayout>
     </ScrollView>
 
@@ -276,17 +272,17 @@
         android:layout_height="wrap_content"
         android:background="#000000"
         android:paddingVertical="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" >
 
         <!-- Destinations Button -->
         <ImageButton
             android:id="@+id/destinationsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@null"
             android:src="@drawable/ic_destinations"
+            android:layout_weight="1"
             app:tint="@color/lightBluegray" />
 
         <!-- Dining Establishments Button -->
@@ -294,9 +290,9 @@
             android:id="@+id/diningEstablishmentsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@null"
             android:src="@drawable/ic_dining_establishments"
+            android:layout_weight="1"
             app:tint="#35464b" />
 
         <!-- Accommodations Button -->
@@ -304,9 +300,9 @@
             android:id="@+id/accommodationsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@null"
             android:src="@drawable/ic_accommodations"
+            android:layout_weight="1"
             app:tint="#35464b" />
 
         <!-- Logistics Button -->
@@ -314,9 +310,9 @@
             android:id="@+id/logisticsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@null"
             android:src="@drawable/ic_logistics"
+            android:layout_weight="1"
             app:tint="#35464b" />
 
         <!-- Travel Community Button -->
@@ -324,11 +320,12 @@
             android:id="@+id/travelCommunityButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@null"
             android:src="@drawable/ic_travel_community"
+            android:layout_weight="1"
             app:tint="#35464b" />
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

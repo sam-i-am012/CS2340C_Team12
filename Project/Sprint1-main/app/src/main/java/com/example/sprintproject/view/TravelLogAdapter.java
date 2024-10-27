@@ -1,3 +1,4 @@
+
 package com.example.sprintproject.view;
 
 import android.view.LayoutInflater;
@@ -47,7 +48,6 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
     public int getItemCount() {
         return travelLogs.size();
     }
-
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView destinationTextView;
         TextView daysTextView;
