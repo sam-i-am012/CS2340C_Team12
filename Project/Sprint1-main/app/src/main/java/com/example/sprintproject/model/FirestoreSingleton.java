@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,9 +21,11 @@ public class FirestoreSingleton {
     private static FirestoreSingleton instance;
     private FirebaseFirestore firestore;
     private MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
+    private FirebaseAuth auth;
 
     private FirestoreSingleton() {
         firestore = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
     }
 
     public static synchronized FirestoreSingleton getInstance() {
@@ -30,6 +33,10 @@ public class FirestoreSingleton {
             instance = new FirestoreSingleton();
         }
         return instance;
+    }
+
+    public String getCurrentUserId() {
+        return auth.getCurrentUser().getUid();
     }
 
     public LiveData<List<TravelLog>> getTravelLogsByUser(String userId) {
@@ -69,5 +76,16 @@ public class FirestoreSingleton {
                 addTravelLog(new TravelLog(userId, "New York", "2023-11-15", "2023-11-20"), null);
             }
         });
+    }
+
+    // method to check if an email exists in the users collection
+    public Task<QuerySnapshot> checkEmailExists(String email) {
+        return firestore.collection("users")
+                .whereEqualTo("email", email)
+                .get();
+    }
+
+    public void addUserToTrip(String uid, String location) {
+        // TODO: Add logic to add user to the trip in Firestore
     }
 }
