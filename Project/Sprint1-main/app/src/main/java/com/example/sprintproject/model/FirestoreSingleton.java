@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -69,5 +70,15 @@ public class FirestoreSingleton {
                 addTravelLog(new TravelLog(userId, "New York", "2023-11-15", "2023-11-20"), null);
             }
         });
+    }
+
+    // methods to add a user to a trip
+    public void addUserToTrip(String tripId, String userId, OnCompleteListener<Void> onCompleteListener) {
+        DocumentReference tripRef = firestore.collection("trips").document(tripId);
+        tripRef.update("users." + userId, true).addOnCompleteListener(onCompleteListener);
+    }
+
+    public void getUsersForTrip(String tripId, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
+        firestore.collection("trips").document(tripId).get().addOnCompleteListener(onCompleteListener);
     }
 }

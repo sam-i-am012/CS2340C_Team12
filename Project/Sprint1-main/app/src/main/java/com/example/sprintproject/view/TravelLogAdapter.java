@@ -55,8 +55,9 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
         public ViewHolder(View itemView) {
             super(itemView);
             // Bind the views from the item layout
-            destinationTextView = itemView.findViewById(R.id.destinationTextView);
-            daysTextView = itemView.findViewById(R.id.daysTextView);
+            // TODO: comment this out
+//            destinationTextView = itemView.findViewById(R.id.destinationTextView);
+//            daysTextView = itemView.findViewById(R.id.daysTextView);
         }
     }
 

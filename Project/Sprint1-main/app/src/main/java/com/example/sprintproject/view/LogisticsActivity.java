@@ -66,6 +66,7 @@ public class LogisticsActivity extends AppCompatActivity {
         addUsersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // will give a pop up to allow user to enter email of the person they want to invite
                 showAddUserDialog();
             }
         });
