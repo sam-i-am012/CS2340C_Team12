@@ -48,6 +48,7 @@ public class DestinationsActivity extends AppCompatActivity {
     private EditText estimatedEndET;
     private Button cancelButton;
     private Button submitButton;
+    private Button resetButton;
 
     private RecyclerView recyclerView;
     private TravelLogAdapter adapter;
@@ -77,6 +78,7 @@ public class DestinationsActivity extends AppCompatActivity {
         estimatedEndET = findViewById(R.id.estimatedEndET);
         cancelButton = findViewById(R.id.cancelButton);
         submitButton = findViewById(R.id.submitButton);
+        resetButton = findViewById(R.id.resetButton);
 
         // Call method to populate the database and fetch logs
         FirestoreSingleton firestore = FirestoreSingleton.getInstance();
@@ -224,10 +226,17 @@ public class DestinationsActivity extends AppCompatActivity {
                 }
             }
         });
+      
+        // Set up the Reset button to hide the result layout when clicked
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hide result layout
+                resultLayout.setVisibility(View.GONE);
+            }
+        });
 
-        /*
-         * Code for handling when buttons are pressed in the navigation bar
-         */
+        // Handle navigation bar button presses
         diningEstablishmentsButton.setOnClickListener(view -> {
             Intent diningEstablishmentsIntent = new Intent(DestinationsActivity.this,
                     DiningEstablishmentsActivity.class);
