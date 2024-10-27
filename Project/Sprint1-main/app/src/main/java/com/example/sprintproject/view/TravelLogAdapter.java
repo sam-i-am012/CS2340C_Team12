@@ -71,9 +71,14 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
     public int getTotalDays() {
         int totalDays = 0;
         for (TravelLog log : travelLogs) {
-            int days = calculateDays(log.getStartDate(), log.getEndDate());
-            totalDays += days;
+            totalDays += calculateDays(log.getStartDate(), log.getEndDate());
         }
         return totalDays;
+    }
+
+
+    public void addLog(TravelLog log) {
+        travelLogs.add(log);
+        notifyItemInserted(travelLogs.size() - 1); // Update only the last item
     }
 }

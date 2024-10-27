@@ -128,6 +128,9 @@ public class DestinationsActivity extends AppCompatActivity {
                     }
                     cancelButton.setVisibility(View.GONE);
                     submitButton.setVisibility(View.GONE);
+                    // Initially set result layout to not visible
+                    resultLayout.setVisibility(View.GONE);
+
                 }
             }
         });
@@ -148,13 +151,51 @@ public class DestinationsActivity extends AppCompatActivity {
             }
         });
 
-        // Set up the button click listener
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTravelLog();
+                // Create a new TravelLog object and validate it before adding
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user == null) {
+                    return;
+                }
+
+                String userId = user.getUid();
+                String destination = travelLocationET.getText().toString().trim();
+                String startDate = estimatedStartET.getText().toString().trim();
+                String endDate = estimatedEndET.getText().toString().trim();
+
+                if (TravelLogValidator.areFieldsEmpty(destination, startDate, endDate)) {
+                    Toast.makeText(getApplicationContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (TravelLogValidator.isDateFormatInvalid(startDate) ||
+                        TravelLogValidator.isDateFormatInvalid(endDate) ||
+                        TravelLogValidator.calculateDays(startDate, endDate) < 0) {
+                    Toast.makeText(getApplicationContext(), "Please enter valid dates (YYYY-MM-DD)", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                TravelLog newLog = new TravelLog(userId, destination, startDate, endDate, new ArrayList<>());
+
+                // Add the new log directly to the adapter and update total days
+                adapter.addLog(newLog);
+
+                // Set result layout to visible
+                resultLayout.setVisibility(View.VISIBLE);
+
+                // Update the total days text
+                int totalDays = adapter.getTotalDays();
+                TextView resultText = findViewById(R.id.resultText);
+                resultText.setText(totalDays + "\n" + "days");
+
+                // Clear the input fields
+                clearInputFields();
+
+                // Optionally, add the log to the ViewModel/database asynchronously
+                viewModel.addTravelLog(newLog);
             }
         });
+
 
         // Handle Calculate Vacation Time button press
         calcVacationTimeButton.setOnClickListener(new View.OnClickListener() {
@@ -178,8 +219,6 @@ public class DestinationsActivity extends AppCompatActivity {
         });
 
         // Code for handling when Calculate button is pressed
-        // Initially set result layout to not visible
-        resultLayout.setVisibility(View.GONE);
 
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,13 +278,6 @@ public class DestinationsActivity extends AppCompatActivity {
                     viewModel.addDatesAndDuration(firestore.getCurrentUserId(), startDate, endDate,
                             duration);
 
-                    // Set result layout to visible
-                    resultLayout.setVisibility(View.VISIBLE);
-
-                    // Set the result text
-                    int totalDays = adapter.getTotalDays();
-                    TextView resultText = findViewById(R.id.resultText);
-                    resultText.setText(totalDays + "\n" + "days");
                 }
             }
         });
