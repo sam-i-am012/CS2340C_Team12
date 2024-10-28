@@ -41,4 +41,22 @@ public class VacationTimeCalculatorTest {
         String result = calculator.calculateEntry(entry1, entry2);
         assertNull(result);
     }
+
+    @Test
+    public void testCalculateEntry_InvalidDateFormat() {
+        String entry1 = "invalid-date";  // Invalid date
+        String entry2 = "2024-01-07";     // Valid end date
+        assertThrows(NumberFormatException.class, () -> {
+            calculator.calculateEntry(entry1, entry2);
+        });
+    }
+
+    @Test
+    public void testCalculateEntry_OneDateAndInvalid() {
+        String entry1 = "2024-01-01";  // Valid date
+        String entry2 = "not-a-number";  // Invalid addition
+        assertThrows(NumberFormatException.class, () -> {
+            calculator.calculateEntry(entry1, entry2);
+        });
+    }
 }
