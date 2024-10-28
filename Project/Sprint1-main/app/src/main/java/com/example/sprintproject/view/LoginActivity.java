@@ -38,20 +38,47 @@ public class LoginActivity extends AppCompatActivity {
         // Initialize ViewModel
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-        // Observe ViewModel changes
+//        // Observe ViewModel changes
+//        loginViewModel.getLoginResult().observe(this, loginResult -> {
+//            if (loginResult.isSuccess()) {
+//                // Navigate to the next screen
+//                Toast.makeText(LoginActivity.this,
+//                        "Login Successful!", Toast.LENGTH_SHORT).show();
+//                startActivity(new Intent(getApplicationContext(), LogisticsActivity.class));
+//                finish();
+//            } else {
+//                progressBar.setVisibility(View.VISIBLE);
+//                Toast.makeText(getApplicationContext(),
+//                        "Login failed", Toast.LENGTH_SHORT).show();
+//            }
+//            progressBar.setVisibility(View.GONE);
+//        });
+//
+//        // Login button click
+//        loginBtn.setOnClickListener(view -> {
+//            String email = editTextEmail.getText().toString().trim();
+//            String password = editTextPassword.getText().toString().trim();
+//
+//            // Validation logic
+//            if (TextUtils.isEmpty(email)) {
+//                Toast.makeText(getApplicationContext(),
+//                        "Please enter an email address", Toast.LENGTH_SHORT).show();
+//            } else if (TextUtils.isEmpty(password)) {
+//                Toast.makeText(getApplicationContext(),
+//                        "Please enter a password", Toast.LENGTH_SHORT).show();
+//            } else {
+//                progressBar.setVisibility(View.VISIBLE);
+//                loginViewModel.login(email, password);
+//            }
+//        });
         loginViewModel.getLoginResult().observe(this, loginResult -> {
+            progressBar.setVisibility(View.GONE); // Hide the progress bar regardless of success or failure
+            Toast.makeText(LoginActivity.this, loginResult.getMessage(), Toast.LENGTH_SHORT).show();
             if (loginResult.isSuccess()) {
                 // Navigate to the next screen
-                Toast.makeText(LoginActivity.this,
-                        "Login Successful!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), LogisticsActivity.class));
                 finish();
-            } else {
-                progressBar.setVisibility(View.VISIBLE);
-                Toast.makeText(getApplicationContext(),
-                        "Login failed", Toast.LENGTH_SHORT).show();
             }
-            progressBar.setVisibility(View.GONE);
         });
 
         // Login button click
@@ -59,17 +86,9 @@ public class LoginActivity extends AppCompatActivity {
             String email = editTextEmail.getText().toString().trim();
             String password = editTextPassword.getText().toString().trim();
 
-            // Validation logic
-            if (TextUtils.isEmpty(email)) {
-                Toast.makeText(getApplicationContext(),
-                        "Please enter an email address", Toast.LENGTH_SHORT).show();
-            } else if (TextUtils.isEmpty(password)) {
-                Toast.makeText(getApplicationContext(),
-                        "Please enter a password", Toast.LENGTH_SHORT).show();
-            } else {
-                progressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(email, password);
-            }
+            // Show progress bar before the login operation
+            progressBar.setVisibility(View.VISIBLE);
+            loginViewModel.login(email, password);
         });
 
         // Quit button click
