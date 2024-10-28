@@ -56,6 +56,7 @@ public class DestinationsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private TravelLogAdapter adapter;
+    private TravelLogAdapter adapterAll;
     private DestinationsViewModel viewModel;
 
     @Override
@@ -101,11 +102,11 @@ public class DestinationsActivity extends AppCompatActivity {
             viewModel.fetchLastFiveTravelLogsForCurrentUser();
         }
 
+        viewModel.getTravelLogs().observe(this, travelLogs -> {
+            adapterAll = new TravelLogAdapter(travelLogs);
+        });
+
         // will only show the last five entries
-//        viewModel.getLastFiveTravelLogs().observe(this, travelLogs -> {
-//            adapter = new TravelLogAdapter(travelLogs);
-//            recyclerView.setAdapter(adapter);
-//        });
         viewModel.getLastFiveTravelLogs().observe(this, travelLogs -> {
             if (adapter == null) {
                 adapter = new TravelLogAdapter(travelLogs);
@@ -194,7 +195,7 @@ public class DestinationsActivity extends AppCompatActivity {
                 resultLayout.setVisibility(View.VISIBLE);
 
                 // Update the total days text
-                int totalDays = adapter.getTotalDays();
+                int totalDays = adapterAll.getTotalDays();
                 TextView resultText = findViewById(R.id.resultText);
                 resultText.setText(totalDays + "\n" + "days");
 
@@ -362,6 +363,7 @@ public class DestinationsActivity extends AppCompatActivity {
         clearInputFields();
     }
 
+    // following is implemented again in travelLog validator to ensure testing is correct
     private boolean isDateFormatInvalid(String date) {
         // Regular expression to match the format YYYY-MM-DD
         String datePattern = "^\\d{4}-\\d{2}-\\d{2}$";

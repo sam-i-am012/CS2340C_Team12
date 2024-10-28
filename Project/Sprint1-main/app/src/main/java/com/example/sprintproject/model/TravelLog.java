@@ -81,6 +81,11 @@ public class TravelLog {
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
+    public int calculatePlannedDays() {
+        return 0;
+    }
 
-
+    public int calculateAllottedDays() {
+        return 0;
+    }
 }

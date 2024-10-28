@@ -15,13 +15,15 @@ import java.util.List;
 
 public class LogisticsViewModel extends ViewModel {
     private FirestoreSingleton firestoreSingleton;
-
     private MutableLiveData<List<String>> userLocations = new MutableLiveData<>();
     private MutableLiveData<String> toastMessage = new MutableLiveData<>();
+    private MutableLiveData<Integer> allottedDaysLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> plannedDaysLiveData = new MutableLiveData<>();
 
     public LogisticsViewModel() {
         firestoreSingleton = FirestoreSingleton.getInstance();
         loadUserLocations();
+        loadTripDays();
     }
 
     // Method to get user-associated locations from Firestore
@@ -34,6 +36,14 @@ public class LogisticsViewModel extends ViewModel {
         return toastMessage;
     }
 
+    public MutableLiveData<Integer> getAllottedDaysLiveData() {
+        return allottedDaysLiveData;
+    }
+
+    public MutableLiveData<Integer> getPlannedDaysLiveData() {
+        return plannedDaysLiveData;
+    }
+
     // Load the user's associated locations and update the LiveData
     private void loadUserLocations() {
         String currentUserId = firestoreSingleton.getCurrentUserId();
@@ -43,6 +53,22 @@ public class LogisticsViewModel extends ViewModel {
                 locations.add(log.getDestination());
             }
             userLocations.setValue(locations);
+        });
+    }
+
+    // TODO: actually follow MVVM pattern
+    private void loadTripDays() {
+        String currentUserId = firestoreSingleton.getCurrentUserId();
+        // Fetch trip data from Firestore and update LiveData accordingly
+        firestoreSingleton.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
+            if (travelLogs != null && !travelLogs.isEmpty()) {
+                // Assuming TravelLog contains startDate and endDate to calculate days
+                TravelLog log = travelLogs.get(0);  // Example: first trip
+                int allottedDays = log.calculateAllottedDays();
+                int plannedDays = log.calculatePlannedDays();
+                allottedDaysLiveData.setValue(allottedDays);
+                plannedDaysLiveData.setValue(plannedDays);
+            }
         });
     }
 
