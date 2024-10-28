@@ -30,4 +30,14 @@ public class InputValidatorTest {
     public void testIsValidPassword_NullPassword() {
         assertFalse(InputValidator.isValidPassword(null));
     }
+
+    @Test
+    public void testIsValidEmail_EmptyEmail() {
+        assertFalse(InputValidator.isValidEmail(""));
+    }
+
+    @Test
+    public void testIsValidEmail_NullEmail() {
+        assertFalse(InputValidator.isValidEmail(null));
+    }
 }
