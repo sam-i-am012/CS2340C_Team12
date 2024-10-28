@@ -29,7 +29,7 @@ public class FirebaseAuthManager {
                         String userEmail = mAuth.getCurrentUser().getEmail();
 
                         // Create a User object to store
-                        User user = new User(userEmail, userId, new ArrayList<>());
+                        User user = new User(userId, userEmail, new ArrayList<>());
 
                         // Save the user data in Firestore and return the original AuthResult
                         return firestore.collection("users")
