@@ -26,6 +26,7 @@ import com.example.sprintproject.model.Result;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DestinationsActivity extends AppCompatActivity {
@@ -284,7 +285,7 @@ public class DestinationsActivity extends AppCompatActivity {
             return;
         }
 
-        TravelLog newLog = new TravelLog(userId, destination, startDate, endDate);
+        TravelLog newLog = new TravelLog(userId, destination, startDate, endDate, new ArrayList<>());
         viewModel.addTravelLog(newLog); // Update the ViewModel to add new log
         clearInputFields();
     }

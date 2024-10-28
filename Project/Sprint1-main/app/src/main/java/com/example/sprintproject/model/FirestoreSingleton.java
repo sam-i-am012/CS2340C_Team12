@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FirestoreSingleton {
@@ -61,7 +63,30 @@ public class FirestoreSingleton {
     }
 
     public void addTravelLog(TravelLog log, OnCompleteListener<DocumentReference> listener) {
-        firestore.collection("travelLogs").add(log).addOnCompleteListener(listener);
+        // When creating a new travel log, ensure that the creator's userId is added to associatedUserIds
+        if (!log.getAssociatedUsers().contains(log.getUserId())) {
+            log.addAssociatedUser(log.getUserId());
+        }
+
+        firestore.collection("travelLogs")
+                .add(log)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Get the ID of the newly created travel log
+                        String travelLogId = task.getResult().getId();
+
+                        // Update the user's associatedDestinations
+                        updateUserAssociatedDestinations(log.getUserId(), travelLogId);
+                    }
+                    if (listener != null) {
+                        listener.onComplete(task);
+                    }
+                });
+    }
+
+    private void updateUserAssociatedDestinations(String userId, String travelLogId) {
+        firestore.collection("users").document(userId)
+                .update("associatedDestinations", FieldValue.arrayUnion(travelLogId));
     }
 
     public void prepopulateDatabase() {
@@ -72,8 +97,10 @@ public class FirestoreSingleton {
         String userId = user.getUid();
         getTravelLogsByUser(userId).observeForever(logs -> {
             if (logs.size() < 2) {
-                addTravelLog(new TravelLog(userId, "Paris", "2023-12-01", "2023-12-10"), null);
-                addTravelLog(new TravelLog(userId, "New York", "2023-11-15", "2023-11-20"), null);
+                addTravelLog(new TravelLog(userId, "Paris", "2023-12-01", "2023-12-10",
+                        new ArrayList<>(Arrays.asList(userId))), null);
+                addTravelLog(new TravelLog(userId, "New York", "2023-11-15", "2023-11-20",
+                        new ArrayList<>(Arrays.asList(userId))), null);
             }
         });
     }
@@ -84,6 +111,25 @@ public class FirestoreSingleton {
                 .whereEqualTo("email", email)
                 .get();
     }
+
+    public LiveData<User> getUserById(String userId) {
+        MutableLiveData<User> userLiveData = new MutableLiveData<>();
+
+        firestore.collection("users").document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        User user = task.getResult().toObject(User.class);
+                        userLiveData.setValue(user);
+                    } else {
+                        userLiveData.setValue(null); // Handle the case where the user doesn't exist
+                    }
+                });
+
+        return userLiveData;
+    }
+
+
 
     public void addUserToTrip(String uid, String location) {
         // TODO: Add logic to add user to the trip in Firestore

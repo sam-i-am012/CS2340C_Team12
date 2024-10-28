@@ -1,14 +1,17 @@
 package com.example.sprintproject.model;
 
+import java.util.List;
+
 public class User {
     private String email;
-    private String uid;
-
+    private String userId;
+    private List<String> associatedDestinations;  // list of destination IDs
     public User() {} // required no arg constructor
 
-    public User(String email, String uid) {
+    public User(String userId, String email, List<String> associatedDestinations) {
+        this.userId = userId;
         this.email = email;
-        this.uid = uid;
+        this.associatedDestinations = associatedDestinations;
     }
 
     public String getEmail() {
@@ -19,11 +22,19 @@ public class User {
         this.email = email;
     }
 
-    public String getUid() {
-        return uid;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public List<String> getAssociatedDestinations() {
+        return associatedDestinations;
+    }
+
+    public void setAssociatedDestinations(List<String> associatedDestinations) {
+        this.associatedDestinations = associatedDestinations;
     }
 }
