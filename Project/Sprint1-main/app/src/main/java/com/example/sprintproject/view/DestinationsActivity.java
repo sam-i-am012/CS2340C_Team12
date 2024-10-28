@@ -1,5 +1,6 @@
 package com.example.sprintproject.view;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -49,6 +50,7 @@ public class DestinationsActivity extends AppCompatActivity {
     private Button cancelButton;
     private Button submitButton;
     private Button resetButton;
+    View resultLayout;
 
     private RecyclerView recyclerView;
     private TravelLogAdapter adapter;
@@ -79,6 +81,7 @@ public class DestinationsActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancelButton);
         submitButton = findViewById(R.id.submitButton);
         resetButton = findViewById(R.id.resetButton);
+        resultLayout = findViewById(R.id.resultLayout);
 
         // Call method to populate the database and fetch logs
         FirestoreSingleton firestore = FirestoreSingleton.getInstance();
@@ -167,21 +170,15 @@ public class DestinationsActivity extends AppCompatActivity {
                         editText.setVisibility(View.GONE);
                     }
                     calculateButton.setVisibility(View.GONE);
+                    resultLayout.setVisibility(View.GONE);
                 }
             }
         });
 
-
-        /*
-         * Code for handling when Calculate button is pressed
-         */
-
-        // Set Up Calculate Button Press
-        // Get reference to the result layout
-        View resultLayout = findViewById(R.id.resultLayout);
-
+        // Code for handling when Calculate button is pressed
         // Initially set result layout to not visible
         resultLayout.setVisibility(View.GONE);
+
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,16 +186,11 @@ public class DestinationsActivity extends AppCompatActivity {
                 String endDate = endDateET.getText().toString();
                 String duration = durationET.getText().toString();
                 String entry;
-
-                // Set result layout to visible
-                resultLayout.setVisibility(View.VISIBLE);
-
-                // Set the result text
-                TextView resultText = findViewById(R.id.resultText);
-                resultText.setText("Calculated days: XX");  // Replace "XX" with actual calculation result
+                boolean totalSuccess = true;
 
                 Result missingEntry = viewModel.validateMissingEntry(startDate, endDate, duration);
                 if (missingEntry.isSuccess()) {
+                    totalSuccess = true;
                     switch (missingEntry.getMessage()) {
                         case "None":
                             Toast.makeText(DestinationsActivity.this,
@@ -206,7 +198,14 @@ public class DestinationsActivity extends AppCompatActivity {
                             break;
                         case "Start Date":
                             entry = viewModel.calculateMissingEntry(duration, endDate);
-                            startDateET.setText(entry);
+                            if (entry != null) {
+                                startDateET.setText(entry);
+                            } else {
+                                totalSuccess = false;
+                                Toast.makeText(DestinationsActivity.this,
+                                        "Start date cannot be in the past",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             break;
                         case "End Date":
                             entry = viewModel.calculateMissingEntry(startDate, duration);
@@ -219,10 +218,24 @@ public class DestinationsActivity extends AppCompatActivity {
                                 durationET.setText(entry);
                                 break;
                             } else {
+                                totalSuccess = false;
                                 Toast.makeText(DestinationsActivity.this,
                                         dateRangeValid.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                     }
+                } else {
+                    totalSuccess = false;
+                    Toast.makeText(DestinationsActivity.this,
+                            missingEntry.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+                if (totalSuccess) {
+                    // Set result layout to visible
+                    resultLayout.setVisibility(View.VISIBLE);
+
+                    // Set the result text
+                    TextView resultText = findViewById(R.id.resultText);
+                    resultText.setText("Calculated days: XX");  // Replace "XX" with actual calculation result
                 }
             }
         });
@@ -330,6 +343,7 @@ public class DestinationsActivity extends AppCompatActivity {
         estimatedEndET.setText("");
     }
 
+    @SuppressLint("NewApi")
     private int calculateDays(String startDate, String endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate start = LocalDate.parse(startDate, formatter);
