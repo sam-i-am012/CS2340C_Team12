@@ -2,6 +2,7 @@ package com.example.sprintproject.model;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -95,12 +96,17 @@ public class FirestoreSingleton {
             return;
         }
         String userId = user.getUid();
-        getTravelLogsByUser(userId).observeForever(logs -> {
-            if (logs.size() < 2) {
-                addTravelLog(new TravelLog(userId, "Paris", "2023-12-01", "2023-12-10",
-                        new ArrayList<>(Arrays.asList(userId))), null);
-                addTravelLog(new TravelLog(userId, "New York", "2023-11-15", "2023-11-20",
-                        new ArrayList<>(Arrays.asList(userId))), null);
+        LiveData<List<TravelLog>> travelLogsLiveData = getTravelLogsByUser(userId);
+        travelLogsLiveData.observeForever(new Observer<List<TravelLog>>() {
+            @Override
+            public void onChanged(List<TravelLog> logs) {
+                if (logs.size() < 2) {
+                    addTravelLog(new TravelLog(userId, "Paris", "2023-12-01", "2023-12-10",
+                            new ArrayList<>(Arrays.asList(userId))), null);
+                    addTravelLog(new TravelLog(userId, "New York", "2023-11-15", "2023-11-20",
+                            new ArrayList<>(Arrays.asList(userId))), null);
+                }
+                travelLogsLiveData.removeObserver(this);
             }
         });
     }
