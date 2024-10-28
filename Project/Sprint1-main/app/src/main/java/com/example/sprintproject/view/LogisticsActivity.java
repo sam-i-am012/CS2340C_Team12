@@ -32,7 +32,7 @@ public class LogisticsActivity extends AppCompatActivity {
         // Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(LogisticsViewModel.class);
 
-        // observe the toast message live data
+        // Observe the toast message live data
         viewModel.getToastMessage().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String message) {
