@@ -20,4 +20,14 @@ public class InputValidatorTest {
     public void testIsValidPassword_ValidPassword() {
         assertTrue(InputValidator.isValidPassword("securepassword123"));
     }
+
+    @Test
+    public void testIsValidPassword_EmptyPassword() {
+        assertFalse(InputValidator.isValidPassword(""));
+    }
+
+    @Test
+    public void testIsValidPassword_NullPassword() {
+        assertFalse(InputValidator.isValidPassword(null));
+    }
 }
