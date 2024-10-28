@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Result;
 import com.example.sprintproject.model.TravelLog;
+import com.example.sprintproject.model.User;
 import com.example.sprintproject.model.VacationTimeCalculator;
 import com.example.sprintproject.model.ValidationManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,5 +51,13 @@ public class DestinationsViewModel extends ViewModel {
 
     public String calculateMissingEntry(String entry1, String entry2) {
         return vtCalculator.calculateEntry(entry1, entry2);
+    }
+
+    public LiveData<User> getCurrentUser() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            return repository.getUserById(firebaseUser.getUid());
+        }
+        return null; // Handle user not logged in
     }
 }

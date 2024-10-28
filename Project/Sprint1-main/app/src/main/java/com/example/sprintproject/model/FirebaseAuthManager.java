@@ -6,6 +6,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -27,7 +29,7 @@ public class FirebaseAuthManager {
                         String userEmail = mAuth.getCurrentUser().getEmail();
 
                         // Create a User object to store
-                        User user = new User(userEmail, userId);
+                        User user = new User(userEmail, userId, new ArrayList<>());
 
                         // Save the user data in Firestore and return the original AuthResult
                         return firestore.collection("users")
