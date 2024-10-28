@@ -20,16 +20,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.sprintproject.R;
 import com.example.sprintproject.viewmodel.LogisticsViewModel;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class LogisticsActivity extends AppCompatActivity {
     private LogisticsViewModel viewModel;
@@ -78,7 +73,8 @@ public class LogisticsActivity extends AppCompatActivity {
         // getting pie chart button working
         pieChart.setVisibility(View.GONE);
         viewDataBtn.setOnClickListener(view -> {
-            visualizeTripDays(currentPlannedDays, currentAllocatedDays);  // Call method to visualize
+            // Call method to visualize
+            visualizeTripDays(currentPlannedDays, currentAllocatedDays);
         });
 
 
@@ -110,11 +106,12 @@ public class LogisticsActivity extends AppCompatActivity {
         addUsersButton.setOnClickListener(view -> showAddUserDialog());
 
         addNoteBtn.setOnClickListener(view ->
-                Toast.makeText(getApplicationContext(), "New note button pressed", Toast.LENGTH_SHORT).show()
-                );
+                Toast.makeText(getApplicationContext(), "New note button pressed",
+                        Toast.LENGTH_SHORT).show()
+        );
     }
 
-    private void visualizeTripDays(int plannedDays, int allottedDays ) {
+    private void visualizeTripDays(int plannedDays, int allottedDays) {
         // Create pie chart entries
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(plannedDays, "Planned Days"));
@@ -167,7 +164,8 @@ public class LogisticsActivity extends AppCompatActivity {
 
         // Observe locations from the ViewModel and populate the spinner
         viewModel.getUserLocations().observe(this, locations -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locations);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, locations);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             locationSpinner.setAdapter(adapter);
         });

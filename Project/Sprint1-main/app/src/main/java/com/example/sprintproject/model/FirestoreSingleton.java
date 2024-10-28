@@ -52,61 +52,57 @@ public class FirestoreSingleton {
     }
 
 
-    // Fetch duration (allocated days) for the current user
+    // fetch duration (allocated days) for the current user
     public LiveData<Integer> getDurationForUser(String userId) {
         MutableLiveData<Integer> durationLiveData = new MutableLiveData<>();
 
         firestore.collection("users").document(userId).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
-                        // Get the document snapshot
                         DocumentSnapshot document = task.getResult();
 
-                        // Check if 'duration' field exists
+                        // check if 'duration' field exists
                         if (document.exists() && document.contains("duration")) {
                             Object durationObj = document.get("duration");
                             if (durationObj instanceof Number) {
                                 durationLiveData.setValue(((Number) durationObj).intValue());
                             } else if (durationObj instanceof String) {
                                 try {
-                                    // Try parsing the duration if it's a string
+                                    // try parsing duration if it's a string
                                     int parsedDuration = Integer.parseInt((String) durationObj);
                                     durationLiveData.setValue(parsedDuration);
                                 } catch (NumberFormatException e) {
-                                    // Handle parsing error (invalid number)
+                                    // invalid num
                                     durationLiveData.setValue(0);
                                 }
                             } else {
-                                durationLiveData.setValue(0); // Default if type is unexpected
+                                durationLiveData.setValue(0); // default if type is unexpected
                             }
                         } else {
-                            durationLiveData.setValue(0); // Handle case where document doesn't exist
+                            durationLiveData.setValue(0); // when document doesn't exist
                         }
                     } else {
-                        durationLiveData.setValue(0); // Handle failure case
+                        durationLiveData.setValue(0); // failure happened
                     }
                 });
 
-        return durationLiveData; // Return LiveData to be observed
+        return durationLiveData; // LiveData to be observed
     }
 
     public LiveData<List<TravelLog>> getTravelLogsByUser(String userId) {
         MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
         firestore.collection("travelLogs")
-                .whereEqualTo("userId", userId) // Query logs for this user
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
-                        if (error != null) {
-                            return; // Handle error
-                        }
-                        List<TravelLog> travelLogs = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : value) {
-                            TravelLog log = document.toObject(TravelLog.class);
-                            travelLogs.add(log);
-                        }
-                        travelLogsLiveData.setValue(travelLogs);
+                .whereEqualTo("userId", userId) // query logs for this user
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        return; // to avoid null pointer
                     }
+                    List<TravelLog> travelLogs = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : value) {
+                        TravelLog log = document.toObject(TravelLog.class);
+                        travelLogs.add(log);
+                    }
+                    travelLogsLiveData.setValue(travelLogs);
                 });
         return travelLogsLiveData;
     }
@@ -138,7 +134,8 @@ public class FirestoreSingleton {
         // Automatically set createdAt
         log.setCreatedAt(Timestamp.now());
 
-        // When creating a new travel log, ensure that the creator's userId is added to associatedUserIds
+        // When creating a new travel log, ensure that the creator's userId is added to
+        // associatedUserIds
         if (!log.getAssociatedUsers().contains(log.getUserId())) {
             log.addAssociatedUser(log.getUserId());
         }
@@ -210,12 +207,13 @@ public class FirestoreSingleton {
     }
 
     public void addUserToTrip(String uid, String location) {
-        // TODO: Add logic to add user to the trip in Firestore
+        // todo: Add logic to add user to the trip in Firestore
     }
 
     // Adds startDate, endDate, and duration to their respective locations in a specific user's
     // database entry
-    public void addDatesAndDuration(String userId, String startDate, String endDate, String duration) {
+    public void addDatesAndDuration(String userId, String startDate, String endDate,
+                                    String duration) {
         // Create a map to hold the fields and their values
         Map<String, Object> updates = new HashMap<>();
         updates.put("startDate", startDate);

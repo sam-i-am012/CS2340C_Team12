@@ -21,7 +21,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String email, String password) {
-        // Validate email and password using InputValidator
+        // validate email and password with InputValidator class
         if (!InputValidator.isValidEmail(email)) {
             loginResult.setValue(new Result(false, "Please enter a valid email address."));
             return;
@@ -32,12 +32,13 @@ public class LoginViewModel extends ViewModel {
             return;
         }
 
-        // Proceed with login
+        // continue with login
         firebaseAuthManager.login(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 loginResult.setValue(new Result(true, "Login Successful!"));
             } else {
-                loginResult.setValue(new Result(false, "Login failed: " + task.getException().getMessage()));
+                loginResult.setValue(new Result(false, "Login failed: "
+                        + task.getException().getMessage()));
             }
         });
     }

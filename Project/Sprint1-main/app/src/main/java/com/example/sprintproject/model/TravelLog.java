@@ -12,19 +12,18 @@ public class TravelLog {
     private List<String> associatedUsers;  // optional list of user IDs
     private Timestamp createdAt; // to be able to know which are the most recent ones
 
-
-    // Add a constructor that includes userId
-    public TravelLog(String userId, String destination, String startDate, String endDate, List<String> associatedUsers) {
+    public TravelLog(String userId, String destination, String startDate, String endDate,
+                     List<String> associatedUsers) {
         this.userId = userId;
         this.destination = destination;
         this.startDate = startDate;
         this.endDate = endDate;
         this.associatedUsers = associatedUsers;
-        this.createdAt = Timestamp.now(); // Automatically set to current time
+        this.createdAt = Timestamp.now(); // auto set to current time
 
     }
 
-    public TravelLog() {}
+    public TravelLog() { }
 
     // Getters and setters
     public String getUserId() {

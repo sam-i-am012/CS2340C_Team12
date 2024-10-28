@@ -1,6 +1,5 @@
 package com.example.sprintproject.model;
 
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
@@ -8,7 +7,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 
@@ -29,18 +27,25 @@ public class FirebaseAuthManager {
                         String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                         String userEmail = mAuth.getCurrentUser().getEmail();
 
-                        // Fetch existing user data to avoid overwriting fields like startDate, endDate, duration
+                        // Fetch existing user data to avoid overwriting fields like startDate,
+                        // endDate, duration
                         return firestore.collection("users").document(userId).get()
                                 .continueWithTask(userTask -> {
                                     if (userTask.isSuccessful()) {
                                         // Check if user already exists in Firestore
                                         if (userTask.getResult().exists()) {
-                                            // User already exists, just update the email if it's different
-                                            firestore.collection("users").document(userId).update("email", userEmail);
+                                            // User already exists, just update the email
+                                            // if it's different
+                                            firestore.collection("users").
+                                                    document(userId).
+                                                    update("email", userEmail);
                                         } else {
-                                            // User doesn't exist, create a new user with default fields
-                                            User newUser = new User(userId, userEmail, new ArrayList<>());
-                                            firestore.collection("users").document(userId).set(newUser);
+                                            // User doesn't exist, create a new user with
+                                            // default fields
+                                            User newUser = new User(userId, userEmail,
+                                                    new ArrayList<>());
+                                            firestore.collection("users")
+                                                    .document(userId).set(newUser);
                                         }
 
                                         // Return the original AuthResult wrapped in a Task

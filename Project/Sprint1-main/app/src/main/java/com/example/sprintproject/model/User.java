@@ -10,7 +10,7 @@ public class User {
     private String duration;
     private List<String> associatedDestinations;  // list of destination IDs
 
-    public User() {} // required no arg constructor
+    public User() { } // required no arg constructor
 
     public User(String userId, String email, List<String> associatedDestinations) {
         this.userId = userId;
@@ -32,14 +32,26 @@ public class User {
         this.userId = userId;
     }
 
-    public String getEndDate() { return endDate; }
-    public void setEndDate(String endDate) { this.endDate = endDate; }
+    public String getEndDate() {
+        return endDate;
+    }
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 
-    public String getStartDate() { return startDate; }
-    public void setStartDate(String startDate) { this.startDate = startDate; }
+    public String getStartDate() {
+        return startDate;
+    }
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
 
-    public String getDuration() { return duration; }
-    public void setDuration(String duration) { this.duration = duration; }
+    public String getDuration() {
+        return duration;
+    }
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 
     public List<String> getAssociatedDestinations() {
         return associatedDestinations;

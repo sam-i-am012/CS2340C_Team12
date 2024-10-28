@@ -2,7 +2,6 @@ package com.example.sprintproject.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initialize UI components
+        // UI components
         editTextEmail = findViewById(R.id.email_login);
         editTextPassword = findViewById(R.id.password_login);
         progressBar = findViewById(R.id.progressBar);
@@ -35,69 +34,34 @@ public class LoginActivity extends AppCompatActivity {
         ImageButton quitButton = findViewById(R.id.exitButton);
         TextView createAccount = findViewById(R.id.accountCreationPage);
 
-        // Initialize ViewModel
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-//        // Observe ViewModel changes
-//        loginViewModel.getLoginResult().observe(this, loginResult -> {
-//            if (loginResult.isSuccess()) {
-//                // Navigate to the next screen
-//                Toast.makeText(LoginActivity.this,
-//                        "Login Successful!", Toast.LENGTH_SHORT).show();
-//                startActivity(new Intent(getApplicationContext(), LogisticsActivity.class));
-//                finish();
-//            } else {
-//                progressBar.setVisibility(View.VISIBLE);
-//                Toast.makeText(getApplicationContext(),
-//                        "Login failed", Toast.LENGTH_SHORT).show();
-//            }
-//            progressBar.setVisibility(View.GONE);
-//        });
-//
-//        // Login button click
-//        loginBtn.setOnClickListener(view -> {
-//            String email = editTextEmail.getText().toString().trim();
-//            String password = editTextPassword.getText().toString().trim();
-//
-//            // Validation logic
-//            if (TextUtils.isEmpty(email)) {
-//                Toast.makeText(getApplicationContext(),
-//                        "Please enter an email address", Toast.LENGTH_SHORT).show();
-//            } else if (TextUtils.isEmpty(password)) {
-//                Toast.makeText(getApplicationContext(),
-//                        "Please enter a password", Toast.LENGTH_SHORT).show();
-//            } else {
-//                progressBar.setVisibility(View.VISIBLE);
-//                loginViewModel.login(email, password);
-//            }
-//        });
         loginViewModel.getLoginResult().observe(this, loginResult -> {
-            progressBar.setVisibility(View.GONE); // Hide the progress bar regardless of success or failure
+            progressBar.setVisibility(View.GONE); // always hide the progress bar
             Toast.makeText(LoginActivity.this, loginResult.getMessage(), Toast.LENGTH_SHORT).show();
             if (loginResult.isSuccess()) {
-                // Navigate to the next screen
                 startActivity(new Intent(getApplicationContext(), LogisticsActivity.class));
                 finish();
             }
         });
 
-        // Login button click
+        // login button
         loginBtn.setOnClickListener(view -> {
             String email = editTextEmail.getText().toString().trim();
             String password = editTextPassword.getText().toString().trim();
 
-            // Show progress bar before the login operation
+            // display progress bar
             progressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(email, password);
         });
 
-        // Quit button click
+        // quit button
         quitButton.setOnClickListener(view -> {
             finish();
             System.exit(0);
         });
 
-        // Navigate to account creation
+        // go to create account screen
         createAccount.setOnClickListener(view -> {
             startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
             finish();

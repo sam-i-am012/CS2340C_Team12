@@ -15,7 +15,6 @@ import com.example.sprintproject.model.VacationTimeCalculator;
 import com.example.sprintproject.model.ValidationManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class DestinationsViewModel extends ViewModel {
     }
 
     // for only getting the last five entries
-    public void fetchLastFiveTravelLogsForCurrentUser(){
+    public void fetchLastFiveTravelLogsForCurrentUser() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             return;
@@ -75,7 +74,8 @@ public class DestinationsViewModel extends ViewModel {
         return vtCalculator.calculateEntry(entry1, entry2);
     }
 
-    public void addDatesAndDuration(String userId, String startDate, String endDate, String duration) {
+    public void addDatesAndDuration(String userId, String startDate, String endDate,
+                                    String duration) {
         repository.addDatesAndDuration(userId, startDate, endDate, duration);
     }
 

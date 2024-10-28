@@ -25,6 +25,42 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
         this.travelLogs = travelLogs;
     }
 
+    private int calculateDays(String startDate, String endDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate start = LocalDate.parse(startDate, formatter);
+        LocalDate end = LocalDate.parse(endDate, formatter);
+
+        return (int) ChronoUnit.DAYS.between(start, end);
+    }
+
+    public int getTotalDays() {
+        int totalDays = 0;
+        for (TravelLog log : travelLogs) {
+            totalDays += calculateDays(log.getStartDate(), log.getEndDate());
+        }
+        return totalDays;
+    }
+
+    // public void addLog(TravelLog log) {
+    //    travelLogs.add(log);
+    //    notifyItemInserted(travelLogs.size() - 1); // Update only the last item
+    // }
+    @SuppressLint("NotifyDataSetChanged")
+    public void addLog(TravelLog log) {
+        this.travelLogs.add(0, log); // Add new log at the start
+        if (this.travelLogs.size() > 5) { // to make sure there's only 5 logs or less
+            this.travelLogs.remove(this.travelLogs.size() - 1); // Remove the oldest log
+        }
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateLogs(List<TravelLog> newLogs) {
+        this.travelLogs.clear();
+        this.travelLogs.addAll(newLogs);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,8 +86,8 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
         return travelLogs.size();
     }
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView destinationTextView;
-        TextView daysTextView;
+        private TextView destinationTextView;
+        private TextView daysTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -59,42 +95,5 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
             destinationTextView = itemView.findViewById(R.id.destinationTextView);
             daysTextView = itemView.findViewById(R.id.daysTextView);
         }
-    }
-
-    private int calculateDays(String startDate, String endDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate start = LocalDate.parse(startDate, formatter);
-        LocalDate end = LocalDate.parse(endDate, formatter);
-
-        return (int) ChronoUnit.DAYS.between(start, end);
-    }
-
-    public int getTotalDays() {
-        int totalDays = 0;
-        for (TravelLog log : travelLogs) {
-            totalDays += calculateDays(log.getStartDate(), log.getEndDate());
-        }
-        return totalDays;
-    }
-
-
-//    public void addLog(TravelLog log) {
-//        travelLogs.add(log);
-//        notifyItemInserted(travelLogs.size() - 1); // Update only the last item
-//    }
-    @SuppressLint("NotifyDataSetChanged")
-    public void addLog(TravelLog log) {
-        this.travelLogs.add(0, log); // Add new log at the start
-        if (this.travelLogs.size() > 5) { // to make sure there's only 5 logs or less
-            this.travelLogs.remove(this.travelLogs.size() - 1); // Remove the oldest log
-        }
-        notifyDataSetChanged();
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void updateLogs(List<TravelLog> newLogs) {
-        this.travelLogs.clear();
-        this.travelLogs.addAll(newLogs);
-        notifyDataSetChanged();
     }
 }

@@ -1,7 +1,6 @@
 package com.example.sprintproject.viewmodel;
 
 import android.util.Patterns;
-import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,7 +9,6 @@ import androidx.lifecycle.ViewModel;
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.model.TravelLogValidator;
-import com.example.sprintproject.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +27,10 @@ public class LogisticsViewModel extends ViewModel {
         loadDuration();
     }
 
-    // Method to get user-associated locations from Firestore
     public LiveData<List<String>> getUserLocations() {
         return userLocations;
     }
 
-    // getter for the toast message Live data
     public LiveData<String> getToastMessage() {
         return toastMessage;
     }
@@ -47,7 +43,7 @@ public class LogisticsViewModel extends ViewModel {
         return allocatedLiveData;
     }
 
-    // Load the user's associated locations and update the LiveData
+    // load user's associated locations and update the LiveData
     private void loadUserLocations() {
         String currentUserId = firestoreSingleton.getCurrentUserId();
         firestoreSingleton.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
@@ -75,16 +71,18 @@ public class LogisticsViewModel extends ViewModel {
     // for allocated days
     public void loadDuration() {
         String currentUserId = firestoreSingleton.getCurrentUserId();
-        allocatedLiveData = (MutableLiveData<Integer>) firestoreSingleton.getDurationForUser(currentUserId);
+        allocatedLiveData = (MutableLiveData<Integer>) firestoreSingleton
+                .getDurationForUser(currentUserId);
     }
 
-    // Invite a user to the trip after validating their email
+    // invite a user to the trip after validating their email
     public void inviteUserToTrip(String email, String location) {
         if (!isValidEmail(email)) {
             toastMessage.setValue("Please enter a valid email address.");
             return;
         }
 
+        // check if user invited is already an existing user
         firestoreSingleton.checkEmailExists(email).addOnCompleteListener(task -> {
             if (task.isSuccessful() && !task.getResult().isEmpty()) {
                 String uid = task.getResult().getDocuments().get(0).getId(); // Get the UID
@@ -96,9 +94,8 @@ public class LogisticsViewModel extends ViewModel {
         });
     }
 
-    // Helper to check valid email format
+    // helper to check valid email format
     private boolean isValidEmail(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
-
 }

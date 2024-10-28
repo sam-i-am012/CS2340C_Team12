@@ -1,13 +1,10 @@
 package com.example.sprintproject.model;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Date;
 
 public class VacationTimeCalculator {
 
@@ -46,7 +43,8 @@ public class VacationTimeCalculator {
             // Both entries are dates
             int[] startDateParts = separateDate(entry1);
             int[] endDateParts = separateDate(entry2);
-            LocalDate startDate = LocalDate.of(startDateParts[0], startDateParts[1], startDateParts[2]);
+            LocalDate startDate = LocalDate.of(startDateParts[0], startDateParts[1],
+                    startDateParts[2]);
             LocalDate endDate = LocalDate.of(endDateParts[0], endDateParts[1], endDateParts[2]);
             return Long.toString(getDaysBetween(startDate, endDate));
         } else if (entry1IsDate) {
@@ -58,7 +56,8 @@ public class VacationTimeCalculator {
         } else if (entry2IsDate) {
             // start date is missing
             int[] startDateParts = separateDate(entry2);
-            LocalDate startDate = LocalDate.of(startDateParts[0], startDateParts[1], startDateParts[2]);
+            LocalDate startDate = LocalDate.of(startDateParts[0], startDateParts[1],
+                    startDateParts[2]);
             LocalDate addedStartDate = addDays(startDate, Long.parseLong(entry1) * -1);
             String startDateString = formatDate(addedStartDate);
 
