@@ -18,4 +18,14 @@ public class TravelLogValidatorTest {
     public void testCalculateDaysValid() {
         assertEquals(9, TravelLogValidator.calculateDays("2024-01-01", "2024-01-10"));
     }
+
+    @Test
+    public void testCalculateDaysInvalidStart() {
+        assertEquals(-1, TravelLogValidator.calculateDays("Invalid start", "2024-01-10"));
+    }
+
+    @Test
+    public void testCalculateDaysInvalidEnd() {
+        assertEquals(-1, TravelLogValidator.calculateDays("2024-01-01", "Invalid date")); // Test invalid date
+    }
 }
