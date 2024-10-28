@@ -231,6 +231,10 @@ public class DestinationsActivity extends AppCompatActivity {
                 }
 
                 if (totalSuccess) {
+                    // Add startDate, endDate, and duration to database
+                    viewModel.addDatesAndDuration(firestore.getCurrentUserId(), startDate, endDate,
+                            duration);
+
                     // Set result layout to visible
                     resultLayout.setVisibility(View.VISIBLE);
 

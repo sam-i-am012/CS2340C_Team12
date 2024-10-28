@@ -129,9 +129,15 @@ public class FirestoreSingleton {
         return userLiveData;
     }
 
-
-
     public void addUserToTrip(String uid, String location) {
         // TODO: Add logic to add user to the trip in Firestore
+    }
+
+    // Adds startDate, endDate, and duration to their respective locations in a specific user's
+    // database entry
+    public void addDatesAndDuration(String userId, String startDate, String endDate, String duration) {
+        firestore.collection("users").document(userId).update("startDate", startDate);
+        firestore.collection("users").document(userId).update("endDate", endDate);
+        firestore.collection("users").document(userId).update("duration", duration);
     }
 }

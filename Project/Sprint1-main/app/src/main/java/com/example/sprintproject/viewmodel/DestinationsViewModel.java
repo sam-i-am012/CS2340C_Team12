@@ -18,7 +18,6 @@ public class DestinationsViewModel extends ViewModel {
     private FirestoreSingleton repository;
     private LiveData<List<TravelLog>> travelLogs;
     private VacationTimeCalculator vtCalculator = new VacationTimeCalculator();
-    private com.example.sprintproject.model.ValidationManager ValidationManager = new ValidationManager();
 
     public DestinationsViewModel() {
         repository = FirestoreSingleton.getInstance();
@@ -51,6 +50,10 @@ public class DestinationsViewModel extends ViewModel {
 
     public String calculateMissingEntry(String entry1, String entry2) {
         return vtCalculator.calculateEntry(entry1, entry2);
+    }
+
+    public void addDatesAndDuration(String userId, String startDate, String endDate, String duration) {
+        repository.addDatesAndDuration(userId, startDate, endDate, duration);
     }
 
     public LiveData<User> getCurrentUser() {
