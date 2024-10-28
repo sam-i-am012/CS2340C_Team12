@@ -11,5 +11,13 @@ import com.example.sprintproject.model.InputValidator;
  * and are not empty inputs
  */
 public class InputValidatorTest {
+    @Test
+    public void testIsValidPassword_EmptyPassword() {
+        assertFalse(InputValidator.isValidPassword(""));
+    }
 
+    @Test
+    public void testIsValidPassword_NullPassword() {
+        assertFalse(InputValidator.isValidPassword(null));
+    }
 }
