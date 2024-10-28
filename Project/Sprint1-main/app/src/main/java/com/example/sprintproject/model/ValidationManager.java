@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class ValidationManager {
 
-    public Result validateMissingEntry(String startDate, String endDate, String duration) {
+    public static Result validateMissingEntry(String startDate, String endDate, String duration) {
         int missingCount = 0;
         String missingEntry = "None";
         if (startDate.isEmpty()) {
@@ -31,8 +31,8 @@ public class ValidationManager {
         }
     }
 
-    public Result validateDateRange(String startDate, String endDate) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    public static Result validateDateRange(String startDate, String endDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(false); // Ensures strict date parsing
 
         try {
@@ -48,7 +48,7 @@ public class ValidationManager {
                 return new Result(true, null);
             }
         } catch (ParseException e) {
-            return new Result(false, "Invalid date format, Please use DD/MM/YYYY");
+            return new Result(false, "Invalid date format, Please use:\nYYYY-MM-DD");
         }
     }
 }
