@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
 
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.FirestoreSingleton;
@@ -22,6 +23,11 @@ import com.example.sprintproject.viewmodel.DestinationsViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.example.sprintproject.model.Result;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnFailureListener;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -193,10 +199,10 @@ public class DestinationsActivity extends AppCompatActivity {
 
                 // Set result layout to visible
                 resultLayout.setVisibility(View.VISIBLE);
-
                 // Set the result text
+                int totalDays = adapter.getTotalDays();
                 TextView resultText = findViewById(R.id.resultText);
-                resultText.setText("Calculated days: XX");  // Replace "XX" with actual calculation result
+                resultText.setText(totalDays + "\n" + "days");
 
                 Result missingEntry = viewModel.validateMissingEntry(startDate, endDate, duration);
                 if (missingEntry.isSuccess()) {
@@ -232,8 +238,13 @@ public class DestinationsActivity extends AppCompatActivity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Hide result layout
                 resultLayout.setVisibility(View.GONE);
+                TextView resultText = findViewById(R.id.resultText);
+                resultText.setText("XX Days");
+
+                startDateET.setText("");
+                endDateET.setText("");
+                durationET.setText("");
             }
         });
 

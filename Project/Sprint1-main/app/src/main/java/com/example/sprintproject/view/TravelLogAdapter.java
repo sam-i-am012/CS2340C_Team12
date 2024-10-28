@@ -67,4 +67,13 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
 
         return (int) ChronoUnit.DAYS.between(start, end);
     }
+
+    public int getTotalDays() {
+        int totalDays = 0;
+        for (TravelLog log : travelLogs) {
+            int days = calculateDays(log.getStartDate(), log.getEndDate());
+            totalDays += days;
+        }
+        return totalDays;
+    }
 }
