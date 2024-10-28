@@ -17,8 +17,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sprintproject.R;
-import com.example.sprintproject.model.TravelLog;
-import com.example.sprintproject.viewmodel.DestinationsViewModel;
 import com.example.sprintproject.viewmodel.LogisticsViewModel;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -28,6 +26,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LogisticsActivity extends AppCompatActivity {
     private LogisticsViewModel viewModel;
@@ -54,6 +53,16 @@ public class LogisticsActivity extends AppCompatActivity {
             }
         });
 
+
+        AtomicInteger currentPlannedDays = new AtomicInteger();
+        // observe the planned days
+        viewModel.getPlannedDaysLiveData().observe(this, plannedDays ->
+                currentPlannedDays.set(plannedDays)
+        );
+
+
+
+
         ImageButton diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
         ImageButton destinationsButton = findViewById(R.id.destinationsButton);
         ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
@@ -66,7 +75,7 @@ public class LogisticsActivity extends AppCompatActivity {
         // getting pie chart button working
         pieChart.setVisibility(View.GONE);
         viewDataBtn.setOnClickListener(view -> {
-            visualizeTripDays();  // Call method to visualize
+            visualizeTripDays(currentPlannedDays.get());  // Call method to visualize
         });
 
 
@@ -102,9 +111,8 @@ public class LogisticsActivity extends AppCompatActivity {
                 );
     }
 
-    private void visualizeTripDays() {
-        int allottedDays = 7; // TODO: actually have this pull from database
-        int plannedDays = 4;
+    private void visualizeTripDays(int plannedDays) {
+        int allottedDays = 30;
         // Create pie chart entries
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(plannedDays, "Planned Days"));

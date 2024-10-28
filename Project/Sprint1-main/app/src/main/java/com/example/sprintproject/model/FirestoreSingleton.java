@@ -27,6 +27,7 @@ public class FirestoreSingleton {
     private static FirestoreSingleton instance;
     private FirebaseFirestore firestore;
     private MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<User>> userLiveData = new MutableLiveData<>();
     private FirebaseAuth auth;
 
     private FirestoreSingleton() {
@@ -45,6 +46,29 @@ public class FirestoreSingleton {
         return auth.getCurrentUser().getUid();
     }
 
+//
+//    public LiveData<List<User>> getUserLog() {
+//        MutableLiveData<List<User>> usersLiveData = new MutableLiveData<>();
+//
+//        firestore.collection("users")
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
+//                        if (error != null) {
+//                            return; // Handle error appropriately
+//                        }
+//
+//                        List<User> users = new ArrayList<>();
+//                        for (QueryDocumentSnapshot document : value) {
+//                            User user = document.toObject(User.class); // Assuming you have a User class
+//                            users.add(user);
+//                        }
+//                        usersLiveData.setValue(users); // Set the retrieved users to LiveData
+//                    }
+//                });
+//
+//        return usersLiveData;
+//    }
     public LiveData<List<TravelLog>> getTravelLogsByUser(String userId) {
         MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
         firestore.collection("travelLogs")

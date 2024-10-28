@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DestinationsActivity extends AppCompatActivity {
 
@@ -106,6 +108,16 @@ public class DestinationsActivity extends AppCompatActivity {
             adapterAll = new TravelLogAdapter(travelLogs);
         });
 
+        viewModel.getPlannedDaysLiveData().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer totalDays) {
+                // Update the total days text
+                updateTotalDaysText(totalDays);
+            }
+        });
+
+        viewModel.loadTripDays();
+
         // will only show the last five entries
         viewModel.getLastFiveTravelLogs().observe(this, travelLogs -> {
             if (adapter == null) {
@@ -140,7 +152,7 @@ public class DestinationsActivity extends AppCompatActivity {
                     cancelButton.setVisibility(View.GONE);
                     submitButton.setVisibility(View.GONE);
                     // Initially set result layout to not visible
-                    resultLayout.setVisibility(View.GONE);
+                    resultLayout.setVisibility(View.VISIBLE);
 
                 }
             }
@@ -192,12 +204,12 @@ public class DestinationsActivity extends AppCompatActivity {
                 adapter.addLog(newLog);
 
                 // Set result layout to visible
-                resultLayout.setVisibility(View.VISIBLE);
+//                resultLayout.setVisibility(View.VISIBLE);
 
                 // Update the total days text
-                int totalDays = adapterAll.getTotalDays();
-                TextView resultText = findViewById(R.id.resultText);
-                resultText.setText(totalDays + "\n" + "days");
+//                int totalDays = currentPlannedDays;
+//                TextView resultText = findViewById(R.id.resultText);
+//                resultText.setText(totalDays + "\n" + "days");
 
                 // Clear the input fields
                 clearInputFields();
@@ -332,6 +344,11 @@ public class DestinationsActivity extends AppCompatActivity {
                     TravelCommunityActivity.class);
             startActivity(travelCommunityIntent);
         });
+    }
+
+    private void updateTotalDaysText(int totalDays) {
+        TextView resultText = findViewById(R.id.resultText);
+        resultText.setText(totalDays + "\n" + "days");
     }
 
     private void addTravelLog() {

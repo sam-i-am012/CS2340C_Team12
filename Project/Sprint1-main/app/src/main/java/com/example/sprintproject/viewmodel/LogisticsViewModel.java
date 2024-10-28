@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.TravelLog;
+import com.example.sprintproject.model.TravelLogValidator;
+import com.example.sprintproject.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,6 @@ public class LogisticsViewModel extends ViewModel {
     private FirestoreSingleton firestoreSingleton;
     private MutableLiveData<List<String>> userLocations = new MutableLiveData<>();
     private MutableLiveData<String> toastMessage = new MutableLiveData<>();
-    private MutableLiveData<Integer> allottedDaysLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> plannedDaysLiveData = new MutableLiveData<>();
 
     public LogisticsViewModel() {
@@ -36,10 +37,6 @@ public class LogisticsViewModel extends ViewModel {
         return toastMessage;
     }
 
-    public MutableLiveData<Integer> getAllottedDaysLiveData() {
-        return allottedDaysLiveData;
-    }
-
     public MutableLiveData<Integer> getPlannedDaysLiveData() {
         return plannedDaysLiveData;
     }
@@ -56,19 +53,16 @@ public class LogisticsViewModel extends ViewModel {
         });
     }
 
-    // TODO: actually follow MVVM pattern
-    private void loadTripDays() {
+    // for planned days
+    public void loadTripDays() {
         String currentUserId = firestoreSingleton.getCurrentUserId();
         // Fetch trip data from Firestore and update LiveData accordingly
         firestoreSingleton.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
-            if (travelLogs != null && !travelLogs.isEmpty()) {
-                // Assuming TravelLog contains startDate and endDate to calculate days
-                TravelLog log = travelLogs.get(0);  // Example: first trip
-                int allottedDays = log.calculateAllottedDays();
-                int plannedDays = log.calculatePlannedDays();
-                allottedDaysLiveData.setValue(allottedDays);
-                plannedDaysLiveData.setValue(plannedDays);
+            int totalDays = 0;
+            for (TravelLog log : travelLogs) {
+                totalDays += TravelLogValidator.calculateDays(log.getStartDate(), log.getEndDate());
             }
+            plannedDaysLiveData.setValue(totalDays);
         });
     }
 

@@ -3,11 +3,13 @@ package com.example.sprintproject.viewmodel;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Result;
 import com.example.sprintproject.model.TravelLog;
+import com.example.sprintproject.model.TravelLogValidator;
 import com.example.sprintproject.model.User;
 import com.example.sprintproject.model.VacationTimeCalculator;
 import com.example.sprintproject.model.ValidationManager;
@@ -22,6 +24,8 @@ public class DestinationsViewModel extends ViewModel {
     private LiveData<List<TravelLog>> travelLogs;
     private LiveData<List<TravelLog>> lastFivetravelLogs;
     private VacationTimeCalculator vtCalculator = new VacationTimeCalculator();
+    private MutableLiveData<Integer> plannedDaysLiveData = new MutableLiveData<>();
+
 
     public DestinationsViewModel() {
         repository = FirestoreSingleton.getInstance();
@@ -81,5 +85,21 @@ public class DestinationsViewModel extends ViewModel {
             return repository.getUserById(firebaseUser.getUid());
         }
         return null; // Handle user not logged in
+    }
+
+    public void loadTripDays() {
+        String currentUserId = repository.getCurrentUserId();
+        // Fetch trip data from Firestore and update LiveData accordingly
+        repository.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
+            int totalDays = 0;
+            for (TravelLog log : travelLogs) {
+                totalDays += TravelLogValidator.calculateDays(log.getStartDate(), log.getEndDate());
+            }
+            plannedDaysLiveData.setValue(totalDays);
+        });
+    }
+
+    public MutableLiveData<Integer> getPlannedDaysLiveData() {
+        return plannedDaysLiveData;
     }
 }
