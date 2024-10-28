@@ -1,5 +1,7 @@
 package com.example.sprintproject.model;
 
+import com.google.firebase.Timestamp;
+
 import java.util.List;
 
 public class TravelLog {
@@ -8,6 +10,8 @@ public class TravelLog {
     private String startDate;
     private String endDate;
     private List<String> associatedUsers;  // optional list of user IDs
+    private Timestamp createdAt; // to be able to know which are the most recent ones
+
 
     // Add a constructor that includes userId
     public TravelLog(String userId, String destination, String startDate, String endDate, List<String> associatedUsers) {
@@ -16,6 +20,8 @@ public class TravelLog {
         this.startDate = startDate;
         this.endDate = endDate;
         this.associatedUsers = associatedUsers;
+        this.createdAt = Timestamp.now(); // Automatically set to current time
+
     }
 
     public TravelLog() {}
@@ -67,4 +73,14 @@ public class TravelLog {
             associatedUsers.add(userId);
         }
     }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+
 }

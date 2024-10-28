@@ -1,5 +1,7 @@
 package com.example.sprintproject.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -11,12 +13,14 @@ import com.example.sprintproject.model.VacationTimeCalculator;
 import com.example.sprintproject.model.ValidationManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
 public class DestinationsViewModel extends ViewModel {
     private FirestoreSingleton repository;
     private LiveData<List<TravelLog>> travelLogs;
+    private LiveData<List<TravelLog>> lastFivetravelLogs;
     private VacationTimeCalculator vtCalculator = new VacationTimeCalculator();
 
     public DestinationsViewModel() {
@@ -34,6 +38,21 @@ public class DestinationsViewModel extends ViewModel {
 
     public LiveData<List<TravelLog>> getTravelLogs() {
         return travelLogs;
+    }
+
+    // for only getting the last five entries
+    public void fetchLastFiveTravelLogsForCurrentUser(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            return;
+        }
+        String userId = user.getUid();
+        Log.d("Firestore", "Fetching travel logs for user: " + userId);
+        lastFivetravelLogs = repository.getLastFiveTravelLogsByUser(userId);
+    }
+
+    public LiveData<List<TravelLog>> getLastFiveTravelLogs() {
+        return lastFivetravelLogs;
     }
 
     public void addTravelLog(TravelLog log) {

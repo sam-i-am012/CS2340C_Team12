@@ -3,6 +3,8 @@ package com.example.sprintproject.model;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import com.google.firebase.Timestamp;
+
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -11,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -63,7 +66,33 @@ public class FirestoreSingleton {
         return travelLogsLiveData;
     }
 
+    public LiveData<List<TravelLog>> getLastFiveTravelLogsByUser(String userId) {
+        MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
+        firestore.collection("travelLogs")
+                .whereEqualTo("userId", userId)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .limit(5) // Limit to the last 5 entries
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
+                        if (error != null) {
+                            return; // Handle error
+                        }
+                        List<TravelLog> travelLogs = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : value) {
+                            TravelLog log = document.toObject(TravelLog.class);
+                            travelLogs.add(log);
+                        }
+                        travelLogsLiveData.setValue(travelLogs);
+                    }
+                });
+        return travelLogsLiveData;
+    }
+
     public void addTravelLog(TravelLog log, OnCompleteListener<DocumentReference> listener) {
+        // Automatically set createdAt
+        log.setCreatedAt(Timestamp.now());
+
         // When creating a new travel log, ensure that the creator's userId is added to associatedUserIds
         if (!log.getAssociatedUsers().contains(log.getUserId())) {
             log.addAssociatedUser(log.getUserId());

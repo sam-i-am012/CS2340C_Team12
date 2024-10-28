@@ -1,6 +1,7 @@
 
 package com.example.sprintproject.view;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,9 +72,29 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
     public int getTotalDays() {
         int totalDays = 0;
         for (TravelLog log : travelLogs) {
-            int days = calculateDays(log.getStartDate(), log.getEndDate());
-            totalDays += days;
+            totalDays += calculateDays(log.getStartDate(), log.getEndDate());
         }
         return totalDays;
+    }
+
+
+//    public void addLog(TravelLog log) {
+//        travelLogs.add(log);
+//        notifyItemInserted(travelLogs.size() - 1); // Update only the last item
+//    }
+    @SuppressLint("NotifyDataSetChanged")
+    public void addLog(TravelLog log) {
+        this.travelLogs.add(0, log); // Add new log at the start
+        if (this.travelLogs.size() > 5) { // to make sure there's only 5 logs or less
+            this.travelLogs.remove(this.travelLogs.size() - 1); // Remove the oldest log
+        }
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateLogs(List<TravelLog> newLogs) {
+        this.travelLogs.clear();
+        this.travelLogs.addAll(newLogs);
+        notifyDataSetChanged();
     }
 }
