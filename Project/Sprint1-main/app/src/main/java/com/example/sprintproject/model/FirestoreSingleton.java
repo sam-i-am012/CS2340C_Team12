@@ -1,5 +1,7 @@
 package com.example.sprintproject.model;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -22,7 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirestoreSingleton {
     private static FirestoreSingleton instance;
@@ -212,8 +216,21 @@ public class FirestoreSingleton {
     // Adds startDate, endDate, and duration to their respective locations in a specific user's
     // database entry
     public void addDatesAndDuration(String userId, String startDate, String endDate, String duration) {
-        firestore.collection("users").document(userId).update("startDate", startDate);
-        firestore.collection("users").document(userId).update("endDate", endDate);
-        firestore.collection("users").document(userId).update("duration", duration);
+        // Create a map to hold the fields and their values
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("startDate", startDate);
+        updates.put("endDate", endDate);
+        updates.put("duration", duration);
+
+        // Perform the update with all fields at once
+        firestore.collection("users").document(userId).update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    // Successfully updated the document
+                    Log.d("Firestore", "DocumentSnapshot successfully updated!");
+                })
+                .addOnFailureListener(e -> {
+                    // Failed to update the document
+                    Log.w("Firestore", "Error updating document", e);
+                });
     }
 }

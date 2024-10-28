@@ -2,6 +2,7 @@ package com.example.sprintproject.view;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.sprintproject.R;
 import com.example.sprintproject.viewmodel.LogisticsViewModel;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -55,13 +58,11 @@ public class LogisticsActivity extends AppCompatActivity {
         // observe the planned days
         viewModel.getPlannedDaysLiveData().observe(this, plannedDays -> {
             currentPlannedDays = plannedDays;
-            visualizeTripDays(currentPlannedDays, currentAllocatedDays);  // Call method to visualize
         });
 
         // observe allocated days
         viewModel.getAllocatedLiveData().observe(this, allocatedDays -> {
             currentAllocatedDays = allocatedDays;
-            visualizeTripDays(currentPlannedDays, currentAllocatedDays);  // Call method to visualize
         });
 
 
@@ -121,7 +122,31 @@ public class LogisticsActivity extends AppCompatActivity {
 
         // Create dataset
         PieDataSet dataSet = new PieDataSet(entries, "Trip Days");
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        // customize pie chart data numbers
+        dataSet.setColors(Color.parseColor("#78979c"), Color.parseColor("#b0bdbf"), Color.BLACK);
+        dataSet.setSliceSpace(2f);  // Set space between slices
+        dataSet.setValueTextSize(24f);  // Set text size for values inside slices
+        dataSet.setValueTextColor(Color.BLACK);  // Set value text color
+
+
+
+        // Customize pie chart appearance
+        pieChart.setHoleRadius(40f);  // Hole in the middle
+        pieChart.setTransparentCircleRadius(45f);  // Transparent circle around hole
+        pieChart.setCenterText("Trip Days");
+        pieChart.setCenterTextSize(16f);  // Text size for center text
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setExtraOffsets(20f, 10f, 10f, 8f); // to avoid clipping
+
+
+        // Set label color for each entry (Planned Days, Remaining Allotted Days)
+        pieChart.setEntryLabelColor(Color.BLACK);
+        pieChart.setEntryLabelTextSize(15f);
+
+
+        // Animate the chart
+        pieChart.animateY(1500);  // Animation for showing chart
 
         // Create pie data and set it to chart
         PieData data = new PieData(dataSet);

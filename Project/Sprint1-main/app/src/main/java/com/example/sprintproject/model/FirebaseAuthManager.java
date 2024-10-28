@@ -1,6 +1,7 @@
 package com.example.sprintproject.model;
 
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.Task;
@@ -24,24 +25,37 @@ public class FirebaseAuthManager {
         return mAuth.signInWithEmailAndPassword(email, password)
                 .continueWithTask(task -> {
                     if (task.isSuccessful()) {
-                        // save user's email and UID to firestone after successful login
+                        // Get the logged-in user's ID and email
                         String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                         String userEmail = mAuth.getCurrentUser().getEmail();
 
-                        // Create a User object to store
-                        User user = new User(userId, userEmail, new ArrayList<>());
+                        // Fetch existing user data to avoid overwriting fields like startDate, endDate, duration
+                        return firestore.collection("users").document(userId).get()
+                                .continueWithTask(userTask -> {
+                                    if (userTask.isSuccessful()) {
+                                        // Check if user already exists in Firestore
+                                        if (userTask.getResult().exists()) {
+                                            // User already exists, just update the email if it's different
+                                            firestore.collection("users").document(userId).update("email", userEmail);
+                                        } else {
+                                            // User doesn't exist, create a new user with default fields
+                                            User newUser = new User(userId, userEmail, new ArrayList<>());
+                                            firestore.collection("users").document(userId).set(newUser);
+                                        }
 
-                        // Save the user data in Firestore and return the original AuthResult
-                        return firestore.collection("users")
-                                .document(userId)
-                                .set(user)
-                                .continueWith(t -> task.getResult()); // Return the original AuthResult
+                                        // Return the original AuthResult wrapped in a Task
+                                        return Tasks.forResult(task.getResult());
+                                    } else {
+                                        throw Objects.requireNonNull(userTask.getException());
+                                    }
+                                });
                     } else {
                         // if login failed, propagate the error
                         throw Objects.requireNonNull(task.getException());
                     }
                 });
     }
+
 
     public Task<AuthResult> createAccount(String email, String password) {
         return mAuth.createUserWithEmailAndPassword(email, password);
