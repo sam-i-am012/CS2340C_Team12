@@ -30,10 +30,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class LogisticsActivity extends AppCompatActivity {
     private LogisticsViewModel viewModel;
-
     private PieChart pieChart;
-    private TravelLogAdapter adapter;
-
+    private int currentPlannedDays = 0;
+    private int currentAllocatedDays = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,14 +52,17 @@ public class LogisticsActivity extends AppCompatActivity {
             }
         });
 
-
-        AtomicInteger currentPlannedDays = new AtomicInteger();
         // observe the planned days
-        viewModel.getPlannedDaysLiveData().observe(this, plannedDays ->
-                currentPlannedDays.set(plannedDays)
-        );
+        viewModel.getPlannedDaysLiveData().observe(this, plannedDays -> {
+            currentPlannedDays = plannedDays;
+            visualizeTripDays(currentPlannedDays, currentAllocatedDays);  // Call method to visualize
+        });
 
-
+        // observe allocated days
+        viewModel.getAllocatedLiveData().observe(this, allocatedDays -> {
+            currentAllocatedDays = allocatedDays;
+            visualizeTripDays(currentPlannedDays, currentAllocatedDays);  // Call method to visualize
+        });
 
 
         ImageButton diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
@@ -75,7 +77,7 @@ public class LogisticsActivity extends AppCompatActivity {
         // getting pie chart button working
         pieChart.setVisibility(View.GONE);
         viewDataBtn.setOnClickListener(view -> {
-            visualizeTripDays(currentPlannedDays.get());  // Call method to visualize
+            visualizeTripDays(currentPlannedDays, currentAllocatedDays);  // Call method to visualize
         });
 
 
@@ -111,8 +113,7 @@ public class LogisticsActivity extends AppCompatActivity {
                 );
     }
 
-    private void visualizeTripDays(int plannedDays) {
-        int allottedDays = 30;
+    private void visualizeTripDays(int plannedDays, int allottedDays ) {
         // Create pie chart entries
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(plannedDays, "Planned Days"));
@@ -159,7 +160,9 @@ public class LogisticsActivity extends AppCompatActivity {
                         // Call ViewModel to handle invitation logic
                         viewModel.inviteUserToTrip(email, selectedLocation);
                     } else {
-                        Toast.makeText(LogisticsActivity.this, "Please enter a valid email and select a location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LogisticsActivity.this,
+                                "Please enter a valid email and select a location",
+                                Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", null)

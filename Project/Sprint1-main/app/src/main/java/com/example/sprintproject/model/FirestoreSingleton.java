@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -46,29 +47,45 @@ public class FirestoreSingleton {
         return auth.getCurrentUser().getUid();
     }
 
-//
-//    public LiveData<List<User>> getUserLog() {
-//        MutableLiveData<List<User>> usersLiveData = new MutableLiveData<>();
-//
-//        firestore.collection("users")
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
-//                        if (error != null) {
-//                            return; // Handle error appropriately
-//                        }
-//
-//                        List<User> users = new ArrayList<>();
-//                        for (QueryDocumentSnapshot document : value) {
-//                            User user = document.toObject(User.class); // Assuming you have a User class
-//                            users.add(user);
-//                        }
-//                        usersLiveData.setValue(users); // Set the retrieved users to LiveData
-//                    }
-//                });
-//
-//        return usersLiveData;
-//    }
+
+    // Fetch duration (allocated days) for the current user
+    public LiveData<Integer> getDurationForUser(String userId) {
+        MutableLiveData<Integer> durationLiveData = new MutableLiveData<>();
+
+        firestore.collection("users").document(userId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        // Get the document snapshot
+                        DocumentSnapshot document = task.getResult();
+
+                        // Check if 'duration' field exists
+                        if (document.exists() && document.contains("duration")) {
+                            Object durationObj = document.get("duration");
+                            if (durationObj instanceof Number) {
+                                durationLiveData.setValue(((Number) durationObj).intValue());
+                            } else if (durationObj instanceof String) {
+                                try {
+                                    // Try parsing the duration if it's a string
+                                    int parsedDuration = Integer.parseInt((String) durationObj);
+                                    durationLiveData.setValue(parsedDuration);
+                                } catch (NumberFormatException e) {
+                                    // Handle parsing error (invalid number)
+                                    durationLiveData.setValue(0);
+                                }
+                            } else {
+                                durationLiveData.setValue(0); // Default if type is unexpected
+                            }
+                        } else {
+                            durationLiveData.setValue(0); // Handle case where document doesn't exist
+                        }
+                    } else {
+                        durationLiveData.setValue(0); // Handle failure case
+                    }
+                });
+
+        return durationLiveData; // Return LiveData to be observed
+    }
+
     public LiveData<List<TravelLog>> getTravelLogsByUser(String userId) {
         MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
         firestore.collection("travelLogs")

@@ -20,11 +20,13 @@ public class LogisticsViewModel extends ViewModel {
     private MutableLiveData<List<String>> userLocations = new MutableLiveData<>();
     private MutableLiveData<String> toastMessage = new MutableLiveData<>();
     private MutableLiveData<Integer> plannedDaysLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> allocatedLiveData = new MutableLiveData<>();
 
     public LogisticsViewModel() {
         firestoreSingleton = FirestoreSingleton.getInstance();
         loadUserLocations();
         loadTripDays();
+        loadDuration();
     }
 
     // Method to get user-associated locations from Firestore
@@ -39,6 +41,10 @@ public class LogisticsViewModel extends ViewModel {
 
     public MutableLiveData<Integer> getPlannedDaysLiveData() {
         return plannedDaysLiveData;
+    }
+
+    public MutableLiveData<Integer> getAllocatedLiveData() {
+        return allocatedLiveData;
     }
 
     // Load the user's associated locations and update the LiveData
@@ -64,6 +70,12 @@ public class LogisticsViewModel extends ViewModel {
             }
             plannedDaysLiveData.setValue(totalDays);
         });
+    }
+
+    // for allocated days
+    public void loadDuration() {
+        String currentUserId = firestoreSingleton.getCurrentUserId();
+        allocatedLiveData = (MutableLiveData<Integer>) firestoreSingleton.getDurationForUser(currentUserId);
     }
 
     // Invite a user to the trip after validating their email
