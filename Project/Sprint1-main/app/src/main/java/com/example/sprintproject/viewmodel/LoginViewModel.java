@@ -5,26 +5,40 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.sprintproject.model.FirebaseAuthManager;
+import com.example.sprintproject.model.InputValidator;
 import com.example.sprintproject.model.Result;
 
 public class LoginViewModel extends ViewModel {
-    private final MutableLiveData<Result> loginResult = new MutableLiveData<>();
-    private final FirebaseAuthManager loginRepository = new FirebaseAuthManager();
+    private FirebaseAuthManager firebaseAuthManager;
+    private MutableLiveData<Result> loginResult = new MutableLiveData<>();
+
+    public LoginViewModel() {
+        firebaseAuthManager = new FirebaseAuthManager();
+    }
 
     public LiveData<Result> getLoginResult() {
         return loginResult;
     }
 
     public void login(String email, String password) {
-        // Call the repository and handle the task result
-        loginRepository.login(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        loginResult.setValue(new Result(true, null));
-                    } else {
-                        loginResult.setValue(new Result(false,
-                                task.getException().getMessage()));
-                    }
-                });
+        // Validate email and password using InputValidator
+        if (!InputValidator.isValidEmail(email)) {
+            loginResult.setValue(new Result(false, "Please enter a valid email address."));
+            return;
+        }
+
+        if (!InputValidator.isValidPassword(password)) {
+            loginResult.setValue(new Result(false, "Please enter a password."));
+            return;
+        }
+
+        // Proceed with login
+        firebaseAuthManager.login(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                loginResult.setValue(new Result(true, "Login Successful!"));
+            } else {
+                loginResult.setValue(new Result(false, "Login failed: " + task.getException().getMessage()));
+            }
+        });
     }
 }

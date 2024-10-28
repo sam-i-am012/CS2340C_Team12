@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.TravelLog;
+import com.example.sprintproject.model.TravelLogValidator;
 import com.example.sprintproject.viewmodel.DestinationsViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -281,18 +282,20 @@ public class DestinationsActivity extends AppCompatActivity {
         if (user == null) {
             return;
         }
+
         String userId = user.getUid();
         String destination = travelLocationET.getText().toString().trim();
         String startDate = estimatedStartET.getText().toString().trim();
         String endDate = estimatedEndET.getText().toString().trim();
 
-        if (TextUtils.isEmpty(destination) || TextUtils.isEmpty(startDate) || TextUtils.isEmpty(endDate)) {
+        // Use the TravelLogValidator for validations
+        if (TravelLogValidator.areFieldsEmpty(destination, startDate, endDate)) {
             Toast.makeText(getApplicationContext(),
                     "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
-        } else if (isDateFormatInvalid(startDate) ||
-                isDateFormatInvalid(endDate) ||
-                calculateDays(startDate, endDate) < 0) {
+        } else if (TravelLogValidator.isDateFormatInvalid(startDate) ||
+                TravelLogValidator.isDateFormatInvalid(endDate) ||
+                TravelLogValidator.calculateDays(startDate, endDate) < 0) {
             Toast.makeText(getApplicationContext(),
                     "Please enter valid dates (YYYY-MM-DD)", Toast.LENGTH_SHORT).show();
             return;
