@@ -235,8 +235,9 @@ public class DestinationsActivity extends AppCompatActivity {
                     resultLayout.setVisibility(View.VISIBLE);
 
                     // Set the result text
+                    int totalDays = adapter.getTotalDays();
                     TextView resultText = findViewById(R.id.resultText);
-                    resultText.setText("Calculated days: XX");  // Replace "XX" with actual calculation result
+                    resultText.setText(totalDays + "\n" + "days");
                 }
             }
         });
@@ -247,6 +248,12 @@ public class DestinationsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Hide result layout
                 resultLayout.setVisibility(View.GONE);
+                TextView resultText = findViewById(R.id.resultText);
+                resultText.setText("XX Days");
+
+                startDateET.setText("");
+                endDateET.setText("");
+                durationET.setText("");
             }
         });
 
