@@ -47,6 +47,7 @@ public class LogisticsActivity extends AppCompatActivity {
         ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
         ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
         ImageButton addUsersButton = findViewById(R.id.addUsersBtn);
+        ImageButton addNoteBtn = findViewById(R.id.addNoteBtn);
 
         diningEstablishmentsButton.setOnClickListener(view -> {
             Intent diningEstablishmentsIntent = new Intent(LogisticsActivity.this,
@@ -74,6 +75,10 @@ public class LogisticsActivity extends AppCompatActivity {
 
         // Add users button
         addUsersButton.setOnClickListener(view -> showAddUserDialog());
+
+        addNoteBtn.setOnClickListener(view ->
+                Toast.makeText(getApplicationContext(), "New note button pressed", Toast.LENGTH_SHORT).show()
+                );
     }
 
     // Method for the pop-up dialog

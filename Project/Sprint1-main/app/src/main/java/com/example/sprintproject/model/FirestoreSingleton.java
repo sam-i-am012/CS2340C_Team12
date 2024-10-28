@@ -129,8 +129,6 @@ public class FirestoreSingleton {
         return userLiveData;
     }
 
-
-
     public void addUserToTrip(String uid, String location) {
         // TODO: Add logic to add user to the trip in Firestore
     }

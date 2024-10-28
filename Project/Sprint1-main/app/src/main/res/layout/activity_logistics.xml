@@ -50,6 +50,19 @@
         android:layout_marginRight="15dp"
         android:layout_marginBottom="15dp"/>
 
+    <!-- add note button -->
+    <ImageButton
+        android:id="@+id/addNoteBtn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:src="@drawable/new_note"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/navigationBarLL"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="15dp"/>
+
     <!-- Navigation Bar -->
     <LinearLayout
         android:id="@+id/navigationBarLL"
