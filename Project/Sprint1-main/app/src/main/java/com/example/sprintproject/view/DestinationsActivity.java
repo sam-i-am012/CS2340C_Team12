@@ -201,6 +201,7 @@ public class DestinationsActivity extends AppCompatActivity {
                             entry = viewModel.calculateMissingEntry(duration, endDate);
                             if (entry != null) {
                                 startDateET.setText(entry);
+                                startDate = startDateET.getText().toString();
                             } else {
                                 totalSuccess = false;
                                 Toast.makeText(DestinationsActivity.this,
@@ -211,12 +212,14 @@ public class DestinationsActivity extends AppCompatActivity {
                         case "End Date":
                             entry = viewModel.calculateMissingEntry(startDate, duration);
                             endDateET.setText(entry);
+                            endDate = endDateET.getText().toString();
                             break;
                         case "Duration":
                             Result dateRangeValid = viewModel.validateDateRange(startDate, endDate);
                             if (dateRangeValid.isSuccess()) {
                                 entry = viewModel.calculateMissingEntry(startDate, endDate);
                                 durationET.setText(entry);
+                                duration = durationET.getText().toString();
                                 break;
                             } else {
                                 totalSuccess = false;
