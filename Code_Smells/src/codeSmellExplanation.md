@@ -9,7 +9,15 @@ Participating members: Samantha Mau, Kyle Sanquist, Jackson Li, Jiayi Liang, Ril
     -  `applyOrderDiscounts`: handle discounts like gift card and the total > $100 discount. 
 
 
-2. 
+2. A code smell can be found in the 'Item' class. 
+   Issue: The Item class currently handles both item attributes and discount-related properties. This violates the **single responsibility principle**.
+   To fix this code smell I have:
+   - **Created `Discount` Class**: The `Discount` class is introduced to encapsulate discount-related logic, including types and amounts. It now manages how discounts are applied, isolating this functionality from `Item`.
+   - **Refactored `Item` Class**: The `Item` class was simplified to focus only on item attributes: `name`, `price`, and `quantity`.
+   - **Updated `TaxableItem` Class**: The `TaxableItem` class was modified to use the new `Discount` class. It now calculates the total price including tax while utilizing the discount logic from the `Discount` class.
+   After the fix:
+   - Each class now has a single reason to change, which adheres to the SRP. `Item` handles item properties, while `Discount` manages discount logic.
+
 3. 
 4. 
 5. 
