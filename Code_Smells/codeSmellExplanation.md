@@ -18,7 +18,14 @@ Participating members: Samantha Mau, Kyle Sanquist, Jackson Li, Jiayi Liang, Ril
    After the fix:
    - Each class now has a single reason to change, which adheres to the SRP. `Item` handles item properties, while `Discount` manages discount logic.
 
-3. 
+3. A code smell can be found in the 'EmailSender' class.
+   Issue: The EmailSender class only serves one purpose, which includes a static method that prints out three lines of information. This class is violating the **single responsibility principle**, delegating work to the 'Order' class.
+   Currently, the 'EmailSender' class is acting as a middle man, only delegating work to the 'Order' class
+   To fix this code smell, I have:
+   - Completely deleted the 'EmailSender' class
+   - Incorporated the 'sendEmail' method into the 'Order' class by simply moving the code to where the method was called
+   - Removed the calling of the 'sendEmail' method in the 'Order' class
+   This has simplified the code as there is now one less class to worry about. This refactoring has simplified the design without sacrificing functionality.
 4. 
 5. 
 6. 
