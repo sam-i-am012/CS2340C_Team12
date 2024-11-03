@@ -1,6 +1,10 @@
 import java.util.List;
 
 public class Order {
+    private static final double GIFT_CARD_DISCOUNT = 10.0;
+    private static final double LARGE_ORDER_DISCOUNT_THRESHOLD = 100.0;
+    private static final double LARGE_ORDER_DISCOUNT_RATE = 0.9;
+
     private List<Item> items;
     private String customerName;
     private String customerEmail;
@@ -80,10 +84,10 @@ public class Order {
 
     private double applyOrderDiscounts(double total) {
         if (hasGiftCard()) {
-            total -= 10.0; // subtract $10 for gift card
+            total -= GIFT_CARD_DISCOUNT; // subtract $10 for gift card
         }
-        if (total > 100.0) {
-            total *= 0.9; // apply 10% discount for orders over $100
+        if (total > LARGE_ORDER_DISCOUNT_THRESHOLD) {
+            total *= LARGE_ORDER_DISCOUNT_RATE; // apply 10% discount for orders over $100
         }
         return total;
     }
