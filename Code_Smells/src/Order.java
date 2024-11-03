@@ -150,6 +150,8 @@ public class Order {
         this.customerEmail = customerEmail;
     }
 
+    // -------------- Fixed Code Smell #5 ----------------------
+    //`Order` doesn't depend on GiftCardItem subclass
     public boolean hasGiftCard() {
         for (Item item : items) {
             if (item.isGiftCard()) {
@@ -158,6 +160,7 @@ public class Order {
         }
         return false;
     }
+    // --------------------------------------------------------------------------
 
    public void printOrder() {
         System.out.println("Order Details:");

@@ -4,8 +4,12 @@ public class GiftCardItem extends Item {
         super(name, price, quantity, discountType, discountAmount);
     }
 
+    // -------------- Fixed Code Smell #5 ----------------------
+    //create new method to maintain low coupling
     @Override
     public boolean isGiftCard() {
         return true;
     }
+    // ---------------------------------------------------------
+
 }
