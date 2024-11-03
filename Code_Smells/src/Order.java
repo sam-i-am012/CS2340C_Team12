@@ -10,6 +10,18 @@ public class Order {
     private String customerEmail;
 
     public Order(List<Item> items, String customerName, String customerEmail) {
+        // -------------- Fixed Code Smell #6 ----------------------
+        // added null and empty string checks and messages for `items`, `customerName`, and `customerEmail` in the constructor
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("Item list cannot be null or empty");
+        }
+        if (customerName == null || customerName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Customer name cannot be null or empty");
+        }
+        if (customerEmail == null || customerEmail.trim().isEmpty()) {
+            throw new IllegalArgumentException("Customer email cannot be null or empty");
+        }
+        // ---------------------------------------------------------
         this.items = items;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
@@ -131,6 +143,12 @@ public class Order {
     }
 
     public void setItems(List<Item> items) {
+        // -------------- Fixed Code Smell #6 ----------------------
+        // added null and empty string check for `items` in the appropriate setter
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("Item list cannot be null or empty");
+        }
+        // ---------------------------------------------------------
         this.items = items;
     }
 
@@ -139,6 +157,12 @@ public class Order {
     }
 
     public void setCustomerName(String customerName) {
+        // -------------- Fixed Code Smell #6 ----------------------
+        // added null and empty string check and message for `customerName` in the appropriate setter
+        if (customerName == null || customerName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Customer name cannot be null or empty");
+        }
+        // ---------------------------------------------------------
         this.customerName = customerName;
     }
 
@@ -147,6 +171,12 @@ public class Order {
     }
 
     public void setCustomerEmail(String customerEmail) {
+        // -------------- Fixed Code Smell #6 ----------------------
+        // added null and empty string check and message for `customerEmail` in the appropriate setter
+        if (customerEmail == null || customerEmail.trim().isEmpty()) {
+            throw new IllegalArgumentException("Customer email cannot be null or empty");
+        }
+        // ---------------------------------------------------------
         this.customerEmail = customerEmail;
     }
 
