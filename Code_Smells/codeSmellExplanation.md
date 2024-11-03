@@ -24,7 +24,15 @@ Participating members: Samantha Mau, Kyle Sanquist, Jackson Li, Jiayi Liang, Ril
    - Incorporated the 'sendEmail' method into the 'Order' class by simply moving the code to where the method was called
    - Removed the calling of the 'sendEmail' method in the 'Order' class
    This has simplified the code as there is now one less class to worry about. This refactoring has simplified the design without sacrificing functionality.
-4. 
+
+4. A code smell can be found in the `Order` class.  
+   Issue: the `calculateItemTax` method in `Order` should be moved to the `TaxableItem` class to uphold the
+   **single responsibility principle** as it makes sense that a taxable item should be in charge of calculating
+   its own tax.  
+   To fix this code smell the following has been done:
+   - Removed the calculateItemTax method from the `Order` class.
+   - The implementation of the calculateItexTax has been modified as it no longer needs to check if the item is taxable.
+   - The usage of the `calculateItemTax` method has been modified to check if the item is taxable before adding the tax.
 5. 
 6. 
 

@@ -51,7 +51,13 @@ public class Order {
         double total = 0.0;
         for (Item item : items) {
             double itemTotal = calculateItemDiscount(item) * item.getQuantity(); // new method to calculate discount
-            itemTotal += calculateItemTax(item); // new method to calculate tax
+            // -------------- Fixed Code Smell #4 ----------------------
+            // Modified usage of calculateTax() as it has been moved to TaxableItem.java
+            if (item instanceof TaxableItem) {
+                TaxableItem taxableItem = (TaxableItem) item;
+                itemTotal += taxableItem.calculateItemTax();
+            }
+            // ---------------------------------------------------------
             total += itemTotal;
         }
         total = applyOrderDiscounts(total); // new method to see if any discounts can be applied
@@ -74,13 +80,15 @@ public class Order {
         return price;
     }
 
-    private double calculateItemTax(Item item) {
-        if (item instanceof TaxableItem) {
-            TaxableItem taxableItem = (TaxableItem) item;
-            return (taxableItem.getTaxRate() / 100.0) * taxableItem.getPrice();
-        }
-        return 0.0;
-    }
+    // -------------- Fixed Code Smell #4 ----------------------
+    // Moved to TaxableItem.java to uphold Single Responsibility Principle
+//    private double calculateItemTax(Item item) {
+//        if (item instanceof TaxableItem) {
+//            TaxableItem taxableItem = (TaxableItem) item;
+//            return (taxableItem.getTaxRate() / 100.0) * taxableItem.getPrice();
+//        }
+//        return 0.0;
+//    }
 
     private double applyOrderDiscounts(double total) {
         if (hasGiftCard()) {
