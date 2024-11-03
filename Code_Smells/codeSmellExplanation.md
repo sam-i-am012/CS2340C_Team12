@@ -33,7 +33,13 @@ Participating members: Samantha Mau, Kyle Sanquist, Jackson Li, Jiayi Liang, Ril
    - Removed the calculateItemTax method from the `Order` class.
    - The implementation of the calculateItexTax has been modified as it no longer needs to check if the item is taxable.
    - The usage of the `calculateItemTax` method has been modified to check if the item is taxable before adding the tax.
-5. 
+
+5. A code smell can be found in teh `Order` class.
+   Issue: the `hasGiftCard` method in `Order` was dependent on a specific subclass, `GiftCardItem`, which violates the **open closed principle** since there is high coupling.
+   To fix this code smell, I:
+   - created a method `isGiftCard` within `Item` that returns false as a default
+   - since `GiftCardItem` extends `Item` it will override the `isGiftCard` method to return true
+   - edited `Order` to not use instanceof and can now call `isGiftCard` directly on each item. This makes `Order` unaware of other subclasses and allows new tupes of gift card items in the future with changing itself.
 6. 
 
 

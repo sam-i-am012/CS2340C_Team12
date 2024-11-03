@@ -32,4 +32,8 @@ class Item {
     public double getDiscountAmount() {
         return discountAmount;
     }
+
+    public boolean isGiftCard() {
+        return false;
+    }
 }
