@@ -33,6 +33,8 @@ public class FirestoreSingleton {
     private FirebaseFirestore firestore;
     private MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<User>> userLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Dining>> diningLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
     private FirebaseAuth auth;
 
     private FirestoreSingleton() {
@@ -231,4 +233,73 @@ public class FirestoreSingleton {
                     Log.w("Firestore", "Error updating document", e);
                 });
     }
+
+    public void addDining (Dining dining, OnCompleteListener<DocumentReference> listener){
+        firestore.collection("dining")
+                .add(dining)
+                .addOnCompleteListener( task -> {
+                    if (task.isSuccessful()) {
+                        String diningId = task.getResult().getId();
+
+                        updateUserAssociatedDestinations(dining.getUserId(), diningId);
+                    }
+                    if (listener != null) {
+                        listener.onComplete(task);
+                    }
+                });
+    }
+
+    public LiveData<List<Dining>> getDiningByUser(String userId) {
+        MutableLiveData<List<Dining>> diningLiveData = new MutableLiveData<>();
+        firestore.collection("dining")
+                .whereEqualTo("userId", userId) // query logs for this user
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        return; // to avoid null pointer
+                    }
+                    List<Dining> diningLogs = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : value) {
+                        //TravelLog log = document.toObject(TravelLog.class);
+                        Dining log = document.toObject(Dining.class);
+                        diningLogs.add(log);
+                        //travelLogs.add(log);
+                    }
+                    diningLiveData.setValue(diningLogs);
+                });
+        return diningLiveData;
+    }
+
+    public void addAccommodation (Accommodation accommodation, OnCompleteListener<DocumentReference> listener){
+        firestore.collection("accommodation")
+                .add(accommodation)
+                .addOnCompleteListener( task -> {
+                    if (task.isSuccessful()) {
+                        String accommodationId = task.getResult().getId();
+
+                        updateUserAssociatedDestinations(accommodation.getUserId(), accommodationId);
+                    }
+                    if (listener != null) {
+                        listener.onComplete(task);
+                    }
+                });
+    }
+
+    public LiveData<List<Accommodation>> getAccommodationByUser(String userId) {
+        MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
+        firestore.collection("accommodation")
+                .whereEqualTo("userId", userId) // query logs for this user
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        return; // to avoid null pointer
+                    }
+                    List<Accommodation> accommodationLogs = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : value) {
+                        Accommodation log = document.toObject(Accommodation.class);
+                        accommodationLogs.add(log);
+                    }
+                    accommodationLiveData.setValue(accommodationLogs);
+                });
+        return accommodationLiveData;
+    }
+
 }
