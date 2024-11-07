@@ -9,22 +9,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
+
+        <!-- Visualize Data Button-->
         <TextView
             android:id="@+id/logisticsTitle"
             android:layout_width="403dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Logistics"
-            android:textSize="50sp"
             android:fontFamily="@font/coolvetica"
-            android:textColor="@color/darkBlue"
             android:gravity="center"
+            android:text="Logistics"
+            android:textColor="@color/darkBlue"
+            android:textSize="50sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Visualize Data Button-->
         <Button
             android:id="@+id/viewDataButton"
             android:layout_width="wrap_content"
