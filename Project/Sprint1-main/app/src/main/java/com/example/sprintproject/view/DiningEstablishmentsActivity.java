@@ -7,8 +7,13 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.sprintproject.R;
+import com.example.sprintproject.viewmodel.DiningViewModel;
+
+import java.util.ArrayList;
 
 public class DiningEstablishmentsActivity extends AppCompatActivity {
+    private DiningViewModel diningViewModel;
+    //private ReservationsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,5 +60,9 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
                 startActivity(travelCommunityIntent);
             }
         });
+
+        // Sprint 3
+
+
     }
 }
