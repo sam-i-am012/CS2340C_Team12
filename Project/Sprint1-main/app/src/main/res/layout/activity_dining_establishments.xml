@@ -30,20 +30,21 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/diningList"
+            android:id="@+id/rvReservations"
             android:layout_width="match_parent"
-            android:layout_height="518dp"
+            android:layout_height="505dp"
             android:layout_weight="1"
             android:paddingTop="8dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addReservationButton"
+            android:id="@+id/fabAddReservation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:contentDescription="Add Reservation"
-            android:src="@drawable/plus" />
+            android:src="@drawable/ic_add"
+            app:backgroundTint="@color/bluegray"
+            android:contentDescription="Add Reservation"/>
     </LinearLayout>
 
 
