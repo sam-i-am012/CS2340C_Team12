@@ -6,9 +6,21 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sprintproject.R;
+import com.example.sprintproject.model.Accommodation;
+import com.example.sprintproject.viewmodel.AccommodationViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 public class AccommodationsActivity extends AppCompatActivity {
+    private AccommodationViewModel accommodationViewModel;
+    private AccommodationsAdapter accommodationAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +65,28 @@ public class AccommodationsActivity extends AppCompatActivity {
                 Intent travelCommunityIntent = new Intent(AccommodationsActivity.this,
                         TravelCommunityActivity.class);
                 startActivity(travelCommunityIntent);
+            }
+        });
+        RecyclerView recyclerView = findViewById(R.id.accommodationRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        accommodationAdapter = new AccommodationsAdapter();
+        recyclerView.setAdapter(accommodationAdapter);
+
+        accommodationViewModel = new ViewModelProvider(this).get(AccommodationViewModel.class);
+        accommodationViewModel.getAccommodationLogs().observe(this, new Observer<List<Accommodation>>() {
+            @Override
+            public void onChanged(List<Accommodation> accommodations) {
+                accommodationAdapter.setAccommodations(accommodations);
+            }
+        });
+
+        FloatingActionButton addAccommodationButton = findViewById(R.id.addAccommodationButton);
+        addAccommodationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open AddAccommodationDialog to add new accommodation
+                AddAccommodationsDialog dialog = new AddAccommodationsDialog();
+                dialog.show(getSupportFragmentManager(), "AddAccommodationDialog");
             }
         });
     }

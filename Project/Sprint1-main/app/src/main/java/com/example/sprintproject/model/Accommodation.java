@@ -19,6 +19,16 @@ public class Accommodation {
         this.roomType = roomType;
         this.userId = userId;
     }
+    public Accommodation(String location, String userId) {
+        this.location = location;
+        this.userId = userId;
+        // Set default values for the other fields
+        this.checkInTime = "";
+        this.checkOutTime = "";
+        this.numRooms = 0;
+        this.roomType = null;
+    }
+
 
     public String getLocation() {
         return location;
