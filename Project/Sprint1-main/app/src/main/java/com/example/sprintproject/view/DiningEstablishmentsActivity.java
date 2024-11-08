@@ -1,6 +1,9 @@
 package com.example.sprintproject.view;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -25,6 +28,13 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
         ImageButton logisticsButton = findViewById(R.id.logisticsButton);
         ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
 
+        Dialog dialog = new Dialog(this);
+        
+        dialog.setContentView(R.layout.new_reservation);
+        // dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        // Navigation Bar Logic
         destinationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
