@@ -13,7 +13,7 @@
 
         <TextView
             android:id="@+id/accommodationsTitle"
-            android:layout_width="403dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="My Accommodations"
@@ -30,8 +30,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/accommodationRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="510dp"
             android:paddingTop="8dp"/>
 
         <!-- Floating Action Button for adding new accommodation -->
@@ -40,9 +39,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_margin="16dp"
+            android:layout_margin="10dp"
             android:contentDescription="Add accommodation"
-            android:src="@drawable/plus"/>
+            android:src="@android:drawable/ic_input_add"/>
     </LinearLayout>
 
     <!-- Navigation Bar -->
