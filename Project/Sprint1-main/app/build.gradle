@@ -29,10 +29,6 @@ android {
     }
     buildFeatures {
         viewBinding true
-        compose true
-    }
-    kotlinOptions {
-        jvmTarget = '11'
     }
 }
 
