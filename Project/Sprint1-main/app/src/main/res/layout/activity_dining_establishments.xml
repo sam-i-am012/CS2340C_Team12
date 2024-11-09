@@ -13,12 +13,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <!-- RecyclerView for Dining List -->
-
         <TextView
             android:id="@+id/diningTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="@font/coolvetica"
             android:gravity="center"
             android:text="Dining Reservations"
@@ -29,22 +29,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvReservations"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="505dp"
-            android:layout_weight="1"
-            android:paddingTop="8dp" />
+            android:layout_height="match_parent" >
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAddReservation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_add"
-            app:backgroundTint="@color/bluegray"
-            android:contentDescription="Add Reservation"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvReservations"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
+                app:layout_constraintBottom_toTopOf="@id/navigationBarLL" />
+
+            <!-- Add Reservation Button -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAddReservation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_add"
+                app:backgroundTint="@color/bluegray"
+                app:tint="@android:color/white"
+                android:contentDescription="Add Reservation"/>
+        </FrameLayout>
     </LinearLayout>
 
 
