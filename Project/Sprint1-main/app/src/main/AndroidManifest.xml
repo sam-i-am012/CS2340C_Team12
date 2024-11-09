@@ -17,7 +17,7 @@
             android:exported="false" />
         <activity
             android:name=".view.TravelCommunityActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".view.AccommodationsActivity"
             android:exported="false" />
@@ -26,8 +26,8 @@
             android:exported="false" />
         <activity
             android:name=".view.DestinationsActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.CreateAccountActivity"
             android:exported="false" />
