@@ -9,13 +9,23 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sprintproject.R;
+import com.example.sprintproject.model.Accommodation;
+import com.example.sprintproject.model.Dining;
+import com.example.sprintproject.viewmodel.AccommodationViewModel;
 import com.example.sprintproject.viewmodel.DiningViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 public class DiningEstablishmentsActivity extends AppCompatActivity {
     private DiningViewModel diningViewModel;
-    //private ReservationsAdapter adapter;
+    private DiningsAdapter diningAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +54,18 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
             }
         });
 
+        RecyclerView recyclerView = findViewById(R.id.rvReservations);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        diningAdapter = new DiningsAdapter();
+        recyclerView.setAdapter(diningAdapter);
+
+        diningViewModel = new ViewModelProvider(this).get(DiningViewModel.class);
+        diningViewModel.getDiningLogs().observe(this, new Observer<List<Dining>>() {
+            @Override
+            public void onChanged(List<Dining> dinings) {
+                diningAdapter.setDinings(dinings);
+            }
+        });
 
 
         // Navigation bar logic
@@ -82,8 +104,6 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
                 startActivity(travelCommunityIntent);
             }
         });
-
-        // Sprint 3
 
 
     }
