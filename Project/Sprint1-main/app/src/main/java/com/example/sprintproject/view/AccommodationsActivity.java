@@ -87,7 +87,7 @@ public class AccommodationsActivity extends AppCompatActivity {
                 return;
             }
 
-            Accommodation newLog = new Accommodation(location, checkInTime, checkOutTime, 0, null, userId);
+            Accommodation newLog = new Accommodation(null, location, checkInTime, checkOutTime, 0, null, userId);
 
             // Add the new log directly to the adapter and update total days
             adapter.addLog(newLog);
