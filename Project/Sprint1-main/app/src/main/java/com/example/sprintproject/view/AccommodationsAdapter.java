@@ -28,10 +28,29 @@ public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAd
     @Override
     public void onBindViewHolder(@NonNull AccommodationViewHolder holder, int position) {
         Accommodation accommodation = accommodations.get(position);
-        holder.location.setText(accommodation.getLocation());
-        holder.checkInTime.setText("Check-In: " + accommodation.getCheckInTime());
-        holder.checkOutTime.setText("Check-Out: " + accommodation.getCheckOutTime());
+
+        // Set location
+        holder.locationText.setText(accommodation.getLocation());
+
+        // Set hotel name
+        holder.hotelNameText.setText(accommodation.getHotel());
+
+        // Set check-in and check-out times
+        holder.checkInOutText.setText("Check-in: " + accommodation.getCheckInTime() +
+                ", Check-out: " + accommodation.getCheckOutTime());
+
+        // Set number of rooms
+        holder.numRoomsText.setText("Number of Rooms: " + accommodation.getNumRooms());
+
+        // Set room type label text (if available)
+        if (accommodation.getRoomType() != null && !accommodation.getRoomType().isEmpty()) {
+            holder.roomTypeLabel.setText(accommodation.getRoomType().get(0));
+            holder.roomTypeLabel.setVisibility(View.VISIBLE);
+        } else {
+            holder.roomTypeLabel.setVisibility(View.GONE); // Hide if no room type is provided
+        }
     }
+
 
     @Override
     public int getItemCount() {
@@ -43,14 +62,16 @@ public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAd
         notifyDataSetChanged();
     }
 
-    static class AccommodationViewHolder extends RecyclerView.ViewHolder {
-        TextView location, checkInTime, checkOutTime;
+    public static class AccommodationViewHolder extends RecyclerView.ViewHolder {
+        TextView locationText, hotelNameText, checkInOutText, numRoomsText, roomTypeLabel;
 
-        AccommodationViewHolder(View itemView) {
+        public AccommodationViewHolder(@NonNull View itemView) {
             super(itemView);
-            location = itemView.findViewById(R.id.location);
-            checkInTime = itemView.findViewById(R.id.checkInTime);
-            checkOutTime = itemView.findViewById(R.id.checkOutTime);
+            locationText = itemView.findViewById(R.id.locationText);
+            hotelNameText = itemView.findViewById(R.id.hotelNameText);
+            checkInOutText = itemView.findViewById(R.id.checkInOutText);
+            numRoomsText = itemView.findViewById(R.id.numRoomsText);
+            roomTypeLabel = itemView.findViewById(R.id.roomTypeLabel);
         }
     }
 }
