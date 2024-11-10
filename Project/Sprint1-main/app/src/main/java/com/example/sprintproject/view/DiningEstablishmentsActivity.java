@@ -43,41 +43,10 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
         FloatingActionButton reservationDialogButton = findViewById(R.id.fabAddReservation);
 
         // Add reservation button and dialog logic
-        reservationDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Dialog dialog = new Dialog(DiningEstablishmentsActivity.this);
-                dialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog_bg);
-                dialog.setContentView(R.layout.dialog_add_reservation);
-                dialog.show();
-
-                EditText nameET = dialog.findViewById(R.id.etName);
-                EditText timeET = dialog.findViewById(R.id.etTime);
-                EditText locationET = dialog.findViewById(R.id.etLocation);
-                EditText websiteET = dialog.findViewById(R.id.etWebsite);
-
-                // Observe reservation result
-                diningViewModel.getResValidationResult().observe(DiningEstablishmentsActivity.this,
-                        result -> {
-                            Toast.makeText(DiningEstablishmentsActivity.this, result.getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                            if (result.isSuccess()) {
-                                // TODO: add reservation to recycler/database
-                            }
-                        });
-
-                Button addReservationButton = dialog.findViewById(R.id.btnAddReservationDialog);
-                addReservationButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String name = nameET.getText().toString().trim();
-                        String time = timeET.getText().toString().trim();
-                        String location = locationET.getText().toString().trim();
-                        String website = websiteET.getText().toString().trim();
-                        diningViewModel.validateNewReservation(name, time, location, website);
-                    }
-                });
-            }
+        reservationDialogButton.setOnClickListener(view -> {
+            AddReservationDialog addReservationDialog = new AddReservationDialog(
+                    DiningEstablishmentsActivity.this, diningViewModel);
+            addReservationDialog.show();
         });
 
         RecyclerView recyclerView = findViewById(R.id.rvReservations);
