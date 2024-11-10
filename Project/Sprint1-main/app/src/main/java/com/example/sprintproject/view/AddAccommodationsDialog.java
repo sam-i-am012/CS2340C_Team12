@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -30,8 +32,13 @@ public class AddAccommodationsDialog extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_accommodation, null);
 
-        final EditText editTextName = dialogView.findViewById(R.id.editTextAccommodationName);
-        final EditText editTextLocation = dialogView.findViewById(R.id.editTextAccommodationLocation);
+        EditText editTextCheckInAccommodation = dialogView.findViewById(R.id.editTextAccommodationCheckInTime);
+        EditText editTextCheckOutAccommodation = dialogView.findViewById(R.id.editTextAccommodationCheckOutTime);
+        EditText editTextAccommodationLocation = dialogView.findViewById(R.id.editTextAccommodationLocation);
+        EditText editTextHotelName = dialogView.findViewById(R.id.editTextHotelName);
+        Spinner numberOfRoomsSpinner = dialogView.findViewById(R.id.numberOfRoomsSpinner);
+        Spinner roomTypeSpinner = dialogView.findViewById(R.id.roomTypeSpinner);
+        Button btnAddAccommodationDialog = dialogView.findViewById(R.id.btnAddAccommodationDialog);
 
         builder.setView(dialogView)
                 .setTitle("Add Accommodation")
