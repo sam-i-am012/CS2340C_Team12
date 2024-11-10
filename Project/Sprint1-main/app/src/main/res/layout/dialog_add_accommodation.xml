@@ -5,13 +5,19 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/editTextAccommodationName"
+        android:id="@+id/editTextAccommodationLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Accommodation Name" />
+        android:hint="Location" />
 
     <EditText
-        android:id="@+id/editTextAccommodationLocation"
+        android:id="@+id/editTextAccommodationCheckInTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Location" />
+
+    <EditText
+        android:id="@+id/editTextAccommodationCheckOutTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Location" />

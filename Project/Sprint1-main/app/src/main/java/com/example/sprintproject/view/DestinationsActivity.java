@@ -86,7 +86,6 @@ public class DestinationsActivity extends AppCompatActivity {
         viewModelObserver(); // helper method to observe all live data from view model
         viewModel.loadTripDays();
 
-
         logTravelButton.setOnClickListener(v -> {
             logTravelBtnVisibility(); // helper method to have the travel log inputs visible
         });
@@ -139,7 +138,7 @@ public class DestinationsActivity extends AppCompatActivity {
             // Clear the input fields
             clearInputFields();
 
-            // Optionally, add the log to the ViewModel/database asynchronously
+            // Add the log to the ViewModel/database asynchronously
             viewModel.addTravelLog(newLog);
         });
 
@@ -280,7 +279,6 @@ public class DestinationsActivity extends AppCompatActivity {
         }
     }
 
-
     private void navButtonsLogic() {
         // Handle navigation bar button presses
         diningEstablishmentsButton.setOnClickListener(view -> {
@@ -337,36 +335,6 @@ public class DestinationsActivity extends AppCompatActivity {
     private void updateTotalDaysText(int totalDays) {
         TextView resultText = findViewById(R.id.resultText);
         resultText.setText(totalDays + "\n" + "days");
-    }
-
-    private void addTravelLog() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            return;
-        }
-
-        String userId = user.getUid();
-        String destination = travelLocationET.getText().toString().trim();
-        String startDate = estimatedStartET.getText().toString().trim();
-        String endDate = estimatedEndET.getText().toString().trim();
-
-        // Use the TravelLogValidator for validations
-        if (TravelLogValidator.areFieldsEmpty(destination, startDate, endDate)) {
-            Toast.makeText(getApplicationContext(),
-                    "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (TravelLogValidator.isDateFormatInvalid(startDate)
-                || TravelLogValidator.isDateFormatInvalid(endDate)
-                || TravelLogValidator.calculateDays(startDate, endDate) < 0) {
-            Toast.makeText(getApplicationContext(),
-                    "Please enter valid dates (YYYY-MM-DD)", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        TravelLog newLog = new TravelLog(userId, destination, startDate, endDate,
-                new ArrayList<>());
-        viewModel.addTravelLog(newLog); // Update the ViewModel to add new log
-        clearInputFields();
     }
 
     // following is implemented again in travelLog validator to ensure testing is correct
