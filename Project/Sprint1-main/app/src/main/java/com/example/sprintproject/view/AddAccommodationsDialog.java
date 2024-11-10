@@ -43,8 +43,8 @@ public class AddAccommodationsDialog extends DialogFragment {
         builder.setView(dialogView)
                 .setTitle("Add Accommodation")
                 .setPositiveButton("Save", (dialogInterface, i) -> {
-                    String name = editTextHotelName.getText().toString().trim();
-                    String location = editTextAccommodationLocation.getText().toString().trim();
+                    String name = editTextName.getText().toString().trim();
+                    String location = editTextLocation.getText().toString().trim();
 
                     if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(location)) {
                         Accommodation accommodation = new Accommodation(name, location);
