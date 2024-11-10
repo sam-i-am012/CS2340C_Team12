@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 
 
@@ -158,9 +160,32 @@ public class FirestoreSingleton {
                 });
     }
 
+    // adds new travel log ID to the asssociatedDestinations array field for specific uer
     private void updateUserAssociatedDestinations(String userId, String travelLogId) {
         firestore.collection("users").document(userId)
                 .update("associatedDestinations", FieldValue.arrayUnion(travelLogId));
+    }
+
+    // synchronizes the associatedDestinations field (will be used at the login screen in case
+    // destinations were manually removed from database)
+    public void syncUserAssociatedDestinationsOnLogin(String userId, OnCompleteListener<Void> onCompleteListener) {
+        // get all valid destinations from the travelLogs collection associated with the userId
+        firestore.collection("travelLogs")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<String> validDestinations = new ArrayList<>();
+
+                    // collect all destination IDs from travelLogs that match the user
+                    for (DocumentSnapshot destinationDoc : querySnapshot) {
+                        validDestinations.add(destinationDoc.getId());
+                    }
+
+                    // update the user's associated destinations with only the valid destinations
+                    firestore.collection("users").document(userId)
+                            .update("associatedDestinations", validDestinations)
+                            .addOnCompleteListener(onCompleteListener);
+                });
     }
 
     public void prepopulateDatabase() {
