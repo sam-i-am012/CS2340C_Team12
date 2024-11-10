@@ -3,6 +3,7 @@ package com.example.sprintproject.model;
 import java.util.List;
 
 public class Accommodation {
+    private String hotel;
     private String location;
     private String checkInTime;
     private String checkOutTime;
@@ -11,7 +12,8 @@ public class Accommodation {
     private String userId;
 
     public Accommodation() {}
-    public Accommodation(String location, String checkInTime, String checkOutTime, int numRooms, List<String> roomType, String userId) {
+    public Accommodation(String hotel, String location, String checkInTime, String checkOutTime, int numRooms, List<String> roomType, String userId) {
+        this.hotel = hotel;
         this.location = location;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
@@ -29,6 +31,14 @@ public class Accommodation {
         this.roomType = null;
     }
 
+
+    public String getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(String hotel) {
+        this.hotel = hotel;
+    }
 
     public String getLocation() {
         return location;

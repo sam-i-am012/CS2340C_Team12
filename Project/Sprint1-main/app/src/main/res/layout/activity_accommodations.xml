@@ -5,17 +5,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@id/navigationBarLL"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/accommodationsTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp"
             android:text="My Accommodations"
             android:textSize="40sp"
             android:fontFamily="@font/coolvetica"
@@ -26,22 +28,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- RecyclerView for accommodation entries -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/accommodationRecyclerView"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="510dp"
-            android:paddingTop="8dp"/>
+            android:layout_height="match_parent" >
 
-        <!-- Floating Action Button for adding new accommodation -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addAccommodationButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="10dp"
-            android:contentDescription="Add accommodation"
-            android:src="@android:drawable/ic_input_add"/>
+            <!-- RecyclerView for accommodation entries -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/accommodationRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
+                app:layout_constraintBottom_toTopOf="@id/navigationBarLL" />
+
+            <!-- Floating Action Button for adding new accommodation -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addAccommodationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_add"
+                app:backgroundTint="@color/bluegray"
+                app:tint="@android:color/white"
+                android:contentDescription="Add accommodation"/>
+        </FrameLayout>
     </LinearLayout>
 
     <!-- Navigation Bar -->
