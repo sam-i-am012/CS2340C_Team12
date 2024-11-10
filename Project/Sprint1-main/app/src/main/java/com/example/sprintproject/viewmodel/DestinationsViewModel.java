@@ -12,7 +12,7 @@ import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.model.TravelLogValidator;
 import com.example.sprintproject.model.User;
 import com.example.sprintproject.model.VacationTimeCalculator;
-import com.example.sprintproject.model.ValidationManager;
+import com.example.sprintproject.model.CalcVacationTimeValidator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -63,11 +63,11 @@ public class DestinationsViewModel extends ViewModel {
     }
 
     public Result validateMissingEntry(String startDate, String endDate, String duration) {
-        return ValidationManager.validateMissingEntry(startDate, endDate, duration);
+        return CalcVacationTimeValidator.validateMissingEntry(startDate, endDate, duration);
     }
 
     public Result validateDateRange(String startDate, String endDate) {
-        return ValidationManager.validateDateRange(startDate, endDate);
+        return CalcVacationTimeValidator.validateDateRange(startDate, endDate);
     }
 
     public String calculateMissingEntry(String entry1, String entry2) {
