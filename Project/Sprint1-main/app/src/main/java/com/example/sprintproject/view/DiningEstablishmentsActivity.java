@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -18,6 +19,7 @@ import com.example.sprintproject.R;
 import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.viewmodel.AccommodationViewModel;
+import com.example.sprintproject.viewmodel.DestinationsViewModel;
 import com.example.sprintproject.viewmodel.DiningViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -32,25 +34,49 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dining_establishments);
 
+        diningViewModel = new ViewModelProvider(this).get(DiningViewModel.class);
+
         ImageButton destinationsButton = findViewById(R.id.destinationsButton);
         ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
         ImageButton logisticsButton = findViewById(R.id.logisticsButton);
         ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
         FloatingActionButton reservationDialogButton = findViewById(R.id.fabAddReservation);
 
-        Dialog dialog = new Dialog(this);
-        EditText timeET = dialog.findViewById(R.id.etTime);
-        EditText locationET = dialog.findViewById(R.id.etLocation);
-        EditText websiteET = dialog.findViewById(R.id.etWebsite);
-        Button addReservationButton = dialog.findViewById(R.id.btnAddReservationDialog);
-
         // Add reservation button and dialog logic
         reservationDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Dialog dialog = new Dialog(DiningEstablishmentsActivity.this);
                 dialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog_bg);
                 dialog.setContentView(R.layout.dialog_add_reservation);
                 dialog.show();
+
+                EditText nameET = dialog.findViewById(R.id.etName);
+                EditText timeET = dialog.findViewById(R.id.etTime);
+                EditText locationET = dialog.findViewById(R.id.etLocation);
+                EditText websiteET = dialog.findViewById(R.id.etWebsite);
+
+                // Observe reservation result
+                diningViewModel.getResValidationResult().observe(DiningEstablishmentsActivity.this,
+                        result -> {
+                            Toast.makeText(DiningEstablishmentsActivity.this, result.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                            if (result.isSuccess()) {
+                                // TODO: add reservation to recycler/database
+                            }
+                        });
+
+                Button addReservationButton = dialog.findViewById(R.id.btnAddReservationDialog);
+                addReservationButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String name = nameET.getText().toString().trim();
+                        String time = timeET.getText().toString().trim();
+                        String location = locationET.getText().toString().trim();
+                        String website = websiteET.getText().toString().trim();
+                        diningViewModel.validateNewReservation(name, time, location, website);
+                    }
+                });
             }
         });
 

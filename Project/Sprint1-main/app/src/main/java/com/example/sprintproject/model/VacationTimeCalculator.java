@@ -61,7 +61,7 @@ public class VacationTimeCalculator {
             LocalDate addedStartDate = addDays(startDate, Long.parseLong(entry1) * -1);
             String startDateString = formatDate(addedStartDate);
 
-            Result validStartDate = ValidationManager.validateDateRange(startDateString, entry2);
+            Result validStartDate = CalcVacationTimeValidator.validateDateRange(startDateString, entry2);
             if (validStartDate.isSuccess()) {
                 return formatDate(addedStartDate);
             } else {

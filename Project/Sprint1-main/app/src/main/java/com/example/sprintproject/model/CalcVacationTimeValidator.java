@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ValidationManager {
+public class CalcVacationTimeValidator {
 
     public static Result validateMissingEntry(String startDate, String endDate, String duration) {
         int missingCount = 0;
