@@ -315,10 +315,8 @@ public class FirestoreSingleton {
                     }
                     List<Dining> diningLogs = new ArrayList<>();
                     for (QueryDocumentSnapshot document : value) {
-                        //TravelLog log = document.toObject(TravelLog.class);
                         Dining log = document.toObject(Dining.class);
                         diningLogs.add(log);
-                        //travelLogs.add(log);
                     }
                     diningLiveData.setValue(diningLogs);
                 });
