@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sprintproject.R;
+import com.example.sprintproject.model.Invitation;
 import com.example.sprintproject.viewmodel.LogisticsViewModel;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -60,6 +61,13 @@ public class LogisticsActivity extends AppCompatActivity {
             currentAllocatedDays = allocatedDays;
         });
 
+        // observe the invitation live data
+        viewModel.getInvitationLiveData().observe(this, invitation -> {
+            if (invitation != null) {
+                // Show the invitation dialog
+                showInvitationDialog(invitation);
+            }
+        });
 
         ImageButton diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
         ImageButton destinationsButton = findViewById(R.id.destinationsButton);
@@ -189,6 +197,21 @@ public class LogisticsActivity extends AppCompatActivity {
                     }
                 })
                 .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void showInvitationDialog(Invitation invitation) {
+        new AlertDialog.Builder(this)
+                .setTitle("Trip Invitation")
+                .setMessage("You have been invited to a trip to " + invitation.getTripLocation()
+                + " with " + invitation.getInvitingUserEmail())
+                .setPositiveButton("Accept", (dialog, which) -> {
+                    viewModel.acceptInvitation(invitation);
+                })
+                .setNegativeButton("Reject", (dialog, which) -> {
+                    viewModel.updateInvitationStatus(invitation.getInvitationId(), "rejected");
+                })
+                .setCancelable(false) // prevent closing dialog without action
                 .show();
     }
 }
