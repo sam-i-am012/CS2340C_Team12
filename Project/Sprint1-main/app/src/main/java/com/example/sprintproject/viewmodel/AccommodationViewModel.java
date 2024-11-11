@@ -9,45 +9,48 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.FirestoreSingleton;
+import com.example.sprintproject.model.ReservationValidator;
+import com.example.sprintproject.model.Result;
+import com.example.sprintproject.view.AccommodationsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
 public class AccommodationViewModel extends AndroidViewModel {
+    AccommodationsAdapter accommodationsAdapter = new AccommodationsAdapter();
 
     private FirestoreSingleton repository;
-    private LiveData<List<Accommodation>> accommodations;
+    private MutableLiveData<List<Accommodation>> accommodationLogs;
+    private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
 
     public AccommodationViewModel(@NonNull Application application) {
         super(application);
         repository = FirestoreSingleton.getInstance();
+        accommodationLogs = new MutableLiveData<>();
     }
 
+    // Fetch accommodations for the current user from Firestore
     public void fetchAccommodationLogsForCurrentUser() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
-            accommodations = repository.getAccommodationLogsByUser(userId);
+            repository.getAccommodationLogsByUser(userId).observeForever(accommodations -> {
+                accommodationLogs.setValue(accommodations);
+            });
         }
     }
 
-    public LiveData<List<Accommodation>> getAccommodations() {
-        if (accommodations == null) {
-            accommodations = new MutableLiveData<>();
-        }
-        return accommodations;
+    // Getter for accommodation logs
+    public LiveData<List<Accommodation>> getAccommodationLogs() {
+        return accommodationLogs;
     }
 
+    // Add an accommodation to the repository
     public void addAccommodation(Accommodation accommodation) {
-        // Add the accommodation to the repository (database or Firebase)
-        repository.addAccommodation(accommodation, success -> {
-            // After adding the accommodation, fetch updated list
-            fetchAccommodationLogsForCurrentUser();
-        });
-    }
-    public String getCurrentUserId() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        return user != null ? user.getUid() : null;
+        if (accommodationsAdapter != null) {
+            repository.addAccommodation(accommodation, null);
+            resValidationResult = new MutableLiveData<>();
+        }
     }
 }

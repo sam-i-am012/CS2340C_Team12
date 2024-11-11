@@ -11,20 +11,27 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Accommodation;
+import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.viewmodel.AccommodationViewModel;
+import com.example.sprintproject.viewmodel.DiningViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class AccommodationsActivity extends AppCompatActivity implements AddAccommodationsDialog.OnAccommodationAddedListener {
+public class AccommodationsActivity extends AppCompatActivity {
+
+    private AccommodationViewModel accommodationViewModel;
+    private AccommodationsAdapter accommodationsAdapter;
+    private RecyclerView recyclerView;
 
     private EditText locationET;
     private EditText checkInTimeET;
@@ -37,9 +44,6 @@ public class AccommodationsActivity extends AppCompatActivity implements AddAcco
     private ImageButton logisticsButton;
     private ImageButton travelCommunityButton;
     private FloatingActionButton addAccommodationButton;
-    private AccommodationViewModel viewModel;
-    private AccommodationsAdapter adapter;
-    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,65 +52,33 @@ public class AccommodationsActivity extends AppCompatActivity implements AddAcco
 
         initViews();
 
-        recyclerView = findViewById(R.id.accommodationRecyclerView);
-        adapter = new AccommodationsAdapter(new ArrayList<>());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // ViewModel setup
+        accommodationViewModel = new ViewModelProvider(this).get(AccommodationViewModel.class);
 
-        viewModel = new ViewModelProvider(this).get(AccommodationViewModel.class);
-
-        // After authentication
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            viewModel.fetchAccommodationLogsForCurrentUser();
-        }
-
-        viewModelObserver();
-
-        addAccommodationButton.setOnClickListener(v -> {
-            // Inflate the dialog layout (item_add_accommodation.xml)
-            LayoutInflater inflater = LayoutInflater.from(AccommodationsActivity.this);
-            View dialogView = inflater.inflate(R.layout.dialog_add_accommodation, null);
-
-            // Find the button inside the dialog view
-            Button btnAddAccommodationDialog = dialogView.findViewById(R.id.btnAddAccommodationDialog);
-
-            // Set the click listener for the button inside the dialog
-            btnAddAccommodationDialog.setOnClickListener(v1 -> {
-                // Create a new Accommodation object and validate it before adding
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user == null) {
-                    return;
-                }
-
-                String userId = user.getUid();
-                String location = locationET.getText().toString().trim();
-                String checkInTime = checkInTimeET.getText().toString().trim();
-                String checkOutTime = checkOutTimeET.getText().toString().trim();
-                String hotel = hotelET.getText().toString().trim();
-                String room = rooms.getSelectedItem().toString().trim();
-                int numRooms = Integer.parseInt(room);
-                String roomTypes = roomType.getSelectedItem().toString().trim();
-
-                if (location.isEmpty() || checkInTime.isEmpty() || checkOutTime.isEmpty()  || hotel.isEmpty() || room.isEmpty() || roomTypes.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Accommodation newLog = new Accommodation(hotel, location, checkInTime, checkOutTime, numRooms, roomTypes, userId);
-
-                // Add the accommodation to the ViewModel (not the adapter directly)
-                viewModel.addAccommodation(newLog);
-
-                // Clear the input fields
-                clearInputFields();
-            });
-
-            // Create and show the dialog
-            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(AccommodationsActivity.this);
-            builder.setView(dialogView);
-            builder.create().show();
+        addAccommodationButton.setOnClickListener(view -> {
+            AddAccommodationsDialog addAccommodationsDialog = new AddAccommodationsDialog(
+                    AccommodationsActivity.this, accommodationViewModel);
+            addAccommodationsDialog.show();
         });
 
+        // RecyclerView setup
+        recyclerView = findViewById(R.id.accommodationRecyclerView);
+        accommodationsAdapter = new AccommodationsAdapter();
+        recyclerView.setAdapter(accommodationsAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Fetch dining logs for the current user
+        accommodationViewModel.fetchAccommodationLogsForCurrentUser(); // Ensure data is fetched
+
+        // Observe the LiveData for updates to dining logs
+        accommodationViewModel.getAccommodationLogs().observe(this, new Observer<List<Accommodation>>() {
+            @Override
+            public void onChanged(List<Accommodation> accommodations) {
+                accommodationsAdapter.setAccommodations(accommodations); // Update the adapter when data changes
+            }
+        });
+
+        // Navigation button logic
         navButtonsLogic();
     }
 
@@ -155,21 +127,6 @@ public class AccommodationsActivity extends AppCompatActivity implements AddAcco
         locationET.setText("");
         checkInTimeET.setText("");
         checkOutTimeET.setText("");
-    }
-
-    private void viewModelObserver() {
-        viewModel.getAccommodations().observe(this, accommodations -> {
-            if (adapter == null) {
-                adapter = new AccommodationsAdapter(accommodations);
-                recyclerView.setAdapter(adapter);
-            } else {
-                adapter.updateLogs(accommodations); // Add a method to update the adapter data
-            }
-        });
-    }
-
-    @Override
-    public void onAccommodationAdded(Accommodation accommodation) {
-        viewModel.addAccommodation(accommodation);
+        hotelET.setText("");
     }
 }

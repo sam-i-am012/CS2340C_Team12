@@ -1,37 +1,37 @@
 package com.example.sprintproject.view;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.R;
+import com.example.sprintproject.model.Accommodation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAdapter.AccommodationViewHolder> {
 
     private List<Accommodation> accommodations;
 
-    public AccommodationsAdapter(List<Accommodation> accommodations) {
-        this.accommodations = accommodations;
+    public AccommodationsAdapter() {
+        this.accommodations = new ArrayList<>(); // Initialize with an empty list if null
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void addLog(Accommodation log) {
-        this.accommodations.add(0, log); // Add new log at the start
-        notifyItemInserted(0);
+    public void addLog(Accommodation accommodation) {
+        this.accommodations.add(0, accommodation); // Add new log at the start
+        notifyDataSetChanged(); // Notify the adapter that data has changed
     }
 
     @SuppressLint("NotifyDataSetChanged")
     public void updateLogs(List<Accommodation> newLogs) {
         this.accommodations.clear();
         this.accommodations.addAll(newLogs);
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // Notify that data has been updated
     }
 
     @NonNull
@@ -67,14 +67,17 @@ public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAd
         }
     }
 
-
     @Override
     public int getItemCount() {
         return accommodations != null ? accommodations.size() : 0;
     }
 
     public void setAccommodations(List<Accommodation> accommodations) {
-        this.accommodations = accommodations;
+        if (accommodations != null) {
+            this.accommodations = accommodations;
+        } else {
+            this.accommodations = new ArrayList<>(); // Avoid null pointer
+        }
         notifyDataSetChanged();
     }
 
