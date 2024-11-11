@@ -21,5 +21,31 @@ public class AccommodationValidatorTest {
         location = "";
         hotel = "";
     }
+    @Test
+    public void emptyCheckOut() {
+        // check out is empty
+        checkIn = "5:00";
+        checkOut = "";
+        location = "New York";
+        hotel = "Grand Hotel";
+
+        boolean result = AccommodationValidator.validateInputs(checkIn, checkOut, location, hotel);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void allFieldsEmpty() {
+        // all fields are empty
+        checkIn = "";
+        checkOut = "";
+        location = "";
+        hotel = "";
+
+        boolean result = AccommodationValidator.validateInputs(checkIn, checkOut, location, hotel);
+
+        assertFalse(result);
+    }
+
 
 }

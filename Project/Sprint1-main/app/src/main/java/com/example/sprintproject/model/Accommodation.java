@@ -10,6 +10,8 @@ public class Accommodation {
     private int numRooms;
     private String roomType;
     private String userId;
+    public Accommodation() {
+    }
     public Accommodation(String hotel, String location, String checkInTime, String checkOutTime, int numRooms, String roomType, String userId) {
         this.hotel = hotel;
         this.location = location;

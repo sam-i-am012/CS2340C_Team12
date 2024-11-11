@@ -119,6 +119,9 @@ public class AccommodationsActivity extends AppCompatActivity implements AddAcco
         locationET = findViewById(R.id.editTextAccommodationLocation);
         checkInTimeET = findViewById(R.id.editTextAccommodationCheckInTime);
         checkOutTimeET = findViewById(R.id.editTextAccommodationCheckOutTime);
+        hotelET = findViewById(R.id.editTextHotelName);
+        rooms = findViewById(R.id.numberOfRoomsSpinner);
+        roomType = findViewById(R.id.roomTypeSpinner);
     }
 
     private void navButtonsLogic() {
