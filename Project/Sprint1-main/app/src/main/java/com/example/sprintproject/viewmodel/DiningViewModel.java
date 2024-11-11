@@ -11,12 +11,15 @@ import com.example.sprintproject.model.ReservationValidator;
 import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Result;
+import com.example.sprintproject.view.DiningsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
 public class DiningViewModel extends AndroidViewModel {
+    DiningsAdapter diningAdapter = new DiningsAdapter();
+
     private FirestoreSingleton repository;
     private MutableLiveData<List<Dining>> diningLogs;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
@@ -43,11 +46,14 @@ public class DiningViewModel extends AndroidViewModel {
     }
 
     public void addDining(Dining dining) {
-        repository.addDining(dining, null);
+        if (diningAdapter != null) {
+            repository.addDining(dining, null);
+            resValidationResult = new MutableLiveData<>();
+        }
     }
 
-    public void addDiningLog(Dining log) {
-        repository.addDining(log, null);
+    public void addLog(Dining dining) {
+        diningAdapter.addLog(dining);
     }
 
     public LiveData<Result> getResValidationResult() { return resValidationResult; }

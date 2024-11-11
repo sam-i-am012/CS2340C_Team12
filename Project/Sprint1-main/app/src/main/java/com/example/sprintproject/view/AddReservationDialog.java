@@ -12,17 +12,11 @@ import androidx.lifecycle.LifecycleOwner;
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.model.FirestoreSingleton;
-import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.viewmodel.DiningViewModel;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 
 public class AddReservationDialog extends Dialog {
     private DiningViewModel diningViewModel;
     private LifecycleOwner lifecycleOwner;
-    private DiningsAdapter adapter;
     private TextView location;
     private TextView restaurantName;
     private TextView time;
@@ -50,33 +44,6 @@ public class AddReservationDialog extends Dialog {
         EditText websiteET = findViewById(R.id.etWebsite);
         Button addReservationButton = findViewById(R.id.btnAddReservationDialog);
 
-        // Observe reservation result
-        diningViewModel.getResValidationResult().observe(lifecycleOwner ,
-                result -> {
-                    Toast.makeText(getContext(), result.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                    if (result.isSuccess()) {
-                        String name = nameET.getText().toString().trim();
-                        String time = timeET.getText().toString().trim();
-                        String location = locationET.getText().toString().trim();
-                        String website = websiteET.getText().toString().trim();
-
-                        // Add reservation to database
-                        Dining dining = new Dining(location, website, name, time,
-                                firestore.getCurrentUserId());
-                        diningViewModel.addDining(dining);
-                        diningViewModel.addDiningLog(dining);
-
-                        if (adapter != null) {
-                            adapter.addLog(dining);
-                        }
-
-                        clearInputFields();
-                    }
-                });
-
-
-
         // Handle add reservation button click
         addReservationButton.setOnClickListener(view -> {
             String name = nameET.getText().toString().trim();
@@ -85,18 +52,26 @@ public class AddReservationDialog extends Dialog {
             String website = websiteET.getText().toString().trim();
 
             diningViewModel.validateNewReservation(name, time, location, website);
+
+            // Observe reservation result
+            diningViewModel.getResValidationResult().observe(lifecycleOwner ,
+                    result -> {
+                        Toast.makeText(getContext(), result.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        if (result.isSuccess()) {
+                            Dining dining = new Dining(location, website, name, time,
+                                    firestore.getCurrentUserId());
+
+                            // Add reservation to database
+                            diningViewModel.addDining(dining);
+
+                            // Add reservation to recycler
+                            diningViewModel.addLog(dining);
+
+                            clearInputFields();
+                        }
+                    });
         });
-    }
-
-    public void setAdapter(DiningsAdapter adapter) {
-        this.adapter = adapter;
-    }
-
-    private void initViews() {
-        location = findViewById(R.id.tvLocation);
-        restaurantName = findViewById(R.id.tvRestaurantName);
-        time = findViewById(R.id.tvTime);
-        website = findViewById(R.id.tvWebsite);
     }
 
     private void clearInputFields() {

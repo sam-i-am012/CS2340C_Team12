@@ -16,8 +16,7 @@ public class ReservationValidator {
     }
 
     public static Result isValidTime(String time) {
-        boolean valid = isValidTimeFormat(time, "h:mm a") ||
-                isValidTimeFormat(time, "HH:mm");
+        boolean valid = isValidTimeFormat(time, "h:mma");
         if (!valid) {
             return new Result(false, "Time format is invalid");
         }

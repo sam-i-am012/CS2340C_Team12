@@ -90,4 +90,32 @@ public class ReservationValidatorServiceTest {
         assertFalse(result.isSuccess());
         assertEquals("All entries must be filled out", result.getMessage());
     }
+
+    @Test
+    public void testInvalidTime() {
+        String name = "John";
+        String time = "25:00 PM";  // Invalid time
+        String location = "Restaurant";
+        String website = "https://www.restaurant.com";
+
+        Result result = reservationValidatorService.validate(name, time, location, website);
+
+        assertNotNull(result);
+        assertFalse(result.isSuccess());
+        assertEquals("Time format is invalid", result.getMessage());
+    }
+
+    @Test
+    public void testInvalidWebsite() {
+        String name = "John";
+        String time = "12:00 PM";
+        String location = "Restaurant";
+        String website = "invalid-url";
+
+        Result result = reservationValidatorService.validate(name, time, location, website);
+
+        assertNotNull(result);
+        assertFalse(result.isSuccess());
+        assertEquals("Invalid website format", result.getMessage());
+    }
 }
