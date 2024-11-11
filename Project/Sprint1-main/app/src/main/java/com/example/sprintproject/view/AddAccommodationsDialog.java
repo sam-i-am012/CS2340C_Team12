@@ -55,28 +55,28 @@ public class AddAccommodationsDialog extends Dialog {
 
             // Validate inputs
             if (validateInputs(locationET, checkInTimeET, checkOutTimeET, hotelNameET)) {
-                // Call to the view model to validate and add accommodation
+                // Create a new Accommodation object
+                Accommodation newAccommodation = new Accommodation(
+                        hotelName,
+                        location,
+                        checkInTime,
+                        checkOutTime,
+                        numRooms,
+                        roomType,
+                        firestore.getCurrentUserId()
+                );
 
-                // Observe validation result
-                        // Create a new Accommodation object
-                        Accommodation newAccommodation = new Accommodation(
-                                hotelName,
-                                location,
-                                checkInTime,
-                                checkOutTime,
-                                numRooms,
-                                roomType,
-                                firestore.getCurrentUserId()
-                        );
+                // Add the accommodation to the database
+                accommodationViewModel.addAccommodation(newAccommodation);
 
-                        // Add the accommodation to the database
-                        accommodationViewModel.addAccommodation(newAccommodation);
+                // Update the UI and clear input fields
+                clearInputFields(locationET, checkInTimeET, checkOutTimeET, hotelNameET);
 
-                        // Update the UI and clear input fields
-                        clearInputFields(locationET, checkInTimeET, checkOutTimeET, hotelNameET);
+                // Show success message
+                Toast.makeText(getContext(), "Accommodation added successfully", Toast.LENGTH_SHORT).show();
 
-                        // Show success message
-                        Toast.makeText(getContext(), "Accommodation added successfully", Toast.LENGTH_SHORT).show();
+                // Dismiss the dialog after adding the accommodation
+                dismiss();
             }
         });
     }
@@ -103,6 +103,14 @@ public class AddAccommodationsDialog extends Dialog {
             hotelField.setError("Hotel name is required");
             isValid = false;
         }
+        if (isDateFormatInvalid(checkInField.getText().toString().trim())) {
+            checkInField.setError("Enter YYYY-MM-DD");
+            isValid = false;
+        }
+        if (isDateFormatInvalid(checkOutField.getText().toString().trim())) {
+            checkOutField.setError("Enter YYYY-MM-DD");
+            isValid = false;
+        }
 
         return isValid;
     }
@@ -113,5 +121,40 @@ public class AddAccommodationsDialog extends Dialog {
         checkInET.setText("");
         checkOutET.setText("");
         hotelET.setText("");
+    }
+
+    private boolean isDateFormatInvalid(String date) {
+        // Regular expression to match the format YYYY-MM-DD
+        String datePattern = "^\\d{4}-\\d{2}-\\d{2}$";
+
+        // Check if the date matches the pattern
+        if (!date.matches(datePattern)) {
+            return true;
+        }
+
+        // Additional validation for valid date values
+        String[] parts = date.split("-");
+        int year = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+        int day = Integer.parseInt(parts[2]);
+
+        // Check for valid month
+        if (month < 1 || month > 12) {
+            return true;
+        }
+
+        // Check for valid day based on the month
+        switch (month) {
+            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+                return day < 1 || day > 31;
+            case 4: case 6: case 9: case 11:
+                return day < 1 || day > 30;
+            case 2:
+                // Leap year check
+                boolean isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+                return day < 1 || day > (isLeapYear ? 29 : 28);
+            default:
+                return true;
+        }
     }
 }

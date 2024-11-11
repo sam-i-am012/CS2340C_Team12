@@ -13,6 +13,9 @@ import com.example.sprintproject.model.Accommodation;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAdapter.AccommodationViewHolder> {
 
     private List<Accommodation> accommodations;
@@ -49,7 +52,11 @@ public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAd
         holder.locationText.setText(accommodation.getLocation());
 
         // Set hotel name
-        holder.hotelNameText.setText(accommodation.getHotel());
+        if (getCurrentDateString().compareTo(accommodation.getCheckOutTime()) < 0) {
+            holder.hotelNameText.setText(accommodation.getHotel());
+        } else {
+            holder.hotelNameText.setText(accommodation.getHotel() + " (Expired)");
+        }
 
         // Set check-in and check-out times
         holder.checkInOutText.setText("Check-in: " + accommodation.getCheckInTime() +
@@ -65,6 +72,17 @@ public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAd
         } else {
             holder.roomTypeLabel.setVisibility(View.GONE); // Hide if no room type is provided
         }
+    }
+
+    private static String getCurrentDateString() {
+        // Get the current date
+        LocalDate currentDate = LocalDate.now();
+
+        // Define the desired format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Format the current date to the desired string format
+        return currentDate.format(formatter);
     }
 
     @Override

@@ -67,10 +67,10 @@ public class AccommodationsActivity extends AppCompatActivity {
         recyclerView.setAdapter(accommodationsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Fetch dining logs for the current user
+        // Fetch logs for the current user
         accommodationViewModel.fetchAccommodationLogsForCurrentUser(); // Ensure data is fetched
 
-        // Observe the LiveData for updates to dining logs
+        // Observe the LiveData for updates to logs
         accommodationViewModel.getAccommodationLogs().observe(this, new Observer<List<Accommodation>>() {
             @Override
             public void onChanged(List<Accommodation> accommodations) {

@@ -47,5 +47,29 @@ public class AccommodationValidatorTest {
         assertFalse(result);
     }
 
+    @Test
+    public void allFieldsFilled() {
+        //  all fields are filled
+        checkIn = "2024-12-01";
+        checkOut = "2024-12-07";
+        location = "New York";
+        hotel = "Grand Hotel";
 
+        boolean result = AccommodationValidator.validateInputs(checkIn, checkOut, location, hotel);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void emptyCheckIn() {
+        // check in is empty
+        checkIn = "";
+        checkOut = "2024-12-07";
+        location = "New York";
+        hotel = "Grand Hotel";
+
+        boolean result = AccommodationValidator.validateInputs(checkIn, checkOut, location, hotel);
+
+        assertFalse(result);
+    }
 }
