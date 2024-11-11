@@ -118,4 +118,32 @@ public class ReservationValidatorServiceTest {
         assertFalse(result.isSuccess());
         assertEquals("Invalid website format", result.getMessage());
     }
+
+    @Test
+    public void testMissingWebsite() {
+        String name = "John";
+        String time = "";
+        String location = "Restaurant";
+        String website = "";
+
+        Result result = reservationValidatorService.validate(name, time, location, website);
+
+        assertNotNull(result);
+        assertFalse(result.isSuccess());
+        assertEquals("All entries must be filled out", result.getMessage());
+    }
+
+    @Test
+    public void testMissingLocation() {
+        String name = "John";
+        String time = "12:00 PM";
+        String location = "";
+        String website = "https://www.restaurant.com";
+
+        Result result = reservationValidatorService.validate(name, time, location, website);
+
+        assertNotNull(result);
+        assertFalse(result.isSuccess());
+        assertEquals("All entries must be filled out", result.getMessage());
+    }
 }
