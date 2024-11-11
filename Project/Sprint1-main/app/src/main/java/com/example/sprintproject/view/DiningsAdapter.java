@@ -1,5 +1,6 @@
 package com.example.sprintproject.view;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Dining;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningViewHolder> {
     private List<Dining> dinings;
+
     public DiningsAdapter() {
-        this.dinings = dinings;
+        this.dinings = new ArrayList<>(); // Initialize with an empty list if null
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void addLog(Dining reservation) {
+        this.dinings.add(0, reservation); // Add new log at the start
+        notifyDataSetChanged(); // Notify the adapter that data has changed
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateLogs(List<Dining> newReservation) {
+        this.dinings.clear();
+        this.dinings.addAll(newReservation);
+        notifyDataSetChanged();
+    }
+
+
     @NonNull
     @Override
     public DiningViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,7 +57,11 @@ public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningVi
     }
 
     public void setDinings(List<Dining> dinings) {
-        this.dinings = dinings;
+        if (dinings != null) {
+            this.dinings = dinings;
+        } else {
+            this.dinings = new ArrayList<>(); // Avoid null pointer
+        }
         notifyDataSetChanged();
     }
 

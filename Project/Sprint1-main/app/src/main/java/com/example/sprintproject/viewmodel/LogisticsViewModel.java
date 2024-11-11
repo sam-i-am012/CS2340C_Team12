@@ -1,5 +1,8 @@
 package com.example.sprintproject.viewmodel;
 
+import static com.example.sprintproject.model.InputValidator.isValidEmail;
+
+import android.util.Log;
 import android.util.Patterns;
 
 import androidx.lifecycle.LiveData;
@@ -7,11 +10,18 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.sprintproject.model.FirestoreSingleton;
+import com.example.sprintproject.model.Invitation;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.model.TravelLogValidator;
+import com.example.sprintproject.model.TripUtils;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LogisticsViewModel extends ViewModel {
     private FirestoreSingleton firestoreSingleton;
@@ -19,12 +29,20 @@ public class LogisticsViewModel extends ViewModel {
     private MutableLiveData<String> toastMessage = new MutableLiveData<>();
     private MutableLiveData<Integer> plannedDaysLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> allocatedLiveData = new MutableLiveData<>();
+    private MutableLiveData<Invitation> invitationLiveData = new MutableLiveData<>();
+
 
     public LogisticsViewModel() {
         firestoreSingleton = FirestoreSingleton.getInstance();
         loadUserLocations();
         loadTripDays();
         loadDuration();
+        listenForInvitations(); // listen for new invitations to collab on a trip
+    }
+
+    // live data for invitations
+    public LiveData<Invitation> getInvitationLiveData() {
+        return invitationLiveData;
     }
 
     public LiveData<List<String>> getUserLocations() {
@@ -60,10 +78,7 @@ public class LogisticsViewModel extends ViewModel {
         String currentUserId = firestoreSingleton.getCurrentUserId();
         // Fetch trip data from Firestore and update LiveData accordingly
         firestoreSingleton.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
-            int totalDays = 0;
-            for (TravelLog log : travelLogs) {
-                totalDays += TravelLogValidator.calculateDays(log.getStartDate(), log.getEndDate());
-            }
+            int totalDays = TripUtils.calculateTotalDays(travelLogs);  // use utility
             plannedDaysLiveData.setValue(totalDays);
         });
     }
@@ -85,17 +100,83 @@ public class LogisticsViewModel extends ViewModel {
         // check if user invited is already an existing user
         firestoreSingleton.checkEmailExists(email).addOnCompleteListener(task -> {
             if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                String uid = task.getResult().getDocuments().get(0).getId(); // Get the UID
-                firestoreSingleton.addUserToTrip(uid, location);
-                toastMessage.setValue("Invitation sent to " + email + " for location " + location);
+                // uid of invited user
+                String invitedUser = task.getResult().getDocuments().get(0).getId();
+
+                // data for Invitation class
+                Map<String, Object> invitationData = new HashMap<>();
+                // current user (inviter)
+                invitationData.put("invitingUserId", firestoreSingleton.getCurrentUserId());
+                invitationData.put("invitedUserId", invitedUser);  // user being invited
+                invitationData.put("invitingUserEmail", email);  // inviter's email
+                invitationData.put("tripLocation", location);  // location for the trip
+                invitationData.put("status", "pending");  // initial status of the invitation
+                invitationData.put("timestamp", FieldValue.serverTimestamp());  // timestamp
+
+
+                // add the invitation to Firestore
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("invitations")
+                        .add(invitationData)
+                        .addOnSuccessListener(documentReference -> {
+                            toastMessage.setValue("Invitation sent to " + email + " for location " + location);
+                        })
+                        .addOnFailureListener(e -> {
+                            toastMessage.setValue("Error sending invitation: " + e.getMessage());
+                        });
             } else {
                 toastMessage.setValue("No account found for this email.");
             }
         });
     }
 
-    // helper to check valid email format
-    private boolean isValidEmail(String email) {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    // to listen for invitations to accept / deny them
+    private void listenForInvitations() {
+        String currentUserId = firestoreSingleton.getCurrentUserId();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("invitations")
+                .whereEqualTo("invitedUserId", currentUserId)
+                .whereEqualTo("status", "pending") // only fetch pending invitations
+                .addSnapshotListener((querySnapshot, error) -> {
+                    if (error != null) {
+                        Log.e("Firestore", "Error fetching invitations", error);
+                        return;
+                    }
+
+                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                        for (QueryDocumentSnapshot doc : querySnapshot) {
+                            Invitation invitation = doc.toObject(Invitation.class);
+                            invitation.setInvitationId(doc.getId());  // store the document ID
+
+                            // notify UI about the new invitation
+                            invitationLiveData.setValue(invitation);
+                        }
+                    }
+                });
+    }
+
+    // accept or reject invitation
+    public void updateInvitationStatus(String invitationId, String status) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("invitations")
+                .document(invitationId)  // use the invitation ID stored in the Invitation model
+                .update("status", status)
+                .addOnSuccessListener(aVoid -> {
+                    toastMessage.setValue("Invitation " + status);
+                    invitationLiveData.setValue(null);  // stop showing the dialog
+                })
+                .addOnFailureListener(e -> {
+                    toastMessage.setValue("Error updating invitation: " + e.getMessage());
+                    Log.d("Firestore", "Failed to update invitation with ID: "
+                            + invitationId, e);
+                });
+    }
+
+    // accept invitation
+    public void acceptInvitation(Invitation invitation) {
+        updateInvitationStatus(invitation.getInvitationId(), "accepted");
+        firestoreSingleton.addUserToTrip(invitation.getInvitingUserId(),
+                invitation.getInvitedUserId(), invitation.getTripLocation());
     }
 }
