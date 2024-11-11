@@ -78,4 +78,8 @@ public class DiningViewModel extends AndroidViewModel {
         }
         resValidationResult.setValue(finalResult);
     }
+
+    public void resetResult() {
+        resValidationResult = new MutableLiveData<>();
+    }
 }

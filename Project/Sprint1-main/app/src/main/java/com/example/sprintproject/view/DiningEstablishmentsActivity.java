@@ -57,7 +57,8 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
         recyclerView.setAdapter(diningAdapter);
 
         // Fetch dining logs for the current user
-        diningViewModel.fetchDiningLogsForCurrentUser(); // Ensure data is fetched
+        diningViewModel.fetchDiningLogsForCurrentUser();
+
 
         // Observe the LiveData for updates to dining logs
         diningViewModel.getDiningLogs().observe(this, new Observer<List<Dining>>() {
