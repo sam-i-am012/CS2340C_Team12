@@ -1,5 +1,6 @@
 package com.example.sprintproject.view;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,14 +9,29 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.R;
+import com.example.sprintproject.model.TravelLog;
+
 import java.util.List;
 
 public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAdapter.AccommodationViewHolder> {
 
     private List<Accommodation> accommodations;
 
-    public AccommodationsAdapter() {
+    public AccommodationsAdapter(List<Accommodation> accommodations) {
         this.accommodations = accommodations;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void addLog(Accommodation log) {
+        this.accommodations.add(0, log); // Add new log at the start
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateLogs(List<Accommodation> newLogs) {
+        this.accommodations.clear();
+        this.accommodations.addAll(newLogs);
+        notifyDataSetChanged();
     }
 
     @NonNull

@@ -25,7 +25,6 @@ public class DestinationsViewModel extends ViewModel {
     private VacationTimeCalculator vtCalculator = new VacationTimeCalculator();
     private MutableLiveData<Integer> plannedDaysLiveData = new MutableLiveData<>();
 
-
     public DestinationsViewModel() {
         repository = FirestoreSingleton.getInstance();
     }
@@ -77,14 +76,6 @@ public class DestinationsViewModel extends ViewModel {
     public void addDatesAndDuration(String userId, String startDate, String endDate,
                                     String duration) {
         repository.addDatesAndDuration(userId, startDate, endDate, duration);
-    }
-
-    public LiveData<User> getCurrentUser() {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
-            return repository.getUserById(firebaseUser.getUid());
-        }
-        return null; // Handle user not logged in
     }
 
     public void loadTripDays() {

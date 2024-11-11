@@ -216,23 +216,6 @@ public class FirestoreSingleton {
                 .get();
     }
 
-    public LiveData<User> getUserById(String userId) {
-        MutableLiveData<User> userLiveData = new MutableLiveData<>();
-
-        firestore.collection("users").document(userId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        User user = task.getResult().toObject(User.class);
-                        userLiveData.setValue(user);
-                    } else {
-                        userLiveData.setValue(null); // Handle the case where the user doesn't exist
-                    }
-                });
-
-        return userLiveData;
-    }
-
     public void addUserToTrip(String uid, String location) {
         // todo: Add logic to add user to the trip in Firestore
     }
@@ -309,7 +292,7 @@ public class FirestoreSingleton {
                 });
     }
 
-    public LiveData<List<Accommodation>> getAccommodationByUser(String userId) {
+    public LiveData<List<Accommodation>> getAccommodationLogsByUser(String userId) {
         MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
         firestore.collection("accommodation")
                 .whereEqualTo("userId", userId) // query logs for this user
@@ -326,5 +309,4 @@ public class FirestoreSingleton {
                 });
         return accommodationLiveData;
     }
-
 }

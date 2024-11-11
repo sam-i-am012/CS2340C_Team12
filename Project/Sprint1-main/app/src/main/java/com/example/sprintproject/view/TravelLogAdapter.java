@@ -19,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.ViewHolder> {
+
     private List<TravelLog> travelLogs;
 
     public TravelLogAdapter(List<TravelLog> travelLogs) {
@@ -32,19 +33,6 @@ public class TravelLogAdapter extends RecyclerView.Adapter<TravelLogAdapter.View
 
         return (int) ChronoUnit.DAYS.between(start, end);
     }
-
-    public int getTotalDays() {
-        int totalDays = 0;
-        for (TravelLog log : travelLogs) {
-            totalDays += calculateDays(log.getStartDate(), log.getEndDate());
-        }
-        return totalDays;
-    }
-
-    // public void addLog(TravelLog log) {
-    //    travelLogs.add(log);
-    //    notifyItemInserted(travelLogs.size() - 1); // Update only the last item
-    // }
     @SuppressLint("NotifyDataSetChanged")
     public void addLog(TravelLog log) {
         this.travelLogs.add(0, log); // Add new log at the start
