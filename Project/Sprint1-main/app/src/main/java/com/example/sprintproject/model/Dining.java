@@ -6,6 +6,7 @@ public class Dining {
     private String name;
     private String time;
     private String userId;
+    private boolean expired;
 
     public Dining() {}
 
@@ -15,6 +16,7 @@ public class Dining {
         this.name = name;
         this.time = time;
         this.userId = userId;
+        this.expired = false;
     }
 
     public String getLocation() {
@@ -56,4 +58,8 @@ public class Dining {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    public boolean isExpired() { return expired; }
+
+    public void setExpired(boolean expired) { this.expired = expired; }
 }
