@@ -13,6 +13,7 @@ import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Invitation;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.model.TravelLogValidator;
+import com.example.sprintproject.model.TripUtils;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -77,10 +78,7 @@ public class LogisticsViewModel extends ViewModel {
         String currentUserId = firestoreSingleton.getCurrentUserId();
         // Fetch trip data from Firestore and update LiveData accordingly
         firestoreSingleton.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
-            int totalDays = 0;
-            for (TravelLog log : travelLogs) {
-                totalDays += TravelLogValidator.calculateDays(log.getStartDate(), log.getEndDate());
-            }
+            int totalDays = TripUtils.calculateTotalDays(travelLogs);  // use utility
             plannedDaysLiveData.setValue(totalDays);
         });
     }
