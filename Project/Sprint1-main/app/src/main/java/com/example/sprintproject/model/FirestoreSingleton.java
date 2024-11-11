@@ -96,10 +96,11 @@ public class FirestoreSingleton {
     public LiveData<List<TravelLog>> getTravelLogsByUser(String userId) {
         MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
         firestore.collection("travelLogs")
-                .whereEqualTo("userId", userId) // query logs for this user
+                // use arrayContains to check if userId is in the associatedUsers array
+                .whereArrayContains("associatedUsers", userId)
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
-                        return; // to avoid null pointer
+                        return;
                     }
                     List<TravelLog> travelLogs = new ArrayList<>();
                     for (QueryDocumentSnapshot document : value) {
@@ -114,22 +115,20 @@ public class FirestoreSingleton {
     public LiveData<List<TravelLog>> getLastFiveTravelLogsByUser(String userId) {
         MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
         firestore.collection("travelLogs")
-                .whereEqualTo("userId", userId)
-                .orderBy("createdAt", Query.Direction.DESCENDING)
-                .limit(5) // Limit to the last 5 entries
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
-                        if (error != null) {
-                            return; // Handle error
-                        }
-                        List<TravelLog> travelLogs = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : value) {
-                            TravelLog log = document.toObject(TravelLog.class);
-                            travelLogs.add(log);
-                        }
-                        travelLogsLiveData.setValue(travelLogs);
+                // use arrayContains to check if userId is in the associatedUsers array
+                .whereArrayContains("associatedUsers", userId)
+                .orderBy("createdAt", Query.Direction.DESCENDING)  // order by creation date, newest first
+                .limit(5)  // limit to the last 5 entries
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        return;
                     }
+                    List<TravelLog> travelLogs = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : value) {
+                        TravelLog log = document.toObject(TravelLog.class);
+                        travelLogs.add(log);
+                    }
+                    travelLogsLiveData.setValue(travelLogs);
                 });
         return travelLogsLiveData;
     }
@@ -160,7 +159,7 @@ public class FirestoreSingleton {
                 });
     }
 
-    // adds new travel log ID to the asssociatedDestinations array field for specific uer
+    // adds new travel log ID to the asssociatedDestinations array field for specific user
     private void updateUserAssociatedDestinations(String userId, String travelLogId) {
         firestore.collection("users").document(userId)
                 .update("associatedDestinations", FieldValue.arrayUnion(travelLogId));
@@ -216,8 +215,57 @@ public class FirestoreSingleton {
                 .get();
     }
 
-    public void addUserToTrip(String uid, String location) {
-        // todo: Add logic to add user to the trip in Firestore
+    public LiveData<User> getUserById(String userId) {
+        MutableLiveData<User> userLiveData = new MutableLiveData<>();
+
+        firestore.collection("users").document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        User user = task.getResult().toObject(User.class);
+                        userLiveData.setValue(user);
+                    } else {
+                        userLiveData.setValue(null); // Handle the case where the user doesn't exist
+                    }
+                });
+
+        return userLiveData;
+    }
+
+    public void addUserToTrip(String invitingUserId, String invitedUserId, String location) {
+        // find the travel log by location
+        firestore.collection("travelLogs")
+                .whereEqualTo("destination", location)
+                .whereEqualTo("userId", invitingUserId)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        // assuming only one trip with the given location, get the first result
+                        String tripId = querySnapshot.getDocuments().get(0).getId();
+
+                        Log.d("Firestore", "Found travel log for location: " + location + ", Trip ID: " + tripId);
+
+                        // add the userId to the associatedUsers array for travel logs
+                        firestore.collection("travelLogs")
+                                .document(tripId)
+                                .update("associatedUsers", FieldValue.arrayUnion(invitedUserId))
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d("Firestore", "User added to trip successfully!");
+
+                                    // Update the user's associatedDestinations array to include this trip
+                                    updateUserAssociatedDestinations(invitedUserId, tripId);
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("Firestore", "Error adding user to trip", e);
+                                });
+                    } else {
+                        Log.w("Firestore", "No travel log found for location: " + location
+                        + " with inviting user " + invitingUserId);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error finding travel log by location", e);
+                });
     }
 
     // Adds startDate, endDate, and duration to their respective locations in a specific user's
