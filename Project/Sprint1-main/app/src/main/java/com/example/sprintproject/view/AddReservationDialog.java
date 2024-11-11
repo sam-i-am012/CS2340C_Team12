@@ -8,11 +8,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.viewmodel.DiningViewModel;
+
+import java.util.List;
 
 public class AddReservationDialog extends Dialog {
     private DiningViewModel diningViewModel;
@@ -22,6 +25,7 @@ public class AddReservationDialog extends Dialog {
     private TextView time;
     private TextView website;
     private final FirestoreSingleton firestore = FirestoreSingleton.getInstance();
+    private final DiningsAdapter diningsAdapter = new DiningsAdapter();
 
     public AddReservationDialog(Context context, DiningViewModel diningViewModel) {
         super(context);  // Calls the Dialog constructor
@@ -68,8 +72,16 @@ public class AddReservationDialog extends Dialog {
                             // Add reservation to recycler
                             diningViewModel.addLog(dining);
 
+                            diningViewModel.getDiningLogs().observe(lifecycleOwner, new Observer<List<Dining>>() {
+                                @Override
+                                public void onChanged(List<Dining> dinings) {
+                                    diningsAdapter.updateLogs(dinings); // Update the adapter with the new list
+                                }
+                            });
+
                             clearInputFields();
                         }
+                        diningViewModel.resetResult();
                     });
         });
     }
