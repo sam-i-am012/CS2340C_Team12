@@ -1,6 +1,7 @@
 package com.example.sprintproject.view;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.R;
-import com.example.sprintproject.model.TravelLog;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAd
     @SuppressLint("NotifyDataSetChanged")
     public void addLog(Accommodation log) {
         this.accommodations.add(0, log); // Add new log at the start
-        notifyDataSetChanged();
+        notifyItemInserted(0);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -60,7 +60,7 @@ public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAd
 
         // Set room type label text (if available)
         if (accommodation.getRoomType() != null && !accommodation.getRoomType().isEmpty()) {
-            holder.roomTypeLabel.setText(accommodation.getRoomType().get(0));
+            holder.roomTypeLabel.setText(accommodation.getRoomType());
             holder.roomTypeLabel.setVisibility(View.VISIBLE);
         } else {
             holder.roomTypeLabel.setVisibility(View.GONE); // Hide if no room type is provided

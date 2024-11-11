@@ -8,11 +8,9 @@ public class Accommodation {
     private String checkInTime;
     private String checkOutTime;
     private int numRooms;
-    private List<String> roomType;
+    private String roomType;
     private String userId;
-
-    public Accommodation() {}
-    public Accommodation(String hotel, String location, String checkInTime, String checkOutTime, int numRooms, List<String> roomType, String userId) {
+    public Accommodation(String hotel, String location, String checkInTime, String checkOutTime, int numRooms, String roomType, String userId) {
         this.hotel = hotel;
         this.location = location;
         this.checkInTime = checkInTime;
@@ -21,16 +19,6 @@ public class Accommodation {
         this.roomType = roomType;
         this.userId = userId;
     }
-    public Accommodation(String location, String userId) {
-        this.location = location;
-        this.userId = userId;
-        // Set default values for the other fields
-        this.checkInTime = "";
-        this.checkOutTime = "";
-        this.numRooms = 0;
-        this.roomType = null;
-    }
-
 
     public String getHotel() {
         return hotel;
@@ -72,11 +60,11 @@ public class Accommodation {
         this.numRooms = numRooms;
     }
 
-    public List<String> getRoomType() {
+    public String getRoomType() {
         return roomType;
     }
 
-    public void setRoomType(List<String> roomType) {
+    public void setRoomType(String roomType) {
         this.roomType = roomType;
     }
 
