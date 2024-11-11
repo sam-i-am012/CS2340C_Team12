@@ -33,10 +33,21 @@ public class AccommodationViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Accommodation>> getAccommodations() {
+        if (accommodations == null) {
+            accommodations = new MutableLiveData<>();
+        }
         return accommodations;
     }
 
     public void addAccommodation(Accommodation accommodation) {
-        repository.addAccommodation(accommodation, null);
+        // Add the accommodation to the repository (database or Firebase)
+        repository.addAccommodation(accommodation, success -> {
+            // After adding the accommodation, fetch updated list
+            fetchAccommodationLogsForCurrentUser();
+        });
+    }
+    public String getCurrentUserId() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return user != null ? user.getUid() : null;
     }
 }
