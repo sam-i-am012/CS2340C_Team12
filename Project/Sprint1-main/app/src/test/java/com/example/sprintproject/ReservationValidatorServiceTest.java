@@ -60,4 +60,34 @@ public class ReservationValidatorServiceTest {
         assertFalse(result.isSuccess());
         assertEquals("All entries must be filled out", result.getMessage());
     }
+
+    @Test
+    public void testInvalidTimeAndWebsite() {
+        String name = "John";
+        String time = "25:00 PM";  // invalid time
+        String location = "Restaurant";
+        String website = "invalid-url";
+
+        Result result = reservationValidatorService.validate(name, time, location, website);
+
+        assertNotNull(result);
+        assertEquals("Time and website entries are both invalid", result.getMessage());
+    }
+
+    @Test
+    public void testAllMissingFields() {
+        // Arrange
+        String name = "";
+        String time = "";
+        String location = "";
+        String website = "";
+
+        // Act
+        Result result = reservationValidatorService.validate(name, time, location, website);
+
+        // Assert
+        assertNotNull(result);
+        assertFalse(result.isSuccess());
+        assertEquals("All entries must be filled out", result.getMessage());
+    }
 }
