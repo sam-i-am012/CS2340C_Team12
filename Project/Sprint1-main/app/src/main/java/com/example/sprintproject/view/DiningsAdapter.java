@@ -10,13 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Dining;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningViewHolder> {
     private List<Dining> dinings;
 
     public DiningsAdapter() {
-        this.dinings = dinings; // Initialize with an empty list if null
+        this.dinings = new ArrayList<>(); // Initialize with an empty list if null
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -56,7 +57,11 @@ public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningVi
     }
 
     public void setDinings(List<Dining> dinings) {
-        this.dinings = dinings;
+        if (dinings != null) {
+            this.dinings = dinings;
+        } else {
+            this.dinings = new ArrayList<>(); // Avoid null pointer
+        }
         notifyDataSetChanged();
     }
 

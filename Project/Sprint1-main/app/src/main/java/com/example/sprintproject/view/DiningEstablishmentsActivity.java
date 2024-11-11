@@ -49,16 +49,21 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
             addReservationDialog.show();
         });
 
+        diningViewModel = new ViewModelProvider(this).get(DiningViewModel.class);
+
         RecyclerView recyclerView = findViewById(R.id.rvReservations);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         diningAdapter = new DiningsAdapter();
         recyclerView.setAdapter(diningAdapter);
 
-        diningViewModel = new ViewModelProvider(this).get(DiningViewModel.class);
+        // Fetch dining logs for the current user
+        diningViewModel.fetchDiningLogsForCurrentUser(); // Ensure data is fetched
+
+        // Observe the LiveData for updates to dining logs
         diningViewModel.getDiningLogs().observe(this, new Observer<List<Dining>>() {
             @Override
             public void onChanged(List<Dining> dinings) {
-                diningAdapter.setDinings(dinings);
+                diningAdapter.setDinings(dinings); // Update the adapter when data changes
             }
         });
 
