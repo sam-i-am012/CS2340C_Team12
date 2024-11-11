@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Dining;
+import com.example.sprintproject.viewmodel.DiningViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
