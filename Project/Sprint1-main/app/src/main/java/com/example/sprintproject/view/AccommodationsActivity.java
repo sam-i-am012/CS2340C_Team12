@@ -78,8 +78,8 @@ public class AccommodationsActivity extends AppCompatActivity {
 
             String userId = user.getUid();
             String location = locationET.getText().toString().trim();
-            String checkInTime = locationET.getText().toString().trim();
-            String checkOutTime = locationET.getText().toString().trim();
+            String checkInTime = checkInTimeET.getText().toString().trim();
+            String checkOutTime = checkOutTimeET.getText().toString().trim();
 
             if (location.isEmpty() || checkInTime.isEmpty() || checkOutTime.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "Please fill in all fields",
@@ -108,9 +108,9 @@ public class AccommodationsActivity extends AppCompatActivity {
         logisticsButton = findViewById(R.id.logisticsButton);
         travelCommunityButton = findViewById(R.id.travelCommunityButton);
         addAccommodationButton = findViewById(R.id.addAccommodationButton);
-        //submitButton = 
+        submitButton = findViewById(R.id.btnAddAccommodationDialog);
         locationET = findViewById(R.id.editTextAccommodationLocation);
-        checkOutTimeET = findViewById(R.id.editTextAccommodationCheckInTime);
+        checkInTimeET = findViewById(R.id.editTextAccommodationCheckInTime);
         checkOutTimeET = findViewById(R.id.editTextAccommodationCheckOutTime);
     }
 
