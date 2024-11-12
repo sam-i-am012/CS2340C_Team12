@@ -8,7 +8,9 @@ public class Dining {
     private String userId;
     private boolean expired;
 
-    public Dining() {}
+    public Dining() {
+
+    }
 
     public Dining(String location, String website, String name, String time, String userId) {
         this.location = location;
@@ -59,7 +61,11 @@ public class Dining {
         this.userId = userId;
     }
 
-    public boolean isExpired() { return expired; }
+    public boolean isExpired() {
+        return expired;
+    }
 
-    public void setExpired(boolean expired) { this.expired = expired; }
+    public void setExpired(boolean expired) {
+        this.expired = expired;
+    }
 }

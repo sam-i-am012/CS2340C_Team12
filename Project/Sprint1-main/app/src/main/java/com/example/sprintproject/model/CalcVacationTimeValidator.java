@@ -46,7 +46,8 @@ public class CalcVacationTimeValidator {
                 return new Result(true, null);
             }
         } catch (ParseException e) {
-            return new Result(false, "Invalid date format, Please use:\nYYYY-MM-DD");
+            return new Result(false,
+                    "Invalid date format, Please use:\nYYYY-MM-DD");
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.sprintproject.model;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,7 +9,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ReservationValidator {
-    public static Result noMissingEntries(String name, String time, String location, String website) {
+    public static Result noMissingEntries(String name, String time, String location,
+                                          String website) {
         if (name.isEmpty() || time.isEmpty() || location.isEmpty() || website.isEmpty()) {
             return new Result(false, "All entries must be filled out");
         }
@@ -51,7 +51,8 @@ public class ReservationValidator {
             Calendar now = Calendar.getInstance();
 
             inputCalendar.setTime(inputTime);
-            inputCalendar.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+            inputCalendar.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH),
+                    now.get(Calendar.DAY_OF_MONTH));
 
             return inputCalendar.after(now);
 

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.model.ReservationValidator;
-import com.example.sprintproject.viewmodel.DiningViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +43,11 @@ public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningVi
     public DiningViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         if (viewType == VIEW_TYPE_EXPIRED) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expired_reservation, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_expired_reservation, parent, false);
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_reservation, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_reservation, parent, false);
         }
         return new DiningViewHolder(view);
     }
@@ -72,7 +73,7 @@ public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningVi
 
     private void updateExpiredDinings() {
         for (Dining dining : dinings) {
-            if(!ReservationValidator.isFutureTime(dining.getTime(), "h:mma")) {
+            if (!ReservationValidator.isFutureTime(dining.getTime(), "h:mma")) {
                 dining.setExpired(true);
             }
         }
@@ -89,7 +90,10 @@ public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningVi
     }
 
     static class DiningViewHolder extends RecyclerView.ViewHolder {
-        TextView location, resturantName, website, time;
+        private TextView location;
+        private TextView resturantName;
+        private TextView website;
+        private TextView time;
 
         DiningViewHolder(View itemView) {
             super(itemView);
