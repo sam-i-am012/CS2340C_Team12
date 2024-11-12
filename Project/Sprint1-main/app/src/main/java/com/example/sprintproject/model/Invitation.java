@@ -26,18 +26,38 @@ public class Invitation {
         this.invitingUserEmail = invitingUserEmail;
     }
 
-    public String getInvitingUserId() { return invitingUserId; }
-    public void setInvitingUserId(String invitingUserId) { this.invitingUserId = invitingUserId; }
+    public String getInvitingUserId() {
+        return invitingUserId;
+    }
+    public void setInvitingUserId(String invitingUserId) {
+        this.invitingUserId = invitingUserId;
+    }
 
-    public String getInvitedUserId() { return invitedUserId; }
-    public void setInvitedUserId(String invitedUserId) { this.invitedUserId = invitedUserId; }
+    public String getInvitedUserId() {
+        return invitedUserId;
+    }
+    public void setInvitedUserId(String invitedUserId) {
+        this.invitedUserId = invitedUserId;
+    }
 
-    public String getTripLocation() { return tripLocation; }
-    public void setTripLocation(String tripLocation) { this.tripLocation = tripLocation; }
+    public String getTripLocation() {
+        return tripLocation;
+    }
+    public void setTripLocation(String tripLocation) {
+        this.tripLocation = tripLocation;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-    public Object getTimestamp() { return timestamp; }
-    public void setTimestamp(Object timestamp) { this.timestamp = timestamp; }
+    public Object getTimestamp() {
+        return timestamp;
+    }
+    public void setTimestamp(Object timestamp) {
+        this.timestamp = timestamp;
+    }
 }

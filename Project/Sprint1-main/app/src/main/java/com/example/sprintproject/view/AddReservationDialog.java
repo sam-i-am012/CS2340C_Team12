@@ -58,39 +58,47 @@ public class AddReservationDialog extends Dialog {
             diningViewModel.validateNewReservation(name, time, location, website);
 
             // Observe reservation result
-            diningViewModel.getResValidationResult().observe(lifecycleOwner ,
-                    result -> {
-                        Toast.makeText(getContext(), result.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                        if (result.isSuccess()) {
-                            Dining dining = new Dining(location, website, name, time,
-                                    firestore.getCurrentUserId());
+            diningViewModel.getResValidationResult().observe(lifecycleOwner, result -> {
+                Toast.makeText(getContext(), result.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+                if (result.isSuccess()) {
+                    Dining dining = new Dining(location, website, name, time,
+                            firestore.getCurrentUserId());
 
-                            // Add reservation to database
-                            diningViewModel.addDining(dining);
+                    // Add reservation to database
+                    diningViewModel.addDining(dining);
 
-                            // Add reservation to recycler
-                            diningViewModel.addLog(dining);
+                    // Add reservation to recycler
+                    diningViewModel.addLog(dining);
 
-                            diningViewModel.getDiningLogs().observe(lifecycleOwner, new Observer<List<Dining>>() {
+                    // Update recycler when reservation is added
+                    diningViewModel.getDiningLogs().observe(lifecycleOwner,
+                            new Observer<List<Dining>>() {
                                 @Override
                                 public void onChanged(List<Dining> dinings) {
-                                    diningsAdapter.updateLogs(dinings); // Update the adapter with the new list
+                                    diningsAdapter.updateLogs(dinings); // Update w/ the new list
                                 }
                             });
-
-                            clearInputFields();
-                        }
-                        diningViewModel.resetResult();
-                    });
+                    clearInputFields();
+                }
+                diningViewModel.resetResult();
+            });
         });
     }
 
     private void clearInputFields() {
-        if (location != null) location.setText("");
-        if (restaurantName != null) restaurantName.setText("");
-        if (time != null) time.setText("");
-        if (website != null) website.setText("");
+        if (location != null) {
+            location.setText("");
+        }
+        if (restaurantName != null) {
+            restaurantName.setText("");
+        }
+        if (time != null) {
+            time.setText("");
+        }
+        if (website != null) {
+            website.setText("");
+        }
     }
 }
 

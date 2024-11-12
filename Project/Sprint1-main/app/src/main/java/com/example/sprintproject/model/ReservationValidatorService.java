@@ -5,7 +5,8 @@ package com.example.sprintproject.model;
  */
 public class ReservationValidatorService {
     public Result validate(String name, String time, String location, String website) {
-        Result noMissingEntries = ReservationValidator.noMissingEntries(name, time, location, website);
+        Result noMissingEntries = ReservationValidator.noMissingEntries(name, time, location,
+                website);
         if (noMissingEntries.isSuccess()) {
             Result isValidTime = ReservationValidator.isValidTime(time);
             Result isValidWebsite = ReservationValidator.isValidWebsite(website);

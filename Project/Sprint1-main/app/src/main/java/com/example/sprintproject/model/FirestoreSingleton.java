@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 
 
@@ -21,8 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -117,7 +114,7 @@ public class FirestoreSingleton {
         firestore.collection("travelLogs")
                 // use arrayContains to check if userId is in the associatedUsers array
                 .whereArrayContains("associatedUsers", userId)
-                .orderBy("createdAt", Query.Direction.DESCENDING)  // order by creation date, newest first
+                .orderBy("createdAt", Query.Direction.DESCENDING)  // creation date, newest first
                 .limit(5)  // limit to the last 5 entries
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
@@ -167,7 +164,8 @@ public class FirestoreSingleton {
 
     // synchronizes the associatedDestinations field (will be used at the login screen in case
     // destinations were manually removed from database)
-    public void syncUserAssociatedDestinationsOnLogin(String userId, OnCompleteListener<Void> onCompleteListener) {
+    public void syncUserAssociatedDestinationsOnLogin(String userId,
+                                                      OnCompleteListener<Void> onCompleteListener) {
         // get all valid destinations from the travelLogs collection associated with the userId
         firestore.collection("travelLogs")
                 .whereEqualTo("userId", userId)
@@ -243,7 +241,8 @@ public class FirestoreSingleton {
                         // assuming only one trip with the given location, get the first result
                         String tripId = querySnapshot.getDocuments().get(0).getId();
 
-                        Log.d("Firestore", "Found travel log for location: " + location + ", Trip ID: " + tripId);
+                        Log.d("Firestore", "Found travel log for location: " + location
+                                + ", Trip ID: " + tripId);
 
                         // add the userId to the associatedUsers array for travel logs
                         firestore.collection("travelLogs")
@@ -252,7 +251,7 @@ public class FirestoreSingleton {
                                 .addOnSuccessListener(aVoid -> {
                                     Log.d("Firestore", "User added to trip successfully!");
 
-                                    // Update the user's associatedDestinations array to include this trip
+                                    // Update user's associatedDestinations array to include trip
                                     updateUserAssociatedDestinations(invitedUserId, tripId);
                                 })
                                 .addOnFailureListener(e -> {
@@ -260,7 +259,7 @@ public class FirestoreSingleton {
                                 });
                     } else {
                         Log.w("Firestore", "No travel log found for location: " + location
-                        + " with inviting user " + invitingUserId);
+                                + " with inviting user " + invitingUserId);
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -290,10 +289,10 @@ public class FirestoreSingleton {
                 });
     }
 
-    public void addDining (Dining dining, OnCompleteListener<DocumentReference> listener){
+    public void addDining(Dining dining, OnCompleteListener<DocumentReference> listener) {
         firestore.collection("dining")
                 .add(dining)
-                .addOnCompleteListener( task -> {
+                .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         String diningId = task.getResult().getId();
 
@@ -323,14 +322,16 @@ public class FirestoreSingleton {
         return diningLiveData;
     }
 
-    public void addAccommodation (Accommodation accommodation, OnCompleteListener<DocumentReference> listener){
+    public void addAccommodation(Accommodation accommodation,
+                                  OnCompleteListener<DocumentReference> listener) {
         firestore.collection("accommodation")
                 .add(accommodation)
-                .addOnCompleteListener( task -> {
+                .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         String accommodationId = task.getResult().getId();
 
-                        updateUserAssociatedDestinations(accommodation.getUserId(), accommodationId);
+                        updateUserAssociatedDestinations(accommodation.getUserId(),
+                                accommodationId);
                     }
                     if (listener != null) {
                         listener.onComplete(task);
