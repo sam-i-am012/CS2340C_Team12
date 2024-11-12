@@ -13,6 +13,8 @@ import com.example.sprintproject.model.ReservationValidator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningViewHolder> {
     private static final int VIEW_TYPE_ACTIVE = 0;
@@ -27,6 +29,7 @@ public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningVi
     public void addLog(Dining reservation) {
         this.dinings.add(0, reservation); // Add new log at the start
         updateExpiredDinings();
+        sortDiningsByTimeDescending();
         notifyDataSetChanged(); // Notify the adapter that data has changed
     }
 
@@ -35,6 +38,7 @@ public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningVi
         this.dinings.clear();
         this.dinings.addAll(newReservations);
         updateExpiredDinings(); // Refresh expired statuses for all items
+        sortDiningsByTimeDescending();
         notifyDataSetChanged();
     }
 
@@ -86,7 +90,20 @@ public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningVi
         } else {
             this.dinings = new ArrayList<>(); // Avoid null pointer
         }
+        sortDiningsByTimeDescending();
         notifyDataSetChanged();
+    }
+
+    // Sorting the reservation list
+    public void sortDiningsByTimeDescending() {
+        Collections.sort(dinings, new Comparator<Dining>() {
+            @Override
+            public int compare(Dining d1, Dining d2) {
+                // Assuming Dining's getTime() returns a String in a format that can be parsed to Date or used for comparison
+                return d2.getTime().compareTo(d1.getTime());
+            }
+        });
+        notifyDataSetChanged(); // Notify the adapter of the change
     }
 
     static class DiningViewHolder extends RecyclerView.ViewHolder {
