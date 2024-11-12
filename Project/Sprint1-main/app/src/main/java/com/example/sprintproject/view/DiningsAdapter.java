@@ -10,12 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.model.ReservationValidator;
-import com.example.sprintproject.viewmodel.DiningViewModel;
-import java.util.Collections;
-import java.util.Comparator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningViewHolder> {
     private static final int VIEW_TYPE_ACTIVE = 0;
