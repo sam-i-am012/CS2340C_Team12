@@ -23,6 +23,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -341,19 +343,35 @@ public class FirestoreSingleton {
 
     public LiveData<List<Accommodation>> getAccommodationLogsByUser(String userId) {
         MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
         firestore.collection("accommodation")
                 .whereEqualTo("userId", userId) // query logs for this user
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         return; // to avoid null pointer
                     }
+
                     List<Accommodation> accommodationLogs = new ArrayList<>();
                     for (QueryDocumentSnapshot document : value) {
                         Accommodation log = document.toObject(Accommodation.class);
                         accommodationLogs.add(log);
                     }
-                    accommodationLiveData.setValue(accommodationLogs);
+
+                    // Sort the logs by date (assuming `getCheckOutTime()` returns a date string in "yyyy-MM-dd" format)
+                    Collections.sort(accommodationLogs, new Comparator<Accommodation>() {
+                        @Override
+                        public int compare(Accommodation o1, Accommodation o2) {
+                            // Assuming the Accommodation class has a getCheckOutTime() method returning a string
+                            String date1 = o1.getCheckOutTime();
+                            String date2 = o2.getCheckOutTime();
+                            return date2.compareTo(date1);  // Compare dates as strings (lexicographical order)
+                        }
+                    });
+
+                    accommodationLiveData.setValue(accommodationLogs);  // Update LiveData with sorted list
                 });
+
         return accommodationLiveData;
     }
 }
