@@ -2,6 +2,7 @@ package com.example.sprintproject.model;
 
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TravelLog {
@@ -11,21 +12,32 @@ public class TravelLog {
     private String endDate;
     private List<String> associatedUsers;  // optional list of user IDs
     private Timestamp createdAt; // to be able to know which are the most recent ones
+    private List<Note> notes;
 
     public TravelLog(String userId, String destination, String startDate, String endDate,
-                     List<String> associatedUsers) {
+                     List<String> associatedUsers, List<Note> notes) {
         this.userId = userId;
         this.destination = destination;
         this.startDate = startDate;
         this.endDate = endDate;
         this.associatedUsers = associatedUsers;
         this.createdAt = Timestamp.now(); // auto set to current time
+        this.notes = notes;
 
     }
 
     public TravelLog() { }
 
     // Getters and setters
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -71,6 +83,14 @@ public class TravelLog {
         if (!associatedUsers.contains(userId)) {
             associatedUsers.add(userId);
         }
+    }
+
+    // add a note
+    public void addNote(Note note) {
+        if (notes == null) {
+            notes = new ArrayList<>();
+        }
+        notes.add(note);
     }
 
     public Timestamp getCreatedAt() {

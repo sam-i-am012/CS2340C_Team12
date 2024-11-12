@@ -130,7 +130,7 @@ public class DestinationsActivity extends AppCompatActivity {
             }
 
             TravelLog newLog = new TravelLog(userId, destination, startDate, endDate,
-                    new ArrayList<>());
+                    new ArrayList<>(), new ArrayList<>());
 
             // Add the new log directly to the adapter and update total days
             adapter.addLog(newLog);

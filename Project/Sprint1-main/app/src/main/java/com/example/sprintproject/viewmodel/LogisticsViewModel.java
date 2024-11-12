@@ -4,6 +4,7 @@ import static com.example.sprintproject.model.InputValidator.isValidEmail;
 
 import android.util.Log;
 import android.util.Patterns;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,9 +12,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Invitation;
+import com.example.sprintproject.model.Note;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.model.TravelLogValidator;
 import com.example.sprintproject.model.TripUtils;
+import com.example.sprintproject.model.User;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -30,6 +33,8 @@ public class LogisticsViewModel extends ViewModel {
     private MutableLiveData<Integer> plannedDaysLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> allocatedLiveData = new MutableLiveData<>();
     private MutableLiveData<Invitation> invitationLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> noteAddedLiveData = new MutableLiveData<>();  // node addition
+    private MutableLiveData<List<Note>> notesLiveData = new MutableLiveData<>();  // displaying notes
 
 
     public LogisticsViewModel() {
@@ -38,6 +43,7 @@ public class LogisticsViewModel extends ViewModel {
         loadTripDays();
         loadDuration();
         listenForInvitations(); // listen for new invitations to collab on a trip
+        notesLiveData = new MutableLiveData<>();
     }
 
     // live data for invitations
@@ -59,6 +65,25 @@ public class LogisticsViewModel extends ViewModel {
 
     public MutableLiveData<Integer> getAllocatedLiveData() {
         return allocatedLiveData;
+    }
+
+    // live data for notes
+    public LiveData<String> getNoteAddedLiveData() {
+        return noteAddedLiveData;
+    }
+
+    public LiveData<List<Note>> getNotesLiveData() {
+        return notesLiveData;
+    }
+
+    // fetch notes for a specific location and current user
+    public LiveData<List<Note>> getNotesForTravelLog(String location) {
+        String currentUserId = firestoreSingleton.getCurrentUserId();
+        firestoreSingleton.getNotesForTravelLog(location, currentUserId).observeForever(notes -> {
+            // update the live data
+            notesLiveData.setValue(notes);
+        });
+        return notesLiveData;
     }
 
     // load user's associated locations and update the LiveData
@@ -179,4 +204,25 @@ public class LogisticsViewModel extends ViewModel {
         firestoreSingleton.addUserToTrip(invitation.getInvitingUserId(),
                 invitation.getInvitedUserId(), invitation.getTripLocation());
     }
+
+    public LiveData<List<User>> getCollaboratorsForLocation(String location) {
+        return firestoreSingleton.getCollaboratorsForLocation(location,
+                firestoreSingleton.getCurrentUserId());
+    }
+
+    public void addNoteToTravelLog(String location, String noteContent) {
+        String userId = firestoreSingleton.getCurrentUserId();
+
+        Note newNote = new Note(noteContent, userId);
+
+        firestoreSingleton.addNoteToTravelLog(location, userId, newNote, task -> {
+            if (task.isSuccessful()) {
+                toastMessage.setValue("Note added successfully!");
+            } else {
+                toastMessage.setValue("Failed to add note.");
+            }
+        });
+    }
+
+
 }

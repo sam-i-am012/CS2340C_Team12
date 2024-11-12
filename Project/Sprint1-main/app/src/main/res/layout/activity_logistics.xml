@@ -1,185 +1,130 @@
-<androidx.core.widget.NestedScrollView
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:fillViewport="true">
+    android:layout_height="match_parent" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
+        android:id="@+id/contentScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".LogisticsActivity"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/navigationBarLL"
+        android:fillViewport="true">
 
-        <!-- FrameLayout for logistics (if needed) -->
-        <FrameLayout
+        <!-- holds all scrollable views -->
+        <LinearLayout
+            android:id="@+id/buttonsLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints">
-            <!-- Visualize Data Button-->
-        </FrameLayout>
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/logisticsTitle"
-            android:layout_width="403dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/coolvetica"
-            android:gravity="center"
-            android:text="Logistics"
-            android:textColor="@color/darkBlue"
-            android:textSize="50sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/logisticsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/coolvetica"
+                android:gravity="center"
+                android:text="Logistics"
+                android:textColor="@color/darkBlue"
+                android:textSize="50sp" />
 
-        <Button
-            android:id="@+id/viewDataButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/bluegray"
-            android:text="View Data"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/logisticsTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp" />
+            <!-- view data button -->
+            <Button
+                android:id="@+id/viewDataButton"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/bluegray"
+                android:text="View Data"
+                android:layout_marginTop="40dp"
+                android:textSize="20sp"
+                android:layout_gravity="center_horizontal" />
 
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/pieChart"
-            android:layout_width="300dp"
-            android:layout_height="400dp"
-            app:layout_constraintTop_toBottomOf="@id/viewDataButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_goneMarginTop="0dp"
-            android:visibility="gone"
-            />
 
-        <Button
-            android:id="@+id/viewCollabsAndNotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/bluegray"
-            android:text="View Collaborators/Notes"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/pieChart"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp" />
+            <!-- piechart -->
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="300dp"
+                android:layout_height="400dp"
+                android:layout_marginTop="40dp"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal" />
 
-        <!-- Spinner for Location Selection -->
-        <Spinner
-            android:id="@+id/locationSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/viewCollabsAndNotes"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            android:layout_marginTop="16dp" />
 
-        <!-- RecyclerView for Collaborators List -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/collaboratorsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/locationSpinner"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            android:layout_marginTop="16dp" />
-
-        <!-- invite other users button -->
-        <ImageButton
-            android:id="@+id/addUsersBtn"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:src="@drawable/add_users"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/navigationBarLL"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="15dp"/>
-
-        <!-- add note button -->
-        <ImageButton
-            android:id="@+id/addNoteBtn"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:src="@drawable/new_note"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/navigationBarLL"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="15dp"/>
+            <!-- collab and notes button -->
+            <Button
+                android:id="@+id/viewCollabsAndNotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/bluegray"
+                android:text="Collaborators and Notes"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+    </ScrollView>
 
         <!-- Navigation Bar -->
-        <LinearLayout
-            android:id="@+id/navigationBarLL"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/navigationBarLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:paddingVertical="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" >
+
+
+        <!-- Destination Button -->
+        <ImageButton
+            android:id="@+id/destinationsButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#000000"
-            android:paddingVertical="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" >
+            android:background="@null"
+            android:src="@drawable/ic_destinations"
+            android:layout_weight="1"
+            app:tint="#35464b" />
 
-            <!-- Destinations Button -->
-            <ImageButton
-                android:id="@+id/destinationsButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:src="@drawable/ic_destinations"
-                android:layout_weight="1"
-                app:tint="#35464b" />
+        <!-- Dining Establishments Button -->
+        <ImageButton
+            android:id="@+id/diningEstablishmentsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_dining_establishments"
+            android:layout_weight="1"
+            app:tint="#35464b" />
 
-            <!-- Dining Establishments Button -->
-            <ImageButton
-                android:id="@+id/diningEstablishmentsButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:src="@drawable/ic_dining_establishments"
-                android:layout_weight="1"
-                app:tint="#35464b" />
+        <!-- Accommodations Button -->
+        <ImageButton
+            android:id="@+id/accommodationsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_accommodations"
+            android:layout_weight="1"
+            app:tint="#35464b" />
 
-            <!-- Accommodations Button -->
-            <ImageButton
-                android:id="@+id/accommodationsButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:src="@drawable/ic_accommodations"
-                android:layout_weight="1"
-                app:tint="#35464b" />
+        <!-- Logistics Button -->
+        <ImageButton
+            android:id="@+id/logisticsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_logistics"
+            android:layout_weight="1"
+            app:tint="@color/lightBluegray" />
 
-            <!-- Logistics Button -->
-            <ImageButton
-                android:id="@+id/logisticsButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:src="@drawable/ic_logistics"
-                android:layout_weight="1"
-                app:tint="@color/lightBluegray" />
+        <!-- Travel Community Button -->
+        <ImageButton
+            android:id="@+id/travelCommunityButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_travel_community"
+            android:layout_weight="1"
+            app:tint="#35464b" />
+    </LinearLayout>
 
-            <!-- Travel Community Button -->
-            <ImageButton
-                android:id="@+id/travelCommunityButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:src="@drawable/ic_travel_community"
-                android:layout_weight="1"
-                app:tint="#35464b" />
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

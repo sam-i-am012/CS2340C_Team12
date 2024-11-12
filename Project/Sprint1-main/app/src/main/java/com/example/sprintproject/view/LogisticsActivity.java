@@ -74,11 +74,11 @@ public class LogisticsActivity extends AppCompatActivity {
         ImageButton destinationsButton = findViewById(R.id.destinationsButton);
         ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
         ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
-        ImageButton addUsersButton = findViewById(R.id.addUsersBtn);
-        ImageButton addNoteBtn = findViewById(R.id.addNoteBtn);
+//        ImageButton addUsersButton = findViewById(R.id.addUsersBtn);
+//        ImageButton addNoteBtn = findViewById(R.id.addNoteBtn);
         Button viewDataBtn = findViewById(R.id.viewDataButton);
         Button viewCollabAndNotesBtn = findViewById(R.id.viewCollabsAndNotes);
-        Spinner locationSpinner = findViewById(R.id.locationSpinner);
+//        Spinner locationSpinner = findViewById(R.id.locationSpinner);
         pieChart = findViewById(R.id.pieChart);
 
         // getting pie chart button working
@@ -94,15 +94,16 @@ public class LogisticsActivity extends AppCompatActivity {
         });
 
         // view collaborator/notes button
-        viewCollabAndNotesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // make the spinner visible when the button is clicked
-                locationSpinner.setVisibility(View.VISIBLE);
+        viewCollabAndNotesBtn.setOnClickListener(v -> {
+//            // make the spinner visible when the button is clicked
+//            locationSpinner.setVisibility(View.VISIBLE);
+//
+//            // populate the spinner with locations after it's made visible
+//            populateLocationSpinner(locationSpinner);
 
-                // populate the spinner with locations after it's made visible
-                populateLocationSpinner();
-            }
+            Intent collabAndNotes = new Intent(LogisticsActivity.this,
+                    CollabNotesActivity.class);
+            startActivity(collabAndNotes);
         });
 
 
@@ -132,12 +133,12 @@ public class LogisticsActivity extends AppCompatActivity {
         });
 
         // Add users button
-        addUsersButton.setOnClickListener(view -> showAddUserDialog());
-
-        addNoteBtn.setOnClickListener(view ->
-                Toast.makeText(getApplicationContext(), "New note button pressed",
-                        Toast.LENGTH_SHORT).show()
-        );
+//        addUsersButton.setOnClickListener(view -> showAddUserDialog());
+//
+//        addNoteBtn.setOnClickListener(view ->
+//                Toast.makeText(getApplicationContext(), "New note button pressed",
+//                        Toast.LENGTH_SHORT).show()
+//        );
     }
 
     private void visualizeTripDays(int plannedDays, int allottedDays) {
@@ -237,7 +238,7 @@ public class LogisticsActivity extends AppCompatActivity {
     }
 
     // for view collab/notes button
-    private void populateLocationSpinner() {
+    private void populateLocationSpinner(Spinner locationSpinner) {
         viewModel.getUserLocations().observe(LogisticsActivity.this, locations -> {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(LogisticsActivity.this,
                     android.R.layout.simple_spinner_item, locations);
@@ -245,8 +246,31 @@ public class LogisticsActivity extends AppCompatActivity {
             locationSpinner.setAdapter(adapter);
         });
 
-        // Optionally load user locations into ViewModel, if not done elsewhere
-        List<String> userLocations = getUserAssociatedLocations();
-        viewModel.loadUserLocations(userLocations);
     }
+//    private void populateLocationSpinner(Spinner locationSpinner) {
+//        viewModel.getUserLocations().observe(LogisticsActivity.this, locations -> {
+//            ArrayAdapter<String> adapter = new ArrayAdapter<>(LogisticsActivity.this,
+//                    android.R.layout.simple_spinner_item, locations);
+//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            locationSpinner.setAdapter(adapter);
+//        });
+//
+//        // Set listener to open bottom sheet when a location is selected
+//        locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String selectedLocation = (String) parent.getItemAtPosition(position);
+//
+//                // Show Bottom Sheet dialog with the selected location's details
+//                LocationDetailsBottomSheet bottomSheet = LocationDetailsBottomSheet.newInstance(selectedLocation);
+//                bottomSheet.show(getSupportFragmentManager(), "LocationDetailsBottomSheet");
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // Do nothing
+//            }
+//        });
+//    }
+
 }
