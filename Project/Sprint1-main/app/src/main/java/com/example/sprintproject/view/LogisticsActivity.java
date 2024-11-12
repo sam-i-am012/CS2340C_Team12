@@ -32,6 +32,7 @@ public class LogisticsActivity extends AppCompatActivity {
     private PieChart pieChart;
     private int currentPlannedDays = 0;
     private int currentAllocatedDays = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,17 +74,38 @@ public class LogisticsActivity extends AppCompatActivity {
         ImageButton destinationsButton = findViewById(R.id.destinationsButton);
         ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
         ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
-        ImageButton addUsersButton = findViewById(R.id.addUsersBtn);
-        ImageButton addNoteBtn = findViewById(R.id.addNoteBtn);
+//        ImageButton addUsersButton = findViewById(R.id.addUsersBtn);
+//        ImageButton addNoteBtn = findViewById(R.id.addNoteBtn);
         Button viewDataBtn = findViewById(R.id.viewDataButton);
+        Button viewCollabAndNotesBtn = findViewById(R.id.viewCollabsAndNotes);
+//        Spinner locationSpinner = findViewById(R.id.locationSpinner);
         pieChart = findViewById(R.id.pieChart);
 
         // getting pie chart button working
         pieChart.setVisibility(View.GONE);
         viewDataBtn.setOnClickListener(view -> {
-            // Call method to visualize
-            visualizeTripDays(currentPlannedDays, currentAllocatedDays);
+            // check if chart is currently visible
+            if (pieChart.getVisibility() == View.VISIBLE) {
+                pieChart.setVisibility(View.GONE); // hide if visible
+            } else {
+                // ff not visible, show the pie chart
+                visualizeTripDays(currentPlannedDays, currentAllocatedDays);
+            }
         });
+
+        // view collaborator/notes button
+        viewCollabAndNotesBtn.setOnClickListener(v -> {
+//            // make the spinner visible when the button is clicked
+//            locationSpinner.setVisibility(View.VISIBLE);
+//
+//            // populate the spinner with locations after it's made visible
+//            populateLocationSpinner(locationSpinner);
+
+            Intent collabAndNotes = new Intent(LogisticsActivity.this,
+                    CollabNotesActivity.class);
+            startActivity(collabAndNotes);
+        });
+
 
 
         diningEstablishmentsButton.setOnClickListener(view -> {
@@ -111,12 +133,12 @@ public class LogisticsActivity extends AppCompatActivity {
         });
 
         // Add users button
-        addUsersButton.setOnClickListener(view -> showAddUserDialog());
-
-        addNoteBtn.setOnClickListener(view ->
-                Toast.makeText(getApplicationContext(), "New note button pressed",
-                        Toast.LENGTH_SHORT).show()
-        );
+//        addUsersButton.setOnClickListener(view -> showAddUserDialog());
+//
+//        addNoteBtn.setOnClickListener(view ->
+//                Toast.makeText(getApplicationContext(), "New note button pressed",
+//                        Toast.LENGTH_SHORT).show()
+//        );
     }
 
     private void visualizeTripDays(int plannedDays, int allottedDays) {
@@ -135,23 +157,23 @@ public class LogisticsActivity extends AppCompatActivity {
         dataSet.setValueTextColor(Color.BLACK);  // Set value text color
 
 
-
         // Customize pie chart appearance
         pieChart.setHoleRadius(40f);  // Hole in the middle
         pieChart.setTransparentCircleRadius(45f);  // Transparent circle around hole
         pieChart.setCenterText("Trip Days");
         pieChart.setCenterTextSize(16f);  // Text size for center text
         pieChart.getDescription().setEnabled(false);
-        pieChart.setExtraOffsets(20f, 10f, 10f, 8f); // to avoid clipping
+        pieChart.setExtraOffsets(10f, 0f, 10f, 8f); // to avoid clipping
 
 
         // Set label color for each entry (Planned Days, Remaining Allotted Days)
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setEntryLabelTextSize(15f);
 
+        pieChart.getLegend().setEnabled(false);
 
         // Animate the chart
-        pieChart.animateY(1500);  // Animation for showing chart
+        pieChart.animateY(1000);  // Animation for showing chart
 
         // Create pie data and set it to chart
         PieData data = new PieData(dataSet);
@@ -214,4 +236,41 @@ public class LogisticsActivity extends AppCompatActivity {
                 .setCancelable(false) // prevent closing dialog without action
                 .show();
     }
+
+    // for view collab/notes button
+    private void populateLocationSpinner(Spinner locationSpinner) {
+        viewModel.getUserLocations().observe(LogisticsActivity.this, locations -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(LogisticsActivity.this,
+                    android.R.layout.simple_spinner_item, locations);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            locationSpinner.setAdapter(adapter);
+        });
+
+    }
+//    private void populateLocationSpinner(Spinner locationSpinner) {
+//        viewModel.getUserLocations().observe(LogisticsActivity.this, locations -> {
+//            ArrayAdapter<String> adapter = new ArrayAdapter<>(LogisticsActivity.this,
+//                    android.R.layout.simple_spinner_item, locations);
+//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            locationSpinner.setAdapter(adapter);
+//        });
+//
+//        // Set listener to open bottom sheet when a location is selected
+//        locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String selectedLocation = (String) parent.getItemAtPosition(position);
+//
+//                // Show Bottom Sheet dialog with the selected location's details
+//                LocationDetailsBottomSheet bottomSheet = LocationDetailsBottomSheet.newInstance(selectedLocation);
+//                bottomSheet.show(getSupportFragmentManager(), "LocationDetailsBottomSheet");
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // Do nothing
+//            }
+//        });
+//    }
+
 }
