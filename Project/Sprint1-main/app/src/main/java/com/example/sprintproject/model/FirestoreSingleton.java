@@ -378,6 +378,31 @@ public class FirestoreSingleton {
                 });
     }
 
+    public LiveData<List<Dining>> getDiningLogsByUserAndLocation(String userId, String locationId) {
+        MutableLiveData<List<Dining>> diningLogsLiveData = new MutableLiveData<>();
+
+        firestore.collection("dining")
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("travelDestination", locationId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Dining> diningLogs = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Dining dining = document.toObject(Dining.class);
+                            diningLogs.add(dining);
+                        }
+                        diningLogsLiveData.setValue(diningLogs);
+                    } else {
+                        Log.e("Firestore", "Error getting dining logs: ", task.getException());
+                        diningLogsLiveData.setValue(Collections.emptyList());
+                    }
+                });
+        Log.d("Firestore", "Getting dining log for: " + locationId);
+        return diningLogsLiveData;
+    }
+
+
     public LiveData<List<Dining>> getDiningByUser(String userId) {
         MutableLiveData<List<Dining>> diningLiveData = new MutableLiveData<>();
         firestore.collection("dining")

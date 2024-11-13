@@ -1,6 +1,7 @@
 package com.example.sprintproject.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -75,6 +76,17 @@ public class DiningViewModel extends AndroidViewModel {
                 diningLogs.setValue(dinings);
             });
         }
+    }
+
+    public void fetchDiningLogsForLocation(String locationId) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null || locationId.isEmpty()) {
+            return;
+        }
+        String userId = user.getUid();
+        Log.e("Dining", "fetching dining logs for location: " + locationId);
+        repository.getDiningLogsByUserAndLocation(userId, locationId)
+                .observeForever(diningLogs::setValue);
     }
 
     public LiveData<List<Dining>> getDiningLogs() {

@@ -2,6 +2,7 @@ package com.example.sprintproject.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -66,15 +67,11 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
         recyclerView.setAdapter(diningAdapter);
 
         // Fetch dining logs for the current user
-        diningViewModel.fetchDiningLogsForCurrentUser();
-
+        diningViewModel.fetchDiningLogsForLocation(selectedDestinationId);
 
         // Observe the LiveData for updates to dining logs
-        diningViewModel.getDiningLogs().observe(this, new Observer<List<Dining>>() {
-            @Override
-            public void onChanged(List<Dining> dinings) {
-                diningAdapter.setDinings(dinings); // Update the adapter when data changes
-            }
+        diningViewModel.getDiningLogs().observe(this, dinings -> {
+            diningAdapter.setDinings(dinings); // Update the adapter when data changes
         });
 
 
@@ -119,7 +116,6 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
 
     private void populateLocationSpinner(Spinner locationSpinner) {
         diningViewModel.getUserLocationsWithIds().observe(DiningEstablishmentsActivity.this, locationsWithIds -> {
-            // get location names from the map
             List<String> locationNames = new ArrayList<>(locationsWithIds.keySet());
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -132,10 +128,16 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     String selectedLocation = locationNames.get(position);
                     selectedDestinationId = locationsWithIds.get(selectedLocation);
+                    Log.e("dining", "Selected dining ID: " + selectedDestinationId);
+
+                    if (selectedDestinationId != null) {
+                        diningViewModel.fetchDiningLogsForLocation(selectedDestinationId);
+                    }
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
+                    // Optional: Handle case where nothing is selected, if needed
                 }
             });
         });
