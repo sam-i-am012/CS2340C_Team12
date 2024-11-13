@@ -51,12 +51,12 @@ public class DiningViewModel extends AndroidViewModel {
     private void loadUserLocations() {
         String currentUserId = repository.getCurrentUserId();
 
-        repository.getTravelLogsByUser2(currentUserId).observeForever(querySnapshot -> {
-            if (querySnapshot != null) {
+        repository.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
+            if (travelLogs != null) {
                 Map<String, String> locationsWithIds = new HashMap<>();
-                for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                    String destination = doc.getString("destination"); // Assuming "destination" is the field name
-                    String documentId = doc.getId(); // Get the Firestore document ID
+                for (TravelLog log : travelLogs) {
+                    String destination = log.getDestination();
+                    String documentId = log.getDocumentId();
                     locationsWithIds.put(destination, documentId);
                 }
                 userLocationsWithIds.setValue(locationsWithIds);

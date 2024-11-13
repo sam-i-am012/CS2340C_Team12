@@ -115,25 +115,6 @@ public class FirestoreSingleton {
         return travelLogsLiveData;
     }
 
-    // this method returns a query snapshot so the document id for the location can be grabbed
-    public LiveData<QuerySnapshot> getTravelLogsByUser2(String userId) {
-        CollectionReference travelLogsRef = firestore.collection("travelLogs");
-        Query query = travelLogsRef.whereEqualTo("userId", userId);
-
-        MutableLiveData<QuerySnapshot> liveData = new MutableLiveData<>();
-        query.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                liveData.setValue(task.getResult());
-            } else {
-                // Handle the error
-                liveData.setValue(null);
-            }
-        });
-
-        return liveData;
-    }
-
-
     public LiveData<List<TravelLog>> getLastFiveTravelLogsByUser(String userId) {
         MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
         firestore.collection("travelLogs")
@@ -169,17 +150,24 @@ public class FirestoreSingleton {
                 .add(log)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Get the ID of the newly created travel log
                         String travelLogId = task.getResult().getId();
 
                         // Update the user's associatedDestinations
                         updateUserAssociatedDestinations(log.getUserId(), travelLogId);
+
+                        // set the documentId in the TravelLog object
+                        String documentId = task.getResult().getId();
+
+                        // update the travel log id
+                        firestore.collection("travelLogs").document(documentId)
+                                .update("documentId", documentId);
                     }
                     if (listener != null) {
                         listener.onComplete(task);
                     }
                 });
     }
+
 
     // adds new travel log ID to the asssociatedDestinations array field for specific user
     private void updateUserAssociatedDestinations(String userId, String travelLogId) {
