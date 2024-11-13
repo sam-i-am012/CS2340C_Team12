@@ -12,7 +12,8 @@
         app:layout_constraintBottom_toTopOf="@id/navigationBarLL"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- RecyclerView for Dining List -->
+
+
         <TextView
             android:id="@+id/diningTitle"
             android:layout_width="match_parent"
@@ -29,10 +30,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- spinner to choose location -->
+        <Spinner
+            android:id="@+id/locationSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"/>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
+            <!-- RecyclerView for Dining List -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvReservations"
                 android:layout_width="match_parent"

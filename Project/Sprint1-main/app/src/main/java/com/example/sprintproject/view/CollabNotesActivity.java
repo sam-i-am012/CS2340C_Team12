@@ -34,6 +34,7 @@ public class CollabNotesActivity extends AppCompatActivity {
     private NotesAdapter notesAdapter;
 
     private String selectedLocation;
+    private String previousSelectedLocation = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,26 +89,26 @@ public class CollabNotesActivity extends AppCompatActivity {
                 selectedLocation = (String) parent.getItemAtPosition(position);
                 fetchCollaboratorsForLocation(selectedLocation);
 
-                viewModel.getNotesForTravelLog(selectedLocation).observe(CollabNotesActivity.this, notes -> {
-                    // Update the adapter with the new notes
-                    if (notes != null) {
-                        notesAdapter.updateNotes(notes);
-                        Log.d("Notes", "Fetched notes: " + notes.size());
-                    } else {
-                        // Handle empty or error case
-                        notesAdapter.updateNotes(new ArrayList<>());
-                        Log.d("Notes", "No notes found.");
-                    }
-                });
+                // only fetch notes when location changes
+                if (!selectedLocation.equals(previousSelectedLocation)) {
+                    viewModel.getNotesForTravelLog(selectedLocation).observe(CollabNotesActivity.this, notes -> {
+                        if (notes != null) {
+                            notesAdapter.updateNotes(notes);
+                            Log.d("Notes", "Fetched notes: " + notes.size());
+                        } else {
+                            notesAdapter.updateNotes(new ArrayList<>());
+                            Log.d("Notes", "No notes found.");
+                        }
+                    });
+                    previousSelectedLocation = selectedLocation;  // Update the previous selection
+
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
-
-
 
         diningEstablishmentsButton.setOnClickListener(view -> {
             Intent diningEstablishmentsIntent = new Intent(CollabNotesActivity.this,
@@ -136,11 +137,6 @@ public class CollabNotesActivity extends AppCompatActivity {
         // Add users button
         addUsersButton.setOnClickListener(view -> showAddUserDialog());
 
-        addNoteBtn.setOnClickListener(view ->
-                Toast.makeText(getApplicationContext(), "New note button pressed",
-                        Toast.LENGTH_SHORT).show()
-        );
-
         // add note button
         addNoteBtn.setOnClickListener(view -> showAddNoteDialog(selectedLocation));
 
@@ -165,10 +161,10 @@ public class CollabNotesActivity extends AppCompatActivity {
                     String noteContent = noteEditText.getText().toString().trim();
 
                     if (!noteContent.isEmpty()) {
-                        // Assuming you have a way to get the selected TravelLog ID (e.g., from the location)
-
-                        // Call ViewModel to add the note to the travel log
                         viewModel.addNoteToTravelLog(selectedLocation, noteContent);
+                        setSpinnerSelection(previousSelectedLocation); // to make sure the spinner doesn't reset
+                        Toast.makeText(getApplicationContext(), "old location: " + previousSelectedLocation,
+                                Toast.LENGTH_SHORT).show();
 
                         Toast.makeText(this, "Note sent", Toast.LENGTH_SHORT).show();
                     } else {
@@ -177,6 +173,13 @@ public class CollabNotesActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    // set spinner back to the prev location
+    private void setSpinnerSelection(String location) {
+        ArrayAdapter adapter = (ArrayAdapter) locationSpinner.getAdapter();
+        int position = adapter.getPosition(location);
+        locationSpinner.setSelection(position, false);
     }
 
 

@@ -11,15 +11,18 @@ import com.example.sprintproject.model.ReservationValidator;
 import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Result;
+import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.view.DiningsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiningViewModel extends AndroidViewModel {
     DiningsAdapter diningAdapter = new DiningsAdapter();
 
+    private MutableLiveData<List<String>> userLocations = new MutableLiveData<>();
     private FirestoreSingleton repository;
     private MutableLiveData<List<Dining>> diningLogs;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
@@ -28,6 +31,23 @@ public class DiningViewModel extends AndroidViewModel {
         super(application);
         repository = FirestoreSingleton.getInstance();
         diningLogs = new MutableLiveData<>();
+        loadUserLocations();
+    }
+
+    public LiveData<List<String>> getUserLocations() {
+        return userLocations;
+    }
+
+    // load user's associated locations and update the LiveData
+    private void loadUserLocations() {
+        String currentUserId = repository.getCurrentUserId();
+        repository.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
+            List<String> locations = new ArrayList<>();
+            for (TravelLog log : travelLogs) {
+                locations.add(log.getDestination());
+            }
+            userLocations.setValue(locations);
+        });
     }
 
     public void fetchDiningLogsForCurrentUser() {

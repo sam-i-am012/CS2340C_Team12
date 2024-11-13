@@ -85,14 +85,6 @@ public class TravelLog {
         }
     }
 
-    // add a note
-    public void addNote(Note note) {
-        if (notes == null) {
-            notes = new ArrayList<>();
-        }
-        notes.add(note);
-    }
-
     public Timestamp getCreatedAt() {
         return createdAt;
     }

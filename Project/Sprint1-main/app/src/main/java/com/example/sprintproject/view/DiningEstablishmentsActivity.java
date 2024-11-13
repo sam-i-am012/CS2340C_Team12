@@ -3,7 +3,9 @@ package com.example.sprintproject.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -21,6 +23,7 @@ import java.util.List;
 public class DiningEstablishmentsActivity extends AppCompatActivity {
     private DiningViewModel diningViewModel;
     private DiningsAdapter diningAdapter;
+    private Spinner locationSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +37,20 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
         ImageButton logisticsButton = findViewById(R.id.logisticsButton);
         ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
         FloatingActionButton reservationDialogButton = findViewById(R.id.fabAddReservation);
+        locationSpinner = findViewById(R.id.locationSpinner);
+
+        locationSpinner.setVisibility(View.VISIBLE);
+
+        // populate the spinner with locations after it's made visible
+        populateLocationSpinner(locationSpinner);
+
 
         // Add reservation button and dialog logic
         reservationDialogButton.setOnClickListener(view -> {
+            String selectedLocation = locationSpinner.getSelectedItem().toString();
+
             AddReservationDialog addReservationDialog = new AddReservationDialog(
-                    DiningEstablishmentsActivity.this, diningViewModel);
+                    DiningEstablishmentsActivity.this, diningViewModel, selectedLocation);
             addReservationDialog.show();
         });
 
@@ -99,6 +111,15 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
             }
         });
 
+    }
 
+    private void populateLocationSpinner(Spinner locationSpinner) {
+        diningViewModel.getUserLocations().observe(DiningEstablishmentsActivity.this, locations -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, locations);
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            locationSpinner.setAdapter(adapter);
+        });
     }
 }

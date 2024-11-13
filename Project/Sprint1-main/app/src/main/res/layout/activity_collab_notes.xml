@@ -36,42 +36,14 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"/>
 
-    <!-- add note button -->
-    <ImageButton
-        android:id="@+id/addNoteBtn"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:scaleType="fitCenter"
-        android:background="@null"
-        android:src="@drawable/new_note"
-        app:layout_constraintTop_toBottomOf="@id/logisticsTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/addUsersBtn"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="10dp"/>
 
-    <!-- add users button -->
-    <ImageButton
-        android:id="@+id/addUsersBtn"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:scaleType="fitCenter"
-        android:background="@null"
-        android:src="@drawable/add_users"
-        app:layout_constraintTop_toBottomOf="@id/logisticsTitle"
-        app:layout_constraintStart_toEndOf="@id/addNoteBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="10dp"/>
 
     <!-- ScrollView -->
     <ScrollView
         android:id="@+id/contentScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/addUsersBtn"
+        app:layout_constraintTop_toBottomOf="@id/logisticsTitle"
         app:layout_constraintBottom_toTopOf="@id/navigationBarLL"
         android:fillViewport="true">
 
@@ -83,6 +55,39 @@
             android:orientation="vertical"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="10dp">
+
+                <!-- Add Note Button -->
+                <ImageButton
+                    android:id="@+id/addNoteBtn"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:scaleType="fitCenter"
+                    android:background="@null"
+                    android:src="@drawable/new_note"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/addUsersBtn"
+                    app:layout_constraintHorizontal_chainStyle="spread" />
+
+                <!-- Add Users Button -->
+                <ImageButton
+                    android:id="@+id/addUsersBtn"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:scaleType="fitCenter"
+                    android:background="@null"
+                    android:src="@drawable/add_users"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/addNoteBtn"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="spread" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Spinner
                 android:id="@+id/locationSpinner"
