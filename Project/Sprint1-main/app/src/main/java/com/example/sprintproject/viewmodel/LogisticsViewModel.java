@@ -223,6 +223,4 @@ public class LogisticsViewModel extends ViewModel {
             }
         });
     }
-
-
 }

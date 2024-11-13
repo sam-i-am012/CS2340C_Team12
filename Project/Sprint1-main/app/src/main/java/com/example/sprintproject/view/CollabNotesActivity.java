@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,7 +35,7 @@ public class CollabNotesActivity extends AppCompatActivity {
     private NotesAdapter notesAdapter;
 
     private String selectedLocation;
-    private String previousSelectedLocation = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +82,6 @@ public class CollabNotesActivity extends AppCompatActivity {
         populateLocationSpinner(locationSpinner);
 
 
-
         // on location that is selected
         locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -89,26 +89,22 @@ public class CollabNotesActivity extends AppCompatActivity {
                 selectedLocation = (String) parent.getItemAtPosition(position);
                 fetchCollaboratorsForLocation(selectedLocation);
 
-                // only fetch notes when location changes
-                if (!selectedLocation.equals(previousSelectedLocation)) {
-                    viewModel.getNotesForTravelLog(selectedLocation).observe(CollabNotesActivity.this, notes -> {
-                        if (notes != null) {
-                            notesAdapter.updateNotes(notes);
-                            Log.d("Notes", "Fetched notes: " + notes.size());
-                        } else {
-                            notesAdapter.updateNotes(new ArrayList<>());
-                            Log.d("Notes", "No notes found.");
-                        }
-                    });
-                    previousSelectedLocation = selectedLocation;  // Update the previous selection
-
-                }
+                viewModel.getNotesForTravelLog(selectedLocation).observe(CollabNotesActivity.this, notes -> {
+                    if (notes != null) {
+                        notesAdapter.updateNotes(notes);
+                        Log.d("Notes", "Fetched notes: " + notes.size());
+                    } else {
+                        notesAdapter.updateNotes(new ArrayList<>());
+                        Log.d("Notes", "No notes found.");
+                    }
+                });
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
 
         diningEstablishmentsButton.setOnClickListener(view -> {
             Intent diningEstablishmentsIntent = new Intent(CollabNotesActivity.this,
@@ -138,7 +134,7 @@ public class CollabNotesActivity extends AppCompatActivity {
         addUsersButton.setOnClickListener(view -> showAddUserDialog());
 
         // add note button
-        addNoteBtn.setOnClickListener(view -> showAddNoteDialog(selectedLocation));
+        addNoteBtn.setOnClickListener(view -> showAddNoteDialog());
 
         // go back button
         backBtn.setOnClickListener(view -> {
@@ -148,8 +144,9 @@ public class CollabNotesActivity extends AppCompatActivity {
         });
     }
 
+
     // for the pop up dialog for add note
-    private void showAddNoteDialog(String selectedLocation) {
+    private void showAddNoteDialog() {
         final EditText noteEditText = new EditText(this);
         noteEditText.setHint("Enter your note");
 
@@ -162,11 +159,14 @@ public class CollabNotesActivity extends AppCompatActivity {
 
                     if (!noteContent.isEmpty()) {
                         viewModel.addNoteToTravelLog(selectedLocation, noteContent);
-                        setSpinnerSelection(previousSelectedLocation); // to make sure the spinner doesn't reset
-                        Toast.makeText(getApplicationContext(), "old location: " + previousSelectedLocation,
-                                Toast.LENGTH_SHORT).show();
 
                         Toast.makeText(this, "Note sent", Toast.LENGTH_SHORT).show();
+
+                        // manually set the selection back to the previous location
+                        int position = ((ArrayAdapter<String>) locationSpinner.getAdapter()).getPosition(selectedLocation);
+                        locationSpinner.setSelection(position);
+
+
                     } else {
                         Toast.makeText(this, "Note cannot be empty", Toast.LENGTH_SHORT).show();
                     }
@@ -174,14 +174,6 @@ public class CollabNotesActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-
-    // set spinner back to the prev location
-    private void setSpinnerSelection(String location) {
-        ArrayAdapter adapter = (ArrayAdapter) locationSpinner.getAdapter();
-        int position = adapter.getPosition(location);
-        locationSpinner.setSelection(position, false);
-    }
-
 
 
     // for the pop up dialog for add collaborator
@@ -228,6 +220,12 @@ public class CollabNotesActivity extends AppCompatActivity {
                     android.R.layout.simple_spinner_item, locations);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             locationSpinner.setAdapter(adapter);
+
+            // After population, set initial selected location
+            if (selectedLocation != null) {
+                int position = adapter.getPosition(selectedLocation);
+                locationSpinner.setSelection(position);
+            }
         });
     }
 
@@ -245,6 +243,4 @@ public class CollabNotesActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }
