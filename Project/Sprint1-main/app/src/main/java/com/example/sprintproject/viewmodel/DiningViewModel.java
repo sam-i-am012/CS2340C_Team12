@@ -29,6 +29,7 @@ public class DiningViewModel extends AndroidViewModel {
     private MutableLiveData<List<String>> userLocations = new MutableLiveData<>();
     private FirestoreSingleton repository;
     private MutableLiveData<List<Dining>> diningLogs;
+    private MutableLiveData<List<Dining>> diningLogsByLocation;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
     private MutableLiveData<Map<String, String>> userLocationsWithIds = new MutableLiveData<>();
 
@@ -37,6 +38,7 @@ public class DiningViewModel extends AndroidViewModel {
         super(application);
         repository = FirestoreSingleton.getInstance();
         diningLogs = new MutableLiveData<>();
+        diningLogsByLocation = new MutableLiveData<>();
         loadUserLocations();
     }
 
@@ -85,18 +87,27 @@ public class DiningViewModel extends AndroidViewModel {
         }
         String userId = user.getUid();
         Log.e("Dining", "fetching dining logs for location: " + locationId);
-        repository.getDiningLogsByUserAndLocation(userId, locationId)
-                .observeForever(diningLogs::setValue);
+        repository.getDiningLogsByUserAndLocation(userId, locationId).observeForever(dinings -> {
+            // Update LiveData with fetched reservations
+            diningLogsByLocation.setValue(dinings);
+        });
     }
 
     public LiveData<List<Dining>> getDiningLogs() {
         return diningLogs;
     }
 
+    public LiveData<List<Dining>> getDiningLogsByLocation() {
+        return diningLogsByLocation;
+    }
+
     public void addDining(Dining dining) {
         if (diningAdapter != null) {
             repository.addDining(dining, null);
             resValidationResult = new MutableLiveData<>();
+
+            fetchDiningLogsForLocation(dining.getTravelDestination());
+            Log.d("DINING", "travel id: " + dining.getTravelDestination());
         }
     }
 
