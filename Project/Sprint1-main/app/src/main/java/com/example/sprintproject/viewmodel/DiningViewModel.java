@@ -15,9 +15,12 @@ import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.view.DiningsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DiningViewModel extends AndroidViewModel {
     DiningsAdapter diningAdapter = new DiningsAdapter();
@@ -26,6 +29,8 @@ public class DiningViewModel extends AndroidViewModel {
     private FirestoreSingleton repository;
     private MutableLiveData<List<Dining>> diningLogs;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
+    private MutableLiveData<Map<String, String>> userLocationsWithIds = new MutableLiveData<>();
+
 
     public DiningViewModel(@NonNull Application application) {
         super(application);
@@ -39,16 +44,27 @@ public class DiningViewModel extends AndroidViewModel {
     }
 
     // load user's associated locations and update the LiveData
+
     private void loadUserLocations() {
         String currentUserId = repository.getCurrentUserId();
-        repository.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
-            List<String> locations = new ArrayList<>();
-            for (TravelLog log : travelLogs) {
-                locations.add(log.getDestination());
+
+        repository.getTravelLogsByUser2(currentUserId).observeForever(querySnapshot -> {
+            if (querySnapshot != null) {
+                Map<String, String> locationsWithIds = new HashMap<>();
+                for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                    String destination = doc.getString("destination"); // Assuming "destination" is the field name
+                    String documentId = doc.getId(); // Get the Firestore document ID
+                    locationsWithIds.put(destination, documentId);
+                }
+                userLocationsWithIds.setValue(locationsWithIds);
             }
-            userLocations.setValue(locations);
         });
     }
+
+    public LiveData<Map<String, String>> getUserLocationsWithIds() {
+        return userLocationsWithIds;
+    }
+
 
     public void fetchDiningLogsForCurrentUser() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

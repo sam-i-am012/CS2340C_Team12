@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -113,6 +114,25 @@ public class FirestoreSingleton {
                 });
         return travelLogsLiveData;
     }
+
+    // this method returns a query snapshot so the document id for the location can be grabbed
+    public LiveData<QuerySnapshot> getTravelLogsByUser2(String userId) {
+        CollectionReference travelLogsRef = firestore.collection("travelLogs");
+        Query query = travelLogsRef.whereEqualTo("userId", userId);
+
+        MutableLiveData<QuerySnapshot> liveData = new MutableLiveData<>();
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                liveData.setValue(task.getResult());
+            } else {
+                // Handle the error
+                liveData.setValue(null);
+            }
+        });
+
+        return liveData;
+    }
+
 
     public LiveData<List<TravelLog>> getLastFiveTravelLogsByUser(String userId) {
         MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();

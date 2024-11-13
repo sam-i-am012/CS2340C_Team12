@@ -3,9 +3,11 @@ package com.example.sprintproject.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -18,12 +20,14 @@ import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.viewmodel.DiningViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiningEstablishmentsActivity extends AppCompatActivity {
     private DiningViewModel diningViewModel;
     private DiningsAdapter diningAdapter;
     private Spinner locationSpinner;
+    private String selectedDestinationId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,7 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
             String selectedLocation = locationSpinner.getSelectedItem().toString();
 
             AddReservationDialog addReservationDialog = new AddReservationDialog(
-                    DiningEstablishmentsActivity.this, diningViewModel, selectedLocation);
+                    DiningEstablishmentsActivity.this, diningViewModel, selectedDestinationId);
             addReservationDialog.show();
         });
 
@@ -114,12 +118,27 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
     }
 
     private void populateLocationSpinner(Spinner locationSpinner) {
-        diningViewModel.getUserLocations().observe(DiningEstablishmentsActivity.this, locations -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_spinner_item, locations);
+        diningViewModel.getUserLocationsWithIds().observe(DiningEstablishmentsActivity.this, locationsWithIds -> {
+            // get location names from the map
+            List<String> locationNames = new ArrayList<>(locationsWithIds.keySet());
 
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, locationNames);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             locationSpinner.setAdapter(adapter);
+
+            locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    String selectedLocation = locationNames.get(position);
+                    selectedDestinationId = locationsWithIds.get(selectedLocation);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                }
+            });
         });
     }
+
 }
