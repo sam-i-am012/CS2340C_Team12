@@ -19,11 +19,14 @@ public class AddAccommodationsDialog extends Dialog {
     private AccommodationViewModel accommodationViewModel;
     private LifecycleOwner lifecycleOwner;
     private final FirestoreSingleton firestore = FirestoreSingleton.getInstance();
+    private String selectedDestinationId;
 
-    public AddAccommodationsDialog(Context context, AccommodationViewModel accommodationViewModel) {
+    public AddAccommodationsDialog(Context context, AccommodationViewModel accommodationViewModel,
+                                   String selectedDestinationId) {
         super(context);  // Calls the Dialog constructor
         this.accommodationViewModel = accommodationViewModel;
         this.lifecycleOwner = (LifecycleOwner) context;
+        this.selectedDestinationId = selectedDestinationId;
     }
 
     @Override
@@ -63,7 +66,8 @@ public class AddAccommodationsDialog extends Dialog {
                         checkOutTime,
                         numRooms,
                         roomType,
-                        firestore.getCurrentUserId()
+                        firestore.getCurrentUserId(),
+                        selectedDestinationId
                 );
 
                 // Add the accommodation to the database

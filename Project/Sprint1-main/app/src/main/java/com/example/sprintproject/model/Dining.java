@@ -13,14 +13,14 @@ public class Dining {
 
     }
 
-    public Dining(String location, String website, String name, String time, String userId, String travelLocation) {
+    public Dining(String location, String website, String name, String time, String userId, String travelDestination) {
         this.location = location;
         this.website = website;
         this.name = name;
         this.time = time;
         this.userId = userId;
         this.expired = false;
-        this.travelDestination = travelLocation;
+        this.travelDestination = travelDestination;
     }
 
     public String getTravelDestination() {
