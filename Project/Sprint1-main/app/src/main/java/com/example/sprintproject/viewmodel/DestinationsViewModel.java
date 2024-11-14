@@ -10,7 +10,6 @@ import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Result;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.model.TravelLogValidator;
-import com.example.sprintproject.model.User;
 import com.example.sprintproject.model.VacationTimeCalculator;
 import com.example.sprintproject.model.CalcVacationTimeValidator;
 import com.google.firebase.auth.FirebaseAuth;

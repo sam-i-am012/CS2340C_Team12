@@ -13,7 +13,8 @@ public class Dining {
 
     }
 
-    public Dining(String location, String website, String name, String time, String userId, String travelDestination) {
+    public Dining(String location, String website, String name, String time,
+                  String userId, String travelDestination) {
         this.location = location;
         this.website = website;
         this.name = name;

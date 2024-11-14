@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AccommodationViewModel extends AndroidViewModel {
-    AccommodationsAdapter accommodationsAdapter = new AccommodationsAdapter();
+    private AccommodationsAdapter accommodationsAdapter = new AccommodationsAdapter();
 
     private FirestoreSingleton repository;
     private MutableLiveData<List<Accommodation>> accommodationLogs;
@@ -81,4 +81,13 @@ public class AccommodationViewModel extends AndroidViewModel {
             }
         });
     }
+
+    public AccommodationsAdapter getAccommodationsAdapter() {
+        return accommodationsAdapter;
+    }
+
+    public MutableLiveData<Result> getResValidationResult() {
+        return resValidationResult;
+    }
+
 }

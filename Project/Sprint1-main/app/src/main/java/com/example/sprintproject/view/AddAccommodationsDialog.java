@@ -66,9 +66,11 @@ public class AddAccommodationsDialog extends Dialog {
                         checkOutTime,
                         numRooms,
                         roomType,
-                        firestore.getCurrentUserId(),
-                        selectedDestinationId
+                        firestore.getCurrentUserId()
                 );
+
+                // not part of the main constructor to pass checkstyle
+                newAccommodation.setTravelDestination(selectedDestinationId);
 
                 // Add the accommodation to the database
                 accommodationViewModel.addAccommodation(newAccommodation);
@@ -77,7 +79,8 @@ public class AddAccommodationsDialog extends Dialog {
                 clearInputFields(locationET, checkInTimeET, checkOutTimeET, hotelNameET);
 
                 // Show success message
-                Toast.makeText(getContext(), "Accommodation added successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Accommodation added successfully",
+                        Toast.LENGTH_SHORT).show();
 
                 // Dismiss the dialog after adding the accommodation
                 dismiss();
@@ -87,7 +90,8 @@ public class AddAccommodationsDialog extends Dialog {
 
 
     // Validate input fields
-    private boolean validateInputs(EditText locationField, EditText checkInField, EditText checkOutField, EditText hotelField) {
+    private boolean validateInputs(EditText locationField, EditText checkInField,
+                                   EditText checkOutField, EditText hotelField) {
         boolean isValid = true;
 
         // Check if any field is empty and show an error message
@@ -120,7 +124,8 @@ public class AddAccommodationsDialog extends Dialog {
     }
 
     // Clear input fields after submission
-    private void clearInputFields(EditText locationET, EditText checkInET, EditText checkOutET, EditText hotelET) {
+    private void clearInputFields(EditText locationET, EditText checkInET, EditText checkOutET,
+                                  EditText hotelET) {
         locationET.setText("");
         checkInET.setText("");
         checkOutET.setText("");
@@ -149,16 +154,16 @@ public class AddAccommodationsDialog extends Dialog {
 
         // Check for valid day based on the month
         switch (month) {
-            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-                return day < 1 || day > 31;
-            case 4: case 6: case 9: case 11:
-                return day < 1 || day > 30;
-            case 2:
-                // Leap year check
-                boolean isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-                return day < 1 || day > (isLeapYear ? 29 : 28);
-            default:
-                return true;
+        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+            return day < 1 || day > 31;
+        case 4: case 6: case 9: case 11:
+            return day < 1 || day > 30;
+        case 2:
+            // Leap year check
+            boolean isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+            return day < 1 || day > (isLeapYear ? 29 : 28);
+        default:
+            return true;
         }
     }
 }

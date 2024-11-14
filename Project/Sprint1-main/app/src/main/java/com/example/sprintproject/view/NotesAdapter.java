@@ -45,7 +45,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     }
 
     public static class NoteViewHolder extends RecyclerView.ViewHolder {
-        TextView noteText, userText;
+        private TextView noteText;
+        private TextView userText;
 
         public NoteViewHolder(View itemView) {
             super(itemView);

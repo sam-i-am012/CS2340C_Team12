@@ -11,16 +11,12 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.sprintproject.R;
-import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.viewmodel.AccommodationViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,31 +129,34 @@ public class AccommodationsActivity extends AppCompatActivity {
     }
 
     private void populateLocationSpinner(Spinner locationSpinner) {
-        accommodationViewModel.getUserLocationsWithIds().observe(AccommodationsActivity.this, locationsWithIds -> {
-            List<String> locationNames = new ArrayList<>(locationsWithIds.keySet());
+        accommodationViewModel.getUserLocationsWithIds().observe(AccommodationsActivity.this,
+                locationsWithIds -> {
+                List<String> locationNames = new ArrayList<>(locationsWithIds.keySet());
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_spinner_item, locationNames);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            locationSpinner.setAdapter(adapter);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                        android.R.layout.simple_spinner_item, locationNames);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                locationSpinner.setAdapter(adapter);
 
-            locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    String selectedLocation = locationNames.get(position);
-                    selectedDestinationId = locationsWithIds.get(selectedLocation);
-                    Log.e("dining", "Selected dining ID: " + selectedDestinationId);
+                locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+                                               int position, long id) {
+                        String selectedLocation = locationNames.get(position);
+                        selectedDestinationId = locationsWithIds.get(selectedLocation);
+                        Log.e("dining", "Selected dining ID: " + selectedDestinationId);
 
-                    if (selectedDestinationId != null) {
-                        // fetch the accommodation
-                        accommodationViewModel.fetchAccommodationLogsForDestination(selectedDestinationId);
+                        if (selectedDestinationId != null) {
+                            // fetch the accommodation
+                            accommodationViewModel.
+                                    fetchAccommodationLogsForDestination(selectedDestinationId);
+                        }
                     }
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parentView) {
-                }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parentView) {
+                    }
+                });
             });
-        });
     }
 }

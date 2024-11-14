@@ -12,19 +12,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.User;
 import com.example.sprintproject.viewmodel.CollabNotesViewModel;
-import com.example.sprintproject.viewmodel.LogisticsViewModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,15 +82,16 @@ public class CollabNotesActivity extends AppCompatActivity {
                 selectedLocation = (String) parent.getItemAtPosition(position);
                 fetchCollaboratorsForLocation(selectedLocation);
 
-                viewModel.getNotesForTravelLog(selectedLocation).observe(CollabNotesActivity.this, notes -> {
-                    if (notes != null) {
-                        notesAdapter.updateNotes(notes);
-                        Log.d("Notes", "Fetched notes: " + notes.size());
-                    } else {
-                        notesAdapter.updateNotes(new ArrayList<>());
-                        Log.d("Notes", "No notes found.");
-                    }
-                });
+                viewModel.getNotesForTravelLog(selectedLocation)
+                        .observe(CollabNotesActivity.this, notes -> {
+                            if (notes != null) {
+                                notesAdapter.updateNotes(notes);
+                                Log.d("Notes", "Fetched notes: " + notes.size());
+                            } else {
+                                notesAdapter.updateNotes(new ArrayList<>());
+                                Log.d("Notes", "No notes found.");
+                            }
+                        });
             }
 
             @Override
@@ -162,12 +157,14 @@ public class CollabNotesActivity extends AppCompatActivity {
                         Toast.makeText(this, "Note sent", Toast.LENGTH_SHORT).show();
 
                         // manually set the selection back to the previous location
-                        int position = ((ArrayAdapter<String>) locationSpinner.getAdapter()).getPosition(selectedLocation);
+                        int position = ((ArrayAdapter<String>) locationSpinner.getAdapter())
+                                .getPosition(selectedLocation);
                         locationSpinner.setSelection(position);
 
 
                     } else {
-                        Toast.makeText(this, "Note cannot be empty", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Note cannot be empty",
+                                Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", null)

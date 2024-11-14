@@ -14,7 +14,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -256,7 +255,8 @@ public class FirestoreSingleton {
 
                         // grab all the user ids
                         for (DocumentSnapshot document : task.getResult()) {
-                            List<String> associatedUsers = (List<String>) document.get("associatedUsers");
+                            List<String> associatedUsers = (List<String>) document
+                                    .get("associatedUsers");
                             if (associatedUsers != null) {
                                 userIds.addAll(associatedUsers);
                             }
@@ -277,7 +277,8 @@ public class FirestoreSingleton {
                                         }
                                         collaboratorsLiveData.setValue(users);
                                     })
-                                    .addOnFailureListener(e -> collaboratorsLiveData.setValue(null));
+                                    .addOnFailureListener(e -> collaboratorsLiveData
+                                            .setValue(null));
                         } else {
                             collaboratorsLiveData.setValue(new ArrayList<>()); // no user found
                         }
@@ -349,7 +350,6 @@ public class FirestoreSingleton {
                     Log.w("Firestore", "Error updating document", e);
                 });
     }
-
     public void addDining(Dining dining, OnCompleteListener<DocumentReference> listener) {
         firestore.collection("dining")
                 .add(dining)
@@ -441,35 +441,39 @@ public class FirestoreSingleton {
                         accommodationLogs.add(log);
                     }
 
-                    // Sort the logs by date (assuming `getCheckOutTime()` returns a date string in "yyyy-MM-dd" format)
+                    // Sort the logs by date (checkoutTime is in "yyyy-MM-dd" format)
                     Collections.sort(accommodationLogs, new Comparator<Accommodation>() {
                         @Override
                         public int compare(Accommodation o1, Accommodation o2) {
                             String date1 = o1.getCheckOutTime();
                             String date2 = o2.getCheckOutTime();
-                            return date2.compareTo(date1);  // Compare dates as strings (lexicographical order)
+
+                            // Compare dates as strings (lexicographical order)
+                            return date2.compareTo(date1);
                         }
                     });
 
-                    accommodationLiveData.setValue(accommodationLogs);  // Update LiveData with sorted list
+                    accommodationLiveData.setValue(accommodationLogs);
                 });
 
         return accommodationLiveData;
     }
 
-    public void addNoteToTravelLog(String location, String currentUserId, Note note, OnCompleteListener<Void> listener) {
+    public void addNoteToTravelLog(String location, String currentUserId, Note note,
+                                   OnCompleteListener<Void> listener) {
         firestore.collection("travelLogs")
                 .whereEqualTo("destination", location)
                 .whereArrayContains("associatedUsers", currentUserId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        // TODO: make sure it can differentiate when locations have the same name
+                        // TODO!: make sure it can differentiate when locations have the same name
                         DocumentSnapshot document = task.getResult().getDocuments().get(0);
                         String travelLogId = document.getId();
 
                         // reference to the travel log document
-                        DocumentReference travelLogRef = firestore.collection("travelLogs").document(travelLogId);
+                        DocumentReference travelLogRef = firestore
+                                .collection("travelLogs").document(travelLogId);
 
                         // add the new note
                         travelLogRef.update("notes", FieldValue.arrayUnion(note))
@@ -499,7 +503,8 @@ public class FirestoreSingleton {
                         DocumentSnapshot document = task.getResult().getDocuments().get(0);
 
                         // fetch the notes field
-                        List<Map<String, Object>> notesData = (List<Map<String, Object>>) document.get("notes");
+                        List<Map<String, Object>> notesData = (List<Map<String, Object>>) document
+                                .get("notes");
 
                         if (notesData != null && !notesData.isEmpty()) {
                             // get unique user IDs from the notes
@@ -527,9 +532,10 @@ public class FirestoreSingleton {
 
                                         List<Note> notes = new ArrayList<>();
                                         for (Map<String, Object> noteData : notesData) {
-                                            String noteContent = (String) noteData.get("noteContent");
+                                            String noteContent = (String) noteData
+                                                    .get("noteContent");
                                             String userId = (String) noteData.get("userId");
-                                            String email = userIdToEmailMap.get(userId); // Get the email for the userId
+                                            String email = userIdToEmailMap.get(userId);
 
                                             // add email to the Note object
                                             if (email != null) {
@@ -538,9 +544,11 @@ public class FirestoreSingleton {
                                             }
                                         }
 
-                                        // TODO: this isn't working very well, try to fix
+                                        // TODO!: this isn't working very well, try to fix
                                         // Sort notes by timestamp (descending order)
-                                        Collections.sort(notes, (note1, note2) -> Long.compare(note2.getTimestampMillis(), note1.getTimestampMillis()));
+                                        Collections.sort(notes, (note1, note2) -> Long
+                                                .compare(note2.getTimestampMillis(),
+                                                        note1.getTimestampMillis()));
 
                                         notesLiveData.setValue(notes);
                                     })
@@ -553,7 +561,8 @@ public class FirestoreSingleton {
                             notesLiveData.setValue(new ArrayList<>());
                         }
                     } else {
-                        Log.d("Firestore", "Query failed or no matching travel log found for: " + location);
+                        Log.d("Firestore", "Query failed or no matching travel log found "
+                            + "for: " + location);
                         notesLiveData.setValue(new ArrayList<>());
                     }
                 });

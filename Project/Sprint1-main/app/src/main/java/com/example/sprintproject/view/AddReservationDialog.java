@@ -28,8 +28,9 @@ public class AddReservationDialog extends Dialog {
     private final DiningsAdapter diningsAdapter = new DiningsAdapter();
     private String selectedLocation;
 
-    public AddReservationDialog(Context context, DiningViewModel diningViewModel, String selectedLocation) {
-        super(context);  // Calls the Dialog constructor
+    public AddReservationDialog(Context context, DiningViewModel diningViewModel,
+                                String selectedLocation) {
+        super(context);  // Calls Dialog constructor
         this.diningViewModel = diningViewModel;
         this.lifecycleOwner = (LifecycleOwner) context;
         this.selectedLocation = selectedLocation;

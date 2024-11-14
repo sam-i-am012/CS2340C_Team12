@@ -1,21 +1,15 @@
 package com.example.sprintproject.viewmodel;
 
 import static com.example.sprintproject.model.InputValidator.isValidEmail;
-
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.sprintproject.model.FirestoreSingleton;
-import com.example.sprintproject.model.Invitation;
 import com.example.sprintproject.model.Note;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.model.User;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,7 +88,8 @@ public class CollabNotesViewModel extends ViewModel {
                 db.collection("invitations")
                         .add(invitationData)
                         .addOnSuccessListener(documentReference -> {
-                            toastMessage.setValue("Invitation sent to " + email + " for location " + location);
+                            toastMessage.setValue("Invitation sent to " + email + " for location "
+                                    + location);
                         })
                         .addOnFailureListener(e -> {
                             toastMessage.setValue("Error sending invitation: " + e.getMessage());

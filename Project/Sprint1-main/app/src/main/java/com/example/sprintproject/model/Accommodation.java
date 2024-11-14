@@ -1,7 +1,5 @@
 package com.example.sprintproject.model;
 
-import java.util.List;
-
 public class Accommodation {
     private String hotel;
     private String location;
@@ -15,7 +13,7 @@ public class Accommodation {
     public Accommodation() {
     }
     public Accommodation(String hotel, String location, String checkInTime, String checkOutTime,
-                         int numRooms, String roomType, String userId, String travelDestination) {
+                         int numRooms, String roomType, String userId) {
         this.hotel = hotel;
         this.location = location;
         this.checkInTime = checkInTime;
@@ -23,7 +21,6 @@ public class Accommodation {
         this.numRooms = numRooms;
         this.roomType = roomType;
         this.userId = userId;
-        this.travelDestination = travelDestination;
     }
 
     public String getTravelDestination() {

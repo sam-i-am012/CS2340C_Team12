@@ -40,6 +40,7 @@ public class Note {
     }
 
     public long getTimestampMillis() {
-        return timestamp != null ? timestamp.getSeconds() * 1000 + timestamp.getNanoseconds() / 1000000 : 0;
+        return timestamp != null ? timestamp.getSeconds() * 1000 + timestamp.getNanoseconds()
+                / 1000000 : 0;
     }
 }

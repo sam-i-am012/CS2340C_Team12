@@ -1,7 +1,8 @@
 package com.example.sprintproject.model;
 
 public class AccommodationValidator {
-    public static boolean validateInputs(String checkIn, String checkOut, String location, String hotel) {
+    public static boolean validateInputs(String checkIn, String checkOut,
+                                         String location, String hotel) {
         boolean isValid = true;
 
         if (checkIn == null || checkIn.isEmpty()) {

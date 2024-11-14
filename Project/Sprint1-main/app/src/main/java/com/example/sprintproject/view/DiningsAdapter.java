@@ -99,7 +99,6 @@ public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningVi
         Collections.sort(dinings, new Comparator<Dining>() {
             @Override
             public int compare(Dining d1, Dining d2) {
-                // Assuming Dining's getTime() returns a String in a format that can be parsed to Date or used for comparison
                 return d2.getTime().compareTo(d1.getTime());
             }
         });

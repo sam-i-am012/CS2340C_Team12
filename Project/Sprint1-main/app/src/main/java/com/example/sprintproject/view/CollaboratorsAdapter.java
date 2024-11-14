@@ -42,7 +42,7 @@ public class CollaboratorsAdapter extends RecyclerView.Adapter<CollaboratorsAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView emailTextView;
+        private TextView emailTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);

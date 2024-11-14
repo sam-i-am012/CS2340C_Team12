@@ -16,15 +16,13 @@ import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.view.DiningsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DiningViewModel extends AndroidViewModel {
-    DiningsAdapter diningAdapter = new DiningsAdapter();
+    private DiningsAdapter diningAdapter = new DiningsAdapter();
 
     private MutableLiveData<List<String>> userLocations = new MutableLiveData<>();
     private FirestoreSingleton repository;
@@ -110,11 +108,14 @@ public class DiningViewModel extends AndroidViewModel {
         diningAdapter.addLog(dining);
     }
 
-    public LiveData<Result> getResValidationResult() { return resValidationResult; }
+    public LiveData<Result> getResValidationResult() {
+        return resValidationResult;
+    }
 
     public void validateNewReservation(String name, String time, String location, String website) {
         Result finalResult;
-        Result noMissingEntries = ReservationValidator.noMissingEntries(name, time, location, website);
+        Result noMissingEntries = ReservationValidator.noMissingEntries(name, time,
+                location, website);
         if (noMissingEntries.isSuccess()) {
             Result isValidTime = ReservationValidator.isValidTime(time);
             Result isValidWebsite = ReservationValidator.isValidWebsite(website);

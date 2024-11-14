@@ -16,7 +16,8 @@ import java.util.List;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAdapter.AccommodationViewHolder> {
+public class AccommodationsAdapter extends
+        RecyclerView.Adapter<AccommodationsAdapter.AccommodationViewHolder> {
 
     private List<Accommodation> accommodations;
 
@@ -40,7 +41,8 @@ public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAd
     @NonNull
     @Override
     public AccommodationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_accommodation, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_accommodation,
+                parent, false);
         return new AccommodationViewHolder(view);
     }
 
@@ -59,8 +61,8 @@ public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAd
         }
 
         // Set check-in and check-out times
-        holder.checkInOutText.setText("Check-in: " + accommodation.getCheckInTime() +
-                ", Check-out: " + accommodation.getCheckOutTime());
+        holder.checkInOutText.setText("Check-in: " + accommodation.getCheckInTime()
+                + ", Check-out: " + accommodation.getCheckOutTime());
 
         // Set number of rooms
         holder.numRoomsText.setText("Number of Rooms: " + accommodation.getNumRooms());
@@ -100,7 +102,11 @@ public class AccommodationsAdapter extends RecyclerView.Adapter<AccommodationsAd
     }
 
     public static class AccommodationViewHolder extends RecyclerView.ViewHolder {
-        TextView locationText, hotelNameText, checkInOutText, numRoomsText, roomTypeLabel;
+        private TextView locationText;
+        private TextView hotelNameText;
+        private TextView checkInOutText;
+        private TextView numRoomsText;
+        private TextView roomTypeLabel;
 
         public AccommodationViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -38,17 +38,20 @@ public class LoginViewModel extends ViewModel {
         // continue with login
         firebaseAuthManager.login(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                // sync the associatedDestinations in case destinations were manually removed in database
+                // sync associatedDestinations in case destinations were manually removed
+                // from database
                 String userId = firestoreSingleton.getCurrentUserId();
                 firestoreSingleton.syncUserAssociatedDestinationsOnLogin(userId, updateTask -> {
                     if (updateTask.isSuccessful()) {
                         loginResult.setValue(new Result(true, "Login Successful!"));
                     } else {
-                        loginResult.setValue(new Result(false, "Failed to update associated destinations."));
+                        loginResult.setValue(new Result(false, "Failed to update "
+                                + "associated destinations."));
                     }
                 });
             } else {
-                loginResult.setValue(new Result(false, "Login failed: " + task.getException().getMessage()));
+                loginResult.setValue(new Result(false, "Login failed: "
+                        + task.getException().getMessage()));
             }
         });
     }
