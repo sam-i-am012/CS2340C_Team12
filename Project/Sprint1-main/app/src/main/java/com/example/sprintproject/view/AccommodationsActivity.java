@@ -64,7 +64,7 @@ public class AccommodationsActivity extends AppCompatActivity {
 
         addAccommodationButton.setOnClickListener(view -> {
             AddAccommodationsDialog addAccommodationsDialog = new AddAccommodationsDialog(
-                    AccommodationsActivity.this, accommodationViewModel);
+                    AccommodationsActivity.this, accommodationViewModel, selectedDestinationId);
             addAccommodationsDialog.show();
         });
 
