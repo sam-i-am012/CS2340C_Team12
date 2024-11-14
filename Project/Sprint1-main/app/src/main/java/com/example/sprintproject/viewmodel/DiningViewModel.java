@@ -81,14 +81,9 @@ public class DiningViewModel extends AndroidViewModel {
     }
 
     public void fetchDiningLogsForLocation(String locationId) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null || locationId.isEmpty()) {
-            return;
-        }
-        String userId = user.getUid();
         Log.d("Dining", "fetching dining logs for location: " + locationId);
-        repository.getDiningLogsByUserAndLocation(userId, locationId).observeForever(dinings -> {
-            // Update LiveData with fetched reservations
+        repository.getDiningLogsByUserAndLocation(locationId).observeForever(dinings -> {
+            // update LiveData with fetched reservations
             diningLogsByLocation.setValue(dinings);
         });
     }

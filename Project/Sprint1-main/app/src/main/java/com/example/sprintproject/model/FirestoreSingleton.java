@@ -93,7 +93,7 @@ public class FirestoreSingleton {
                     }
                 });
 
-        return durationLiveData; // LiveData to be observed
+        return durationLiveData;
     }
 
     public LiveData<List<TravelLog>> getTravelLogsByUser(String userId) {
@@ -140,8 +140,7 @@ public class FirestoreSingleton {
         // Automatically set createdAt
         log.setCreatedAt(Timestamp.now());
 
-        // When creating a new travel log, ensure that the creator's userId is added to
-        // associatedUserIds
+        // ensure that the creator's userId is added to associatedUserIds
         if (!log.getAssociatedUsers().contains(log.getUserId())) {
             log.addAssociatedUser(log.getUserId());
         }
@@ -152,13 +151,13 @@ public class FirestoreSingleton {
                     if (task.isSuccessful()) {
                         String travelLogId = task.getResult().getId();
 
-                        // Update the user's associatedDestinations
+                        // Update user's associatedDestinations
                         updateUserAssociatedDestinations(log.getUserId(), travelLogId);
 
-                        // set the documentId in the TravelLog object
+                        // set documentId in the TravelLog object
                         String documentId = task.getResult().getId();
 
-                        // update the travel log id
+                        // update travel log id
                         firestore.collection("travelLogs").document(documentId)
                                 .update("documentId", documentId);
                     }
@@ -366,7 +365,7 @@ public class FirestoreSingleton {
                 });
     }
 
-    public LiveData<List<Dining>> getDiningLogsByUserAndLocation(String userId, String locationId) {
+    public LiveData<List<Dining>> getDiningLogsByUserAndLocation(String locationId) {
         MutableLiveData<List<Dining>> diningLogsLiveData = new MutableLiveData<>();
 
         firestore.collection("dining")
@@ -424,17 +423,17 @@ public class FirestoreSingleton {
                     }
                 });
     }
-
-    public LiveData<List<Accommodation>> getAccommodationLogsByUser(String userId) {
+    public LiveData<List<Accommodation>> getAccommodationLogsByUser(String destinationId) {
         MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
         firestore.collection("accommodation")
-                .whereEqualTo("userId", userId) // query logs for this user
+                .whereEqualTo("travelDestination", destinationId) // query logs for this user
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         return; // to avoid null pointer
                     }
+                    Log.d("Accomodatoin", "fetching accomodations for: " + destinationId);
 
                     List<Accommodation> accommodationLogs = new ArrayList<>();
                     for (QueryDocumentSnapshot document : value) {
@@ -446,7 +445,6 @@ public class FirestoreSingleton {
                     Collections.sort(accommodationLogs, new Comparator<Accommodation>() {
                         @Override
                         public int compare(Accommodation o1, Accommodation o2) {
-                            // Assuming the Accommodation class has a getCheckOutTime() method returning a string
                             String date1 = o1.getCheckOutTime();
                             String date2 = o2.getCheckOutTime();
                             return date2.compareTo(date1);  // Compare dates as strings (lexicographical order)

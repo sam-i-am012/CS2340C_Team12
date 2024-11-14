@@ -1,6 +1,7 @@
 package com.example.sprintproject.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.FirestoreSingleton;
-import com.example.sprintproject.model.ReservationValidator;
 import com.example.sprintproject.model.Result;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.view.AccommodationsAdapter;
@@ -35,13 +35,14 @@ public class AccommodationViewModel extends AndroidViewModel {
         loadUserLocations();
     }
 
-    // Fetch accommodations for the current user from Firestore
-    public void fetchAccommodationLogsForCurrentUser() {
+    // Fetch accommodations for the current destination selected
+    public void fetchAccommodationLogsForDestination(String travelId) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
-            repository.getAccommodationLogsByUser(userId).observeForever(accommodations -> {
+            repository.getAccommodationLogsByUser(travelId).observeForever(accommodations -> {
                 accommodationLogs.setValue(accommodations);
+                Log.d("Accommodation", "travel id: " + travelId);
             });
         }
     }
