@@ -2,6 +2,7 @@ package com.example.sprintproject.viewmodel;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -31,7 +32,10 @@ public class DiningViewModel extends AndroidViewModel {
     private MutableLiveData<List<Dining>> diningLogs;
     private MutableLiveData<List<Dining>> diningLogsByLocation;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
+
+    private MutableLiveData<Boolean> duplicateEntryResult = new MutableLiveData<>();
     private MutableLiveData<Map<String, String>> userLocationsWithIds = new MutableLiveData<>();
+    private MutableLiveData<String> toastMessage = new MutableLiveData<>();
 
 
     public DiningViewModel(@NonNull Application application) {
@@ -46,8 +50,11 @@ public class DiningViewModel extends AndroidViewModel {
         return userLocations;
     }
 
-    // load user's associated locations and update the LiveData
+    public LiveData<String> getToastMessage() {
+        return toastMessage;
+    }
 
+    // load user's associated locations and update the LiveData
     private void loadUserLocations() {
         String currentUserId = repository.getCurrentUserId();
 
@@ -112,13 +119,19 @@ public class DiningViewModel extends AndroidViewModel {
 
     public LiveData<Result> getResValidationResult() { return resValidationResult; }
 
+    public LiveData<Boolean> getDuplicateEntryResult() { return duplicateEntryResult; }
+
     public void validateNewReservation(String name, String time, String location, String website) {
         Result finalResult;
         Result noMissingEntries = ReservationValidator.noMissingEntries(name, time, location, website);
+
         if (noMissingEntries.isSuccess()) {
             Result isValidTime = ReservationValidator.isValidTime(time);
             Result isValidWebsite = ReservationValidator.isValidWebsite(website);
-            if (!isValidTime.isSuccess() && !isValidWebsite.isSuccess()) {
+            Result isADuplicate = ReservationValidator.isNotADuplicate(name, time, location, website);
+            if (!isADuplicate.isSuccess()) {
+                finalResult = isADuplicate;
+            } else if (!isValidTime.isSuccess() && !isValidWebsite.isSuccess()) {
                 finalResult = new Result(true, "Time and website entries are both invalid");
             } else if (!isValidTime.isSuccess()) {
                 finalResult = isValidTime;
@@ -130,10 +143,32 @@ public class DiningViewModel extends AndroidViewModel {
         } else {
             finalResult = noMissingEntries;
         }
+
+        // check for duplicate entries
+
         resValidationResult.setValue(finalResult);
     }
 
     public void resetResult() {
         resValidationResult = new MutableLiveData<>();
+    }
+
+    public void checkDuplicateEntries(String name, String time, String location, String website) {
+        // Check if the dining reservation already exists
+        repository.diningExists(name, location, time, website)
+                .addOnSuccessListener(exists -> {
+                    if (exists) {
+                        // duplicate exists
+                        toastMessage.setValue("Sorry, reservation already exists for this dining "
+                                + "location and time");
+                        duplicateEntryResult.setValue(true);
+                    } else {
+                        duplicateEntryResult.setValue(false);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // handling errors
+                    Log.e("Dining", "Error checking for existing reservation: " + e.getMessage());
+                });
     }
 }

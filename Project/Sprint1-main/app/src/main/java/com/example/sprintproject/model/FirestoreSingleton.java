@@ -350,6 +350,7 @@ public class FirestoreSingleton {
                 });
     }
 
+    // -------------- dining screen methods ------------------
     public void addDining(Dining dining, OnCompleteListener<DocumentReference> listener) {
         firestore.collection("dining")
                 .add(dining)
@@ -407,6 +408,24 @@ public class FirestoreSingleton {
         return diningLiveData;
     }
 
+    // check if a dining reservation exists (to prevent duplicates)
+    public Task<Boolean> diningExists(String name, String location, String time, String website) {
+        CollectionReference diningCollection = firestore.collection("dining");
+
+        // Query collection to check if reservation with the same name, location, and time exists
+        Query query = diningCollection.whereEqualTo("name", name)
+                .whereEqualTo("location", location)
+                .whereEqualTo("time", time)
+                .whereEqualTo("website", website);
+
+        return query.get().continueWith(task -> {
+            // If query result is not empty, a dining reservation already exists
+            return !task.getResult().isEmpty();
+        });
+    }
+
+    // -------------- accommodation screen methods ------------------
+
     public void addAccommodation(Accommodation accommodation,
                                   OnCompleteListener<DocumentReference> listener) {
         firestore.collection("accommodation")
@@ -456,6 +475,8 @@ public class FirestoreSingleton {
 
         return accommodationLiveData;
     }
+
+    // -------------- notes/collab screen methods ------------------
 
     public void addNoteToTravelLog(String location, String currentUserId, Note note, OnCompleteListener<Void> listener) {
         firestore.collection("travelLogs")

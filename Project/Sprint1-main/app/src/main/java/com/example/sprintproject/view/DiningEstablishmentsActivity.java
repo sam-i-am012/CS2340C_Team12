@@ -37,17 +37,23 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
 
         diningViewModel = new ViewModelProvider(this).get(DiningViewModel.class);
 
+        // for making toast messages
+        diningViewModel.getToastMessage().observe(this, message -> {
+            if (message != null) {
+                Toast.makeText(DiningEstablishmentsActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         ImageButton destinationsButton = findViewById(R.id.destinationsButton);
         ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
         ImageButton logisticsButton = findViewById(R.id.logisticsButton);
         ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
         FloatingActionButton reservationDialogButton = findViewById(R.id.fabAddReservation);
+
+        // location spinner set up
         locationSpinner = findViewById(R.id.locationSpinner);
-
         locationSpinner.setVisibility(View.VISIBLE);
-
-        // populate the spinner with locations after it's made visible
-        populateLocationSpinner(locationSpinner);
+        populateLocationSpinner(locationSpinner); // populate spinner
 
 
         // Add reservation button and dialog logic

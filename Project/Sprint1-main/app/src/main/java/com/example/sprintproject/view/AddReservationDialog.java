@@ -2,6 +2,7 @@ package com.example.sprintproject.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -105,5 +106,6 @@ public class AddReservationDialog extends Dialog {
             website.setText("");
         }
     }
+
 }
 
