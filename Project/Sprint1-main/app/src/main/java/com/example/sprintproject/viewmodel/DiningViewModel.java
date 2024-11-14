@@ -86,7 +86,7 @@ public class DiningViewModel extends AndroidViewModel {
             return;
         }
         String userId = user.getUid();
-        Log.e("Dining", "fetching dining logs for location: " + locationId);
+        Log.d("Dining", "fetching dining logs for location: " + locationId);
         repository.getDiningLogsByUserAndLocation(userId, locationId).observeForever(dinings -> {
             // Update LiveData with fetched reservations
             diningLogsByLocation.setValue(dinings);

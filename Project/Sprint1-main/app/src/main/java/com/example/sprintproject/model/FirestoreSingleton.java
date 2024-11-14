@@ -370,7 +370,6 @@ public class FirestoreSingleton {
         MutableLiveData<List<Dining>> diningLogsLiveData = new MutableLiveData<>();
 
         firestore.collection("dining")
-                .whereEqualTo("userId", userId)
                 .whereEqualTo("travelDestination", locationId)
                 .get()
                 .addOnCompleteListener(task -> {
