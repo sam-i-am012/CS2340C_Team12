@@ -86,7 +86,9 @@ public class AddReservationDialog extends Dialog {
                 }
                 diningViewModel.resetResult();
             });
+            dismiss();
         });
+
     }
 
     private void clearInputFields() {
