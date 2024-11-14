@@ -22,13 +22,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.User;
+import com.example.sprintproject.viewmodel.CollabNotesViewModel;
 import com.example.sprintproject.viewmodel.LogisticsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CollabNotesActivity extends AppCompatActivity {
-    private LogisticsViewModel viewModel;
+    private CollabNotesViewModel viewModel;
     private CollaboratorsAdapter collaboratorsAdapter;
     private Spinner locationSpinner;
     private RecyclerView notesRecyclerView;
@@ -41,9 +42,7 @@ public class CollabNotesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collab_notes);
 
-
-        // yes ik it uses the logistics view model (oopsie)
-        viewModel = new ViewModelProvider(this).get(LogisticsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(CollabNotesViewModel.class);
 
         // Observe the toast message live data
         viewModel.getToastMessage().observe(this, message -> {
