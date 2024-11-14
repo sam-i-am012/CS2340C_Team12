@@ -63,7 +63,8 @@ public class AddAccommodationsDialog extends Dialog {
                         checkOutTime,
                         numRooms,
                         roomType,
-                        firestore.getCurrentUserId()
+                        firestore.getCurrentUserId(),
+                        "" // TODO: don't make it empty later
                 );
 
                 // Add the accommodation to the database

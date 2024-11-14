@@ -2,8 +2,11 @@ package com.example.sprintproject.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,6 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccommodationsActivity extends AppCompatActivity {
@@ -44,6 +48,8 @@ public class AccommodationsActivity extends AppCompatActivity {
     private ImageButton logisticsButton;
     private ImageButton travelCommunityButton;
     private FloatingActionButton addAccommodationButton;
+    private Spinner locationSpinner;
+    private String selectedDestinationId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,7 @@ public class AccommodationsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_accommodations); // The main layout
 
         initViews();
+
 
         // ViewModel setup
         accommodationViewModel = new ViewModelProvider(this).get(AccommodationViewModel.class);
@@ -60,6 +67,13 @@ public class AccommodationsActivity extends AppCompatActivity {
                     AccommodationsActivity.this, accommodationViewModel);
             addAccommodationsDialog.show();
         });
+
+        // location spinner initialization
+        locationSpinner = findViewById(R.id.locationSpinnerAccomodation);
+        locationSpinner.setVisibility(View.VISIBLE);
+
+        // populate the spinner with locations after it's made visible
+        populateLocationSpinner(locationSpinner);
 
         // RecyclerView setup
         recyclerView = findViewById(R.id.accommodationRecyclerView);
@@ -128,5 +142,34 @@ public class AccommodationsActivity extends AppCompatActivity {
         checkInTimeET.setText("");
         checkOutTimeET.setText("");
         hotelET.setText("");
+    }
+
+    private void populateLocationSpinner(Spinner locationSpinner) {
+        accommodationViewModel.getUserLocationsWithIds().observe(AccommodationsActivity.this, locationsWithIds -> {
+            List<String> locationNames = new ArrayList<>(locationsWithIds.keySet());
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, locationNames);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            locationSpinner.setAdapter(adapter);
+
+            locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    String selectedLocation = locationNames.get(position);
+                    selectedDestinationId = locationsWithIds.get(selectedLocation);
+                    Log.e("dining", "Selected dining ID: " + selectedDestinationId);
+
+                    if (selectedDestinationId != null) {
+                        // accommodationViewModel.fetchDiningLogsForLocation(selectedDestinationId);
+                        // TODO: this is where i would fetch the accomodation logs
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                }
+            });
+        });
     }
 }

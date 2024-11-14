@@ -10,9 +10,12 @@ public class Accommodation {
     private int numRooms;
     private String roomType;
     private String userId;
+
+    private String travelDestination;
     public Accommodation() {
     }
-    public Accommodation(String hotel, String location, String checkInTime, String checkOutTime, int numRooms, String roomType, String userId) {
+    public Accommodation(String hotel, String location, String checkInTime, String checkOutTime,
+                         int numRooms, String roomType, String userId, String travelDestination) {
         this.hotel = hotel;
         this.location = location;
         this.checkInTime = checkInTime;
@@ -20,6 +23,15 @@ public class Accommodation {
         this.numRooms = numRooms;
         this.roomType = roomType;
         this.userId = userId;
+        this.travelDestination = travelDestination;
+    }
+
+    public String getTravelDestination() {
+        return travelDestination;
+    }
+
+    public void setTravelDestination(String travelDestination) {
+        this.travelDestination = travelDestination;
     }
 
     public String getHotel() {
