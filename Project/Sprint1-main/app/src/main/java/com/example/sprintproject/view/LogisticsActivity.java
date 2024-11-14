@@ -38,17 +38,14 @@ public class LogisticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logistics);
 
-        // Initialize ViewModel
+        // initialize ViewModel
         viewModel = new ViewModelProvider(this).get(LogisticsViewModel.class);
 
 
-        // Observe the toast message live data
-        viewModel.getToastMessage().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String message) {
-                if (message != null) {
-                    Toast.makeText(LogisticsActivity.this, message, Toast.LENGTH_SHORT).show();
-                }
+        // Observe  toast message live data
+        viewModel.getToastMessage().observe(this, message -> {
+            if (message != null) {
+                Toast.makeText(LogisticsActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -65,23 +62,13 @@ public class LogisticsActivity extends AppCompatActivity {
         // observe the invitation live data
         viewModel.getInvitationLiveData().observe(this, invitation -> {
             if (invitation != null) {
-                // Show the invitation dialog
                 showInvitationDialog(invitation);
             }
         });
 
-        ImageButton diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
-        ImageButton destinationsButton = findViewById(R.id.destinationsButton);
-        ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
-        ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
-//        ImageButton addUsersButton = findViewById(R.id.addUsersBtn);
-//        ImageButton addNoteBtn = findViewById(R.id.addNoteBtn);
-        Button viewDataBtn = findViewById(R.id.viewDataButton);
-        Button viewCollabAndNotesBtn = findViewById(R.id.viewCollabsAndNotes);
-//        Spinner locationSpinner = findViewById(R.id.locationSpinner);
-        pieChart = findViewById(R.id.pieChart);
-
         // getting pie chart button working
+        Button viewDataBtn = findViewById(R.id.viewDataButton);
+        pieChart = findViewById(R.id.pieChart);
         pieChart.setVisibility(View.GONE);
         viewDataBtn.setOnClickListener(view -> {
             // check if chart is currently visible
@@ -94,18 +81,21 @@ public class LogisticsActivity extends AppCompatActivity {
         });
 
         // view collaborator/notes button
+        Button viewCollabAndNotesBtn = findViewById(R.id.viewCollabsAndNotes);
         viewCollabAndNotesBtn.setOnClickListener(v -> {
-//            // make the spinner visible when the button is clicked
-//            locationSpinner.setVisibility(View.VISIBLE);
-//
-//            // populate the spinner with locations after it's made visible
-//            populateLocationSpinner(locationSpinner);
-
             Intent collabAndNotes = new Intent(LogisticsActivity.this,
                     CollabNotesActivity.class);
             startActivity(collabAndNotes);
         });
 
+        navBarButtons(); // helper method below for the nav bar
+    }
+
+    private void navBarButtons() {
+        ImageButton diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
+        ImageButton destinationsButton = findViewById(R.id.destinationsButton);
+        ImageButton accommodationsButton = findViewById(R.id.accommodationsButton);
+        ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
 
 
         diningEstablishmentsButton.setOnClickListener(view -> {
@@ -131,14 +121,6 @@ public class LogisticsActivity extends AppCompatActivity {
                     TravelCommunityActivity.class);
             startActivity(travelCommunityIntent);
         });
-
-        // Add users button
-//        addUsersButton.setOnClickListener(view -> showAddUserDialog());
-//
-//        addNoteBtn.setOnClickListener(view ->
-//                Toast.makeText(getApplicationContext(), "New note button pressed",
-//                        Toast.LENGTH_SHORT).show()
-//        );
     }
 
     private void visualizeTripDays(int plannedDays, int allottedDays) {
@@ -184,44 +166,6 @@ public class LogisticsActivity extends AppCompatActivity {
         pieChart.setVisibility(View.VISIBLE);
     }
 
-    // Method for the pop-up dialog
-    private void showAddUserDialog() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View dialogView = inflater.inflate(R.layout.invite_user_popup, null);
-
-        final EditText emailInput = dialogView.findViewById(R.id.emailInput);
-        final Spinner locationSpinner = dialogView.findViewById(R.id.locationSpinner);
-
-        // Observe locations from the ViewModel and populate the spinner
-        viewModel.getUserLocations().observe(this, locations -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_spinner_item, locations);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            locationSpinner.setAdapter(adapter);
-        });
-
-        // Build the dialog
-        new AlertDialog.Builder(this)
-                .setTitle("Invite User")
-                .setMessage("Enter the email and select a location:")
-                .setView(dialogView)
-                .setPositiveButton("Invite", (dialog, whichButton) -> {
-                    String email = emailInput.getText().toString();
-                    String selectedLocation = (String) locationSpinner.getSelectedItem();
-
-                    if (!email.isEmpty() && selectedLocation != null) {
-                        // Call ViewModel to handle invitation logic
-                        viewModel.inviteUserToTrip(email, selectedLocation);
-                    } else {
-                        Toast.makeText(LogisticsActivity.this,
-                                "Please enter a valid email and select a location",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
-    }
-
     private void showInvitationDialog(Invitation invitation) {
         new AlertDialog.Builder(this)
                 .setTitle("Trip Invitation")
@@ -236,41 +180,4 @@ public class LogisticsActivity extends AppCompatActivity {
                 .setCancelable(false) // prevent closing dialog without action
                 .show();
     }
-
-    // for view collab/notes button
-    private void populateLocationSpinner(Spinner locationSpinner) {
-        viewModel.getUserLocations().observe(LogisticsActivity.this, locations -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(LogisticsActivity.this,
-                    android.R.layout.simple_spinner_item, locations);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            locationSpinner.setAdapter(adapter);
-        });
-
-    }
-//    private void populateLocationSpinner(Spinner locationSpinner) {
-//        viewModel.getUserLocations().observe(LogisticsActivity.this, locations -> {
-//            ArrayAdapter<String> adapter = new ArrayAdapter<>(LogisticsActivity.this,
-//                    android.R.layout.simple_spinner_item, locations);
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//            locationSpinner.setAdapter(adapter);
-//        });
-//
-//        // Set listener to open bottom sheet when a location is selected
-//        locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String selectedLocation = (String) parent.getItemAtPosition(position);
-//
-//                // Show Bottom Sheet dialog with the selected location's details
-//                LocationDetailsBottomSheet bottomSheet = LocationDetailsBottomSheet.newInstance(selectedLocation);
-//                bottomSheet.show(getSupportFragmentManager(), "LocationDetailsBottomSheet");
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // Do nothing
-//            }
-//        });
-//    }
-
 }

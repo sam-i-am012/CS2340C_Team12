@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -149,17 +150,24 @@ public class FirestoreSingleton {
                 .add(log)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Get the ID of the newly created travel log
                         String travelLogId = task.getResult().getId();
 
                         // Update the user's associatedDestinations
                         updateUserAssociatedDestinations(log.getUserId(), travelLogId);
+
+                        // set the documentId in the TravelLog object
+                        String documentId = task.getResult().getId();
+
+                        // update the travel log id
+                        firestore.collection("travelLogs").document(documentId)
+                                .update("documentId", documentId);
                     }
                     if (listener != null) {
                         listener.onComplete(task);
                     }
                 });
     }
+
 
     // adds new travel log ID to the asssociatedDestinations array field for specific user
     private void updateUserAssociatedDestinations(String userId, String travelLogId) {
@@ -357,6 +365,30 @@ public class FirestoreSingleton {
                     }
                 });
     }
+
+    public LiveData<List<Dining>> getDiningLogsByUserAndLocation(String userId, String locationId) {
+        MutableLiveData<List<Dining>> diningLogsLiveData = new MutableLiveData<>();
+
+        firestore.collection("dining")
+                .whereEqualTo("travelDestination", locationId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Dining> diningLogs = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Dining dining = document.toObject(Dining.class);
+                            diningLogs.add(dining);
+                        }
+                        diningLogsLiveData.setValue(diningLogs);
+                    } else {
+                        Log.e("Firestore", "Error getting dining logs: ", task.getException());
+                        diningLogsLiveData.setValue(Collections.emptyList());
+                    }
+                });
+        Log.d("Firestore", "Getting dining log for: " + locationId);
+        return diningLogsLiveData;
+    }
+
 
     public LiveData<List<Dining>> getDiningByUser(String userId) {
         MutableLiveData<List<Dining>> diningLiveData = new MutableLiveData<>();

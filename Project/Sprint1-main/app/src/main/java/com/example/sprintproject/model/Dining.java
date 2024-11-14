@@ -7,18 +7,28 @@ public class Dining {
     private String time;
     private String userId;
     private boolean expired;
+    private String travelDestination;
 
     public Dining() {
 
     }
 
-    public Dining(String location, String website, String name, String time, String userId) {
+    public Dining(String location, String website, String name, String time, String userId, String travelLocation) {
         this.location = location;
         this.website = website;
         this.name = name;
         this.time = time;
         this.userId = userId;
         this.expired = false;
+        this.travelDestination = travelLocation;
+    }
+
+    public String getTravelDestination() {
+        return travelDestination;
+    }
+
+    public void setTravelDestination(String travelDestination) {
+        this.travelDestination = travelDestination;
     }
 
     public String getLocation() {

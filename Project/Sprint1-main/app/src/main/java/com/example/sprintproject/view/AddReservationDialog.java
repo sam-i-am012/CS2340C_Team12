@@ -26,11 +26,13 @@ public class AddReservationDialog extends Dialog {
     private TextView website;
     private final FirestoreSingleton firestore = FirestoreSingleton.getInstance();
     private final DiningsAdapter diningsAdapter = new DiningsAdapter();
+    private String selectedLocation;
 
-    public AddReservationDialog(Context context, DiningViewModel diningViewModel) {
+    public AddReservationDialog(Context context, DiningViewModel diningViewModel, String selectedLocation) {
         super(context);  // Calls the Dialog constructor
         this.diningViewModel = diningViewModel;
         this.lifecycleOwner = (LifecycleOwner) context;
+        this.selectedLocation = selectedLocation;
     }
 
     @Override
@@ -55,6 +57,7 @@ public class AddReservationDialog extends Dialog {
             String location = locationET.getText().toString().trim();
             String website = websiteET.getText().toString().trim();
 
+
             diningViewModel.validateNewReservation(name, time, location, website);
 
             // Observe reservation result
@@ -63,7 +66,7 @@ public class AddReservationDialog extends Dialog {
                         Toast.LENGTH_SHORT).show();
                 if (result.isSuccess()) {
                     Dining dining = new Dining(location, website, name, time,
-                            firestore.getCurrentUserId());
+                            firestore.getCurrentUserId(), selectedLocation);
 
                     // Add reservation to database
                     diningViewModel.addDining(dining);

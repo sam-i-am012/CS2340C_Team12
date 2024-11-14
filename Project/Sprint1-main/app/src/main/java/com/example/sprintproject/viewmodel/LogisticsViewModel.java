@@ -204,25 +204,4 @@ public class LogisticsViewModel extends ViewModel {
         firestoreSingleton.addUserToTrip(invitation.getInvitingUserId(),
                 invitation.getInvitedUserId(), invitation.getTripLocation());
     }
-
-    public LiveData<List<User>> getCollaboratorsForLocation(String location) {
-        return firestoreSingleton.getCollaboratorsForLocation(location,
-                firestoreSingleton.getCurrentUserId());
-    }
-
-    public void addNoteToTravelLog(String location, String noteContent) {
-        String userId = firestoreSingleton.getCurrentUserId();
-
-        Note newNote = new Note(noteContent, userId);
-
-        firestoreSingleton.addNoteToTravelLog(location, userId, newNote, task -> {
-            if (task.isSuccessful()) {
-                toastMessage.setValue("Note added successfully!");
-            } else {
-                toastMessage.setValue("Failed to add note.");
-            }
-        });
-    }
-
-
 }

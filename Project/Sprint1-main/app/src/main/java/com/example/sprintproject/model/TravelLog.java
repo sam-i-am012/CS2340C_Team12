@@ -13,6 +13,7 @@ public class TravelLog {
     private List<String> associatedUsers;  // optional list of user IDs
     private Timestamp createdAt; // to be able to know which are the most recent ones
     private List<Note> notes;
+    private String documentId;
 
     public TravelLog(String userId, String destination, String startDate, String endDate,
                      List<String> associatedUsers, List<Note> notes) {
@@ -28,7 +29,13 @@ public class TravelLog {
 
     public TravelLog() { }
 
-    // Getters and setters
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
 
     public List<Note> getNotes() {
         return notes;
@@ -83,14 +90,6 @@ public class TravelLog {
         if (!associatedUsers.contains(userId)) {
             associatedUsers.add(userId);
         }
-    }
-
-    // add a note
-    public void addNote(Note note) {
-        if (notes == null) {
-            notes = new ArrayList<>();
-        }
-        notes.add(note);
     }
 
     public Timestamp getCreatedAt() {

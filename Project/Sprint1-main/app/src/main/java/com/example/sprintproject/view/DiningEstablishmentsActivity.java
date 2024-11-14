@@ -2,8 +2,13 @@ package com.example.sprintproject.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -16,11 +21,14 @@ import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.viewmodel.DiningViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiningEstablishmentsActivity extends AppCompatActivity {
     private DiningViewModel diningViewModel;
     private DiningsAdapter diningAdapter;
+    private Spinner locationSpinner;
+    private String selectedDestinationId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +42,22 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
         ImageButton logisticsButton = findViewById(R.id.logisticsButton);
         ImageButton travelCommunityButton = findViewById(R.id.travelCommunityButton);
         FloatingActionButton reservationDialogButton = findViewById(R.id.fabAddReservation);
+        locationSpinner = findViewById(R.id.locationSpinner);
+
+        locationSpinner.setVisibility(View.VISIBLE);
+
+        // populate the spinner with locations after it's made visible
+        populateLocationSpinner(locationSpinner);
+
 
         // Add reservation button and dialog logic
         reservationDialogButton.setOnClickListener(view -> {
             AddReservationDialog addReservationDialog = new AddReservationDialog(
-                    DiningEstablishmentsActivity.this, diningViewModel);
+                    DiningEstablishmentsActivity.this, diningViewModel, selectedDestinationId);
             addReservationDialog.show();
+
+            // fetch dining logs for selected location after adding a new reservation
+            diningViewModel.fetchDiningLogsForLocation(selectedDestinationId);
         });
 
         diningViewModel = new ViewModelProvider(this).get(DiningViewModel.class);
@@ -49,15 +67,15 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
         diningAdapter = new DiningsAdapter();
         recyclerView.setAdapter(diningAdapter);
 
-        // Fetch dining logs for the current user
-        diningViewModel.fetchDiningLogsForCurrentUser();
-
+        // Fetch dining logs for the current user based on location chosen
+        diningViewModel.fetchDiningLogsForLocation(selectedDestinationId);
 
         // Observe the LiveData for updates to dining logs
-        diningViewModel.getDiningLogs().observe(this, new Observer<List<Dining>>() {
+        diningViewModel.getDiningLogsByLocation().observe(this, new Observer<List<Dining>>() {
             @Override
             public void onChanged(List<Dining> dinings) {
-                diningAdapter.setDinings(dinings); // Update the adapter when data changes
+                // Update the adapter with new dining logs
+                diningAdapter.setDinings(dinings);
             }
         });
 
@@ -99,6 +117,34 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
             }
         });
 
-
     }
+
+    private void populateLocationSpinner(Spinner locationSpinner) {
+        diningViewModel.getUserLocationsWithIds().observe(DiningEstablishmentsActivity.this, locationsWithIds -> {
+            List<String> locationNames = new ArrayList<>(locationsWithIds.keySet());
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, locationNames);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            locationSpinner.setAdapter(adapter);
+
+            locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    String selectedLocation = locationNames.get(position);
+                    selectedDestinationId = locationsWithIds.get(selectedLocation);
+                    Log.e("dining", "Selected dining ID: " + selectedDestinationId);
+
+                    if (selectedDestinationId != null) {
+                        diningViewModel.fetchDiningLogsForLocation(selectedDestinationId);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                }
+            });
+        });
+    }
+
 }
