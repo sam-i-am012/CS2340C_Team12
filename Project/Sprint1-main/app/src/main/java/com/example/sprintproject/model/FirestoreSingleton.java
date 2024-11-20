@@ -39,6 +39,7 @@ public class FirestoreSingleton {
     private MutableLiveData<List<User>> userLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Dining>> diningLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<TravelPost>> travelCommunityLiveData = new MutableLiveData<>();
     private FirebaseAuth auth;
 
     private FirestoreSingleton() {
@@ -568,5 +569,22 @@ public class FirestoreSingleton {
                 });
 
         return notesLiveData;
+    }
+
+    public void addTravelPost(TravelPost travelPost,
+                                 OnCompleteListener<DocumentReference> listener) {
+        firestore.collection("travel_community")
+                .add(travelPost)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String travelPostId = task.getResult().getId();
+
+                        updateUserAssociatedDestinations(travelPost.getUserId(),
+                                travelPostId);
+                    }
+                    if (listener != null) {
+                        listener.onComplete(task);
+                    }
+                });
     }
 }
