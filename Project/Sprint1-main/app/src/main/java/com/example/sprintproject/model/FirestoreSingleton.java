@@ -587,4 +587,22 @@ public class FirestoreSingleton {
                     }
                 });
     }
+
+    public LiveData<List<TravelPost>> getTravelPostByUser(String userId) {
+        //travelCommunityLiveData
+        firestore.collection("travel_community")
+                .whereEqualTo("userId", userId) // query logs for this user
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        return; // to avoid null pointer
+                    }
+                    List<TravelPost> postLogs = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : value) {
+                        TravelPost log = document.toObject(TravelPost.class);
+                        postLogs.add(log);
+                    }
+                    travelCommunityLiveData.setValue(postLogs);
+                });
+        return travelCommunityLiveData;
+    }
 }
