@@ -39,7 +39,7 @@ public class FirestoreSingleton {
     private MutableLiveData<List<User>> userLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Dining>> diningLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
-    private MutableLiveData<List<TravelPost>> travelCommunityLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Post>> travelCommunityLiveData = new MutableLiveData<List<Post>>();
     private FirebaseAuth auth;
 
     private FirestoreSingleton() {
@@ -571,15 +571,15 @@ public class FirestoreSingleton {
         return notesLiveData;
     }
 
-    public void addTravelPost(TravelPost travelPost,
-                                 OnCompleteListener<DocumentReference> listener) {
+    public void addTravelPost(Post travelPost,
+                              OnCompleteListener<DocumentReference> listener) {
         firestore.collection("travel_community")
                 .add(travelPost)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         String travelPostId = task.getResult().getId();
 
-                        updateUserAssociatedDestinations(travelPost.getUserId(),
+                        updateUserAssociatedDestinations(travelPost.getPostUsername(),
                                 travelPostId);
                     }
                     if (listener != null) {
@@ -588,7 +588,7 @@ public class FirestoreSingleton {
                 });
     }
 
-    public LiveData<List<TravelPost>> getTravelPostByUser(String userId) {
+    public LiveData<List<Post>> getTravelPostByUser(String userId) {
         //travelCommunityLiveData
         firestore.collection("travel_community")
                 .whereEqualTo("userId", userId) // query logs for this user
@@ -596,9 +596,9 @@ public class FirestoreSingleton {
                     if (error != null) {
                         return; // to avoid null pointer
                     }
-                    List<TravelPost> postLogs = new ArrayList<>();
+                    List<Post> postLogs = new ArrayList<>();
                     for (QueryDocumentSnapshot document : value) {
-                        TravelPost log = document.toObject(TravelPost.class);
+                        Post log = document.toObject(Post.class);
                         postLogs.add(log);
                     }
                     travelCommunityLiveData.setValue(postLogs);
