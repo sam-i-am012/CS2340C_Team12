@@ -4,18 +4,55 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="403dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="28dp"
-        android:text="Travel Community Screen"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@id/navigationBarLL"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/accommodationsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp"
+            android:text="Travel Community"
+            android:textSize="40sp"
+            android:fontFamily="@font/coolvetica"
+            android:textColor="@color/darkBlue"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <!-- RecyclerView for accommodation entries -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/travelPostRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
+                app:layout_constraintBottom_toTopOf="@id/navigationBarLL" />
+
+            <!-- Floating Action Button for adding new accommodation -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addPostButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_add"
+                app:backgroundTint="@color/bluegray"
+                app:tint="@android:color/white"
+                android:contentDescription="Add post"/>
+        </FrameLayout>
+    </LinearLayout>
 
     <!-- Navigation Bar -->
     <LinearLayout
