@@ -59,7 +59,7 @@ public class FirestoreSingleton {
     }
 
 
-    // fetch duration (allocated days) for the current user
+    // Fetch duration (allocated days) for the current user
     public LiveData<Integer> getDurationForUser(String userId) {
         MutableLiveData<Integer> durationLiveData = new MutableLiveData<>();
 
