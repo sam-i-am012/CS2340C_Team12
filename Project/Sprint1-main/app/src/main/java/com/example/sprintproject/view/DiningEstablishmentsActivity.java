@@ -18,7 +18,6 @@ import com.example.sprintproject.model.Dining;
 import com.example.sprintproject.model.Location;
 import com.example.sprintproject.viewmodel.DiningViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DiningEstablishmentsActivity extends AppCompatActivity {
@@ -71,6 +70,13 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
         diningViewModel.getDiningLogsByLocation().observe(this, new Observer<List<Dining>>() {
             @Override
             public void onChanged(List<Dining> dinings) {
+                if (dinings != null && !dinings.isEmpty()) {
+                    Log.d("DiningEstablishmentsActivity", "Fetched dining logs: "
+                            + dinings.size());
+                } else {
+                    Log.d("DiningEstablishmentsActivity",
+                            "No dining logs available for this location.");
+                }
                 // Update the adapter with new dining logs
                 diningAdapter.setDinings(dinings);
             }
