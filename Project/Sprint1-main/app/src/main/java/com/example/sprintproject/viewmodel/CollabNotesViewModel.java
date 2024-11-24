@@ -41,10 +41,11 @@ public class CollabNotesViewModel extends ViewModel {
     // fetch notes for a specific location and current user
     public LiveData<List<Note>> getNotesForTravelLog(String location, String locationId) {
         String currentUserId = firestoreSingleton.getCurrentUserId();
-        firestoreSingleton.getNotesForTravelLog(location, currentUserId, locationId).observeForever(notes -> {
-            // update the live data
-            notesLiveData.setValue(notes);
-        });
+        firestoreSingleton.getNotesForTravelLog(location, currentUserId,
+                locationId).observeForever(notes -> {
+                    // update the live data
+                    notesLiveData.setValue(notes);
+                });
         return notesLiveData;
     }
 

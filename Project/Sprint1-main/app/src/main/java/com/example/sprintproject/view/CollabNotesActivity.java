@@ -156,7 +156,8 @@ public class CollabNotesActivity extends AppCompatActivity {
                     String noteContent = noteEditText.getText().toString().trim();
 
                     if (!noteContent.isEmpty()) {
-                        viewModel.addNoteToTravelLog(selectedLocation, selectedLocationId, noteContent);
+                        viewModel.addNoteToTravelLog(selectedLocation, selectedLocationId,
+                                noteContent);
 
                         Toast.makeText(this, "Note sent", Toast.LENGTH_SHORT).show();
 
@@ -221,11 +222,6 @@ public class CollabNotesActivity extends AppCompatActivity {
             locationSpinner.setAdapter(adapter);
 
             // after population, set initial selected location
-//            if (selectedLocation != null) {
-//                int position = adapter.getPosition(selectedLocation);
-//                locationSpinner.setSelection(position);
-//            }
-
             if (selectedLocation != null) {
                 for (Location location : locations) {
                     if (selectedLocation.equals(location.getLocationName())) {
