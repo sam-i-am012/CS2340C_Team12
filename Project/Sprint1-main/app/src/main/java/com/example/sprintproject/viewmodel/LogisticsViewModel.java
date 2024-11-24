@@ -12,14 +12,11 @@ import com.example.sprintproject.model.Invitation;
 import com.example.sprintproject.model.Note;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.model.TripUtils;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class LogisticsViewModel extends ViewModel {
     private FirestoreSingleton firestoreSingleton;
@@ -28,8 +25,6 @@ public class LogisticsViewModel extends ViewModel {
     private MutableLiveData<Integer> plannedDaysLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> allocatedLiveData = new MutableLiveData<>();
     private MutableLiveData<Invitation> invitationLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> noteAddedLiveData = new MutableLiveData<>(); // node addition
-    private MutableLiveData<List<Note>> notesLiveData = new MutableLiveData<>(); // displaying notes
 
 
     public LogisticsViewModel() {
@@ -38,7 +33,6 @@ public class LogisticsViewModel extends ViewModel {
         loadTripDays();
         loadDuration();
         listenForInvitations(); // listen for new invitations to collab on a trip
-        notesLiveData = new MutableLiveData<>();
     }
 
     // live data for invitations
@@ -62,24 +56,7 @@ public class LogisticsViewModel extends ViewModel {
         return allocatedLiveData;
     }
 
-    // live data for notes
-    public LiveData<String> getNoteAddedLiveData() {
-        return noteAddedLiveData;
-    }
 
-    public LiveData<List<Note>> getNotesLiveData() {
-        return notesLiveData;
-    }
-
-    // fetch notes for a specific location and current user
-    public LiveData<List<Note>> getNotesForTravelLog(String location) {
-        String currentUserId = firestoreSingleton.getCurrentUserId();
-        firestoreSingleton.getNotesForTravelLog(location, currentUserId).observeForever(notes -> {
-            // update the live data
-            notesLiveData.setValue(notes);
-        });
-        return notesLiveData;
-    }
 
     // load user's associated locations and update the LiveData
     private void loadUserLocations() {
@@ -108,47 +85,6 @@ public class LogisticsViewModel extends ViewModel {
         String currentUserId = firestoreSingleton.getCurrentUserId();
         allocatedLiveData = (MutableLiveData<Integer>) firestoreSingleton
                 .getDurationForUser(currentUserId);
-    }
-
-    // invite a user to the trip after validating their email
-    public void inviteUserToTrip(String email, String location) {
-        if (!isValidEmail(email)) {
-            toastMessage.setValue("Please enter a valid email address.");
-            return;
-        }
-
-        // check if user invited is already an existing user
-        firestoreSingleton.checkEmailExists(email).addOnCompleteListener(task -> {
-            if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                // uid of invited user
-                String invitedUser = task.getResult().getDocuments().get(0).getId();
-
-                // data for Invitation class
-                Map<String, Object> invitationData = new HashMap<>();
-                // current user (inviter)
-                invitationData.put("invitingUserId", firestoreSingleton.getCurrentUserId());
-                invitationData.put("invitedUserId", invitedUser);  // user being invited
-                invitationData.put("invitingUserEmail", email);  // inviter's email
-                invitationData.put("tripLocation", location);  // location for the trip
-                invitationData.put("status", "pending");  // initial status of the invitation
-                invitationData.put("timestamp", FieldValue.serverTimestamp());  // timestamp
-
-
-                // add the invitation to Firestore
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("invitations")
-                        .add(invitationData)
-                        .addOnSuccessListener(documentReference -> {
-                            toastMessage.setValue("Invitation sent to " + email
-                                    + " for location " + location);
-                        })
-                        .addOnFailureListener(e -> {
-                            toastMessage.setValue("Error sending invitation: " + e.getMessage());
-                        });
-            } else {
-                toastMessage.setValue("No account found for this email.");
-            }
-        });
     }
 
     // to listen for invitations to accept / deny them

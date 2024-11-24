@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.sprintproject.R;
+import com.example.sprintproject.model.Location;
 import com.example.sprintproject.model.User;
 import com.example.sprintproject.viewmodel.CollabNotesViewModel;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class CollabNotesActivity extends AppCompatActivity {
     private NotesAdapter notesAdapter;
 
     private String selectedLocation;
+    private String selectedLocationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +81,12 @@ public class CollabNotesActivity extends AppCompatActivity {
         locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedLocation = (String) parent.getItemAtPosition(position);
-                fetchCollaboratorsForLocation(selectedLocation, );
+                Location selected = (Location) parent.getItemAtPosition(position);
+                selectedLocation = selected.getLocationName();
+                selectedLocationId = selected.getDocumentId();
+                fetchCollaboratorsForLocation(selectedLocation, selectedLocationId);
 
-                viewModel.getNotesForTravelLog(selectedLocation)
+                viewModel.getNotesForTravelLog(selectedLocation, selectedLocationId)
                         .observe(CollabNotesActivity.this, notes -> {
                             if (notes != null) {
                                 notesAdapter.updateNotes(notes);
@@ -152,7 +156,7 @@ public class CollabNotesActivity extends AppCompatActivity {
                     String noteContent = noteEditText.getText().toString().trim();
 
                     if (!noteContent.isEmpty()) {
-                        viewModel.addNoteToTravelLog(selectedLocation, noteContent);
+                        viewModel.addNoteToTravelLog(selectedLocation, selectedLocationId, noteContent);
 
                         Toast.makeText(this, "Note sent", Toast.LENGTH_SHORT).show();
 
@@ -182,7 +186,7 @@ public class CollabNotesActivity extends AppCompatActivity {
 
         // Observe locations from the ViewModel and populate the spinner
         viewModel.getUserLocations().observe(this, locations -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+            ArrayAdapter<Location> adapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, locations);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             locationSpinner.setAdapter(adapter);
@@ -195,11 +199,11 @@ public class CollabNotesActivity extends AppCompatActivity {
                 .setView(dialogView)
                 .setPositiveButton("Invite", (dialog, whichButton) -> {
                     String email = emailInput.getText().toString();
-                    String selectedLocation = (String) locationSpinner.getSelectedItem();
+                    Location selectedLocation = (Location) locationSpinner.getSelectedItem();
 
                     if (!email.isEmpty() && selectedLocation != null) {
                         // Call ViewModel to handle invitation logic
-                        viewModel.inviteUserToTrip(email, selectedLocation);
+                        viewModel.inviteUserToTrip(email, selectedLocation.getLocationName());
                     } else {
                         Toast.makeText(CollabNotesActivity.this,
                                 "Please enter a valid email and select a location",
@@ -211,16 +215,20 @@ public class CollabNotesActivity extends AppCompatActivity {
     }
 
     private void populateLocationSpinner(Spinner locationSpinner) {
-        viewModel.getUserLocations().observe(CollabNotesActivity.this, locations -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(CollabNotesActivity.this,
+        viewModel.getUserLocations().observe(this, locations -> {
+            ArrayAdapter<Location> adapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, locations);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             locationSpinner.setAdapter(adapter);
 
-            // After population, set initial selected location
+            // after population, set initial selected location
             if (selectedLocation != null) {
-                int position = adapter.getPosition(selectedLocation);
-                locationSpinner.setSelection(position);
+                for (int i = 0; i < locations.size(); i++) {
+                    if (locations.get(i).getDocumentId().equals(selectedLocation)) {
+                        locationSpinner.setSelection(i);
+                        break;
+                    }
+                }
             }
         });
     }
