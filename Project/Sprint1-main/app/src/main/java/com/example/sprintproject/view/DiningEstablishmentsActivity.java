@@ -142,6 +142,6 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
                 }
             });
         });
-}
+    }
 
 }
