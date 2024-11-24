@@ -1,3 +1,4 @@
+package example;
 
 public class TaxableItem extends Item {
     private double taxRate = 7;
@@ -7,7 +8,7 @@ public class TaxableItem extends Item {
     }
 
     // -------------- Fixed Code Smell #4 ----------------------
-    // Moved calculateTax() from Order.java to uphold the Single Responsibility Principle
+    // Moved calculateTax() from example.Order.java to uphold the Single Responsibility Principle
     public double calculateItemTax() {
         return (taxRate / 100.0) * getPrice();
     }

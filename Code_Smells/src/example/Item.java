@@ -1,3 +1,7 @@
+package example;
+
+import example.DiscountType;
+
 class Item {
     private String name;
     private double price;
