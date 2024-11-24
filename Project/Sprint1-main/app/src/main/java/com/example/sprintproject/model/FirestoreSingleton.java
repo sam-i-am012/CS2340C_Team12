@@ -295,7 +295,8 @@ public class FirestoreSingleton {
         // find the travel log by location
         firestore.collection("travelLogs")
                 .whereEqualTo("destination", location)
-                .whereEqualTo("userId", invitingUserId)
+                // so people added as a collaborator can also invite other people
+                .whereArrayContains("associatedUsers", invitingUserId)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     if (!querySnapshot.isEmpty()) {

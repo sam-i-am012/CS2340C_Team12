@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.sprintproject.R;
 import com.example.sprintproject.model.Dining;
+import com.example.sprintproject.model.Location;
 import com.example.sprintproject.viewmodel.DiningViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DiningEstablishmentsActivity extends AppCompatActivity {
@@ -70,6 +70,13 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
         diningViewModel.getDiningLogsByLocation().observe(this, new Observer<List<Dining>>() {
             @Override
             public void onChanged(List<Dining> dinings) {
+                if (dinings != null && !dinings.isEmpty()) {
+                    Log.d("DiningEstablishmentsActivity", "Fetched dining logs: "
+                            + dinings.size());
+                } else {
+                    Log.d("DiningEstablishmentsActivity",
+                            "No dining logs available for this location.");
+                }
                 // Update the adapter with new dining logs
                 diningAdapter.setDinings(dinings);
             }
@@ -116,33 +123,31 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
     }
 
     private void populateLocationSpinner(Spinner locationSpinner) {
-        diningViewModel.getUserLocationsWithIds().observe(DiningEstablishmentsActivity.this,
-                locationsWithIds -> {
-                List<String> locationNames = new ArrayList<>(locationsWithIds.keySet());
+        diningViewModel.getUserLocations().observe(this, locations -> {
+            ArrayAdapter<Location> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, locations);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            locationSpinner.setAdapter(adapter);
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                        android.R.layout.simple_spinner_item, locationNames);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                locationSpinner.setAdapter(adapter);
+            locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+                                           int position, long id) {
+                    Location selected = (Location) parentView.getItemAtPosition(position);
+                    String selectedLocation = selected.getLocationName();
+                    selectedDestinationId = selected.getDocumentId();
+                    Log.e("dining", "Selected dining ID: " + selectedDestinationId);
 
-                locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-                                               int position, long id) {
-                        String selectedLocation = locationNames.get(position);
-                        selectedDestinationId = locationsWithIds.get(selectedLocation);
-                        Log.e("dining", "Selected dining ID: " + selectedDestinationId);
-
-                        if (selectedDestinationId != null) {
-                            diningViewModel.fetchDiningLogsForLocation(selectedDestinationId);
-                        }
+                    if (selectedDestinationId != null) {
+                        diningViewModel.fetchDiningLogsForLocation(selectedDestinationId);
                     }
+                }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parentView) {
-                    }
-                });
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                }
             });
+        });
     }
 
 }
