@@ -82,11 +82,7 @@ public class FirestoreSingleton {
                                     // invalid num
                                     durationLiveData.setValue(0);
                                 }
-                            } else {
-                                durationLiveData.setValue(0); // default if type is unexpected
                             }
-                        } else {
-                            durationLiveData.setValue(0); // when document doesn't exist
                         }
                     } else {
                         durationLiveData.setValue(0); // failure happened

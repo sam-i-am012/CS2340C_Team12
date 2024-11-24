@@ -1,6 +1,11 @@
 package com.example.sprintproject.model;
 
 public class AccommodationValidator {
+
+    // private constructor to hide the implicit public one
+    private AccommodationValidator() {
+    }
+
     public static boolean validateInputs(String checkIn, String checkOut,
                                          String location, String hotel) {
         boolean isValid = true;
