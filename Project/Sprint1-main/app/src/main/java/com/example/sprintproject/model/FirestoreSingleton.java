@@ -481,13 +481,7 @@ public class FirestoreSingleton {
 
                         // add the new note
                         travelLogRef.update("notes", FieldValue.arrayUnion(note))
-                                .addOnCompleteListener(updateTask -> {
-                                    if (updateTask.isSuccessful()) {
-                                        listener.onComplete(updateTask);
-                                    } else {
-                                        listener.onComplete(updateTask);
-                                    }
-                                });
+                                .addOnCompleteListener(listener);
                     } else {
                         // no travel log match
                         listener.onComplete(Tasks.forResult(null));
