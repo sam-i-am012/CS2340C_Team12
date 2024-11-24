@@ -47,7 +47,6 @@ public class AccommodationsActivity extends AppCompatActivity {
 
         initViews();
 
-
         // ViewModel setup
         accommodationViewModel = new ViewModelProvider(this).get(AccommodationViewModel.class);
 
