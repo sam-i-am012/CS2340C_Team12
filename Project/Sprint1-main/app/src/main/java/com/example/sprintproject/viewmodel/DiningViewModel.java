@@ -30,7 +30,6 @@ public class DiningViewModel extends AndroidViewModel {
     private MutableLiveData<List<Dining>> diningLogs;
     private MutableLiveData<List<Dining>> diningLogsByLocation;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
-    private MutableLiveData<Map<String, String>> userLocationsWithIds = new MutableLiveData<>();
 
 
     public DiningViewModel(@NonNull Application application) {
@@ -56,10 +55,6 @@ public class DiningViewModel extends AndroidViewModel {
             }
             userLocations.setValue(locations);
         });
-    }
-
-    public LiveData<Map<String, String>> getUserLocationsWithIds() {
-        return userLocationsWithIds;
     }
 
 

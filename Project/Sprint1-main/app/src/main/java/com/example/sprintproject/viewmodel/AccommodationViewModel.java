@@ -10,15 +10,15 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.FirestoreSingleton;
+import com.example.sprintproject.model.Location;
 import com.example.sprintproject.model.Result;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.view.AccommodationsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class AccommodationViewModel extends AndroidViewModel {
     private AccommodationsAdapter accommodationsAdapter = new AccommodationsAdapter();
@@ -26,7 +26,8 @@ public class AccommodationViewModel extends AndroidViewModel {
     private FirestoreSingleton repository;
     private MutableLiveData<List<Accommodation>> accommodationLogs;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
-    private MutableLiveData<Map<String, String>> userLocationsWithIds = new MutableLiveData<>();
+    private MutableLiveData<List<Location>> userLocations = new MutableLiveData<>();
+
 
     public AccommodationViewModel(@NonNull Application application) {
         super(application);
@@ -53,8 +54,8 @@ public class AccommodationViewModel extends AndroidViewModel {
     }
 
     // getter for user locations (used for spinner)
-    public LiveData<Map<String, String>> getUserLocationsWithIds() {
-        return userLocationsWithIds;
+    public LiveData<List<Location>> getUserLocations() {
+        return userLocations;
     }
 
     // Add an accommodation to the repository
@@ -68,17 +69,12 @@ public class AccommodationViewModel extends AndroidViewModel {
     // load user locations (used for spinner)
     private void loadUserLocations() {
         String currentUserId = repository.getCurrentUserId();
-
         repository.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
-            if (travelLogs != null) {
-                Map<String, String> locationsWithIds = new HashMap<>();
-                for (TravelLog log : travelLogs) {
-                    String destination = log.getDestination();
-                    String documentId = log.getDocumentId();
-                    locationsWithIds.put(destination, documentId);
-                }
-                userLocationsWithIds.setValue(locationsWithIds);
+            List<Location> locations = new ArrayList<>();
+            for (TravelLog log : travelLogs) {
+                locations.add(new Location(log.getDocumentId(), log.getDestination()));
             }
+            userLocations.setValue(locations);
         });
     }
 
