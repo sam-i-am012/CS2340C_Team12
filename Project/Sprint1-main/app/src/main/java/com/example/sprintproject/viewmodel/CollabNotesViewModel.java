@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.sprintproject.model.FirestoreSingleton;
+import com.example.sprintproject.model.Location;
 import com.example.sprintproject.model.Note;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.model.User;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 public class CollabNotesViewModel extends ViewModel {
     private FirestoreSingleton firestoreSingleton;
-    private MutableLiveData<List<String>> userLocations = new MutableLiveData<>();
+    private MutableLiveData<List<Location>> userLocations = new MutableLiveData<>();
     private MutableLiveData<String> toastMessage = new MutableLiveData<>();
     private MutableLiveData<List<Note>> notesLiveData = new MutableLiveData<>();  // display notes
 
@@ -28,7 +29,7 @@ public class CollabNotesViewModel extends ViewModel {
         notesLiveData = new MutableLiveData<>();
     }
 
-    public LiveData<List<String>> getUserLocations() {
+    public LiveData<List<Location>> getUserLocations() {
         return userLocations;
     }
 
@@ -38,12 +39,13 @@ public class CollabNotesViewModel extends ViewModel {
 
 
     // fetch notes for a specific location and current user
-    public LiveData<List<Note>> getNotesForTravelLog(String location) {
+    public LiveData<List<Note>> getNotesForTravelLog(String location, String locationId) {
         String currentUserId = firestoreSingleton.getCurrentUserId();
-        firestoreSingleton.getNotesForTravelLog(location, currentUserId).observeForever(notes -> {
-            // update the live data
-            notesLiveData.setValue(notes);
-        });
+        firestoreSingleton.getNotesForTravelLog(location, currentUserId,
+                locationId).observeForever(notes -> {
+                    // update the live data
+                    notesLiveData.setValue(notes);
+                });
         return notesLiveData;
     }
 
@@ -51,13 +53,14 @@ public class CollabNotesViewModel extends ViewModel {
     private void loadUserLocations() {
         String currentUserId = firestoreSingleton.getCurrentUserId();
         firestoreSingleton.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
-            List<String> locations = new ArrayList<>();
+            List<Location> locations = new ArrayList<>();
             for (TravelLog log : travelLogs) {
-                locations.add(log.getDestination());
+                locations.add(new Location(log.getDocumentId(), log.getDestination()));
             }
             userLocations.setValue(locations);
         });
     }
+
 
     // invite a user to the trip after validating their email
     public void inviteUserToTrip(String email, String location) {
@@ -100,17 +103,17 @@ public class CollabNotesViewModel extends ViewModel {
         });
     }
 
-    public LiveData<List<User>> getCollaboratorsForLocation(String location) {
+    public LiveData<List<User>> getCollaboratorsForLocation(String location, String documentId) {
         return firestoreSingleton.getCollaboratorsForLocation(location,
-                firestoreSingleton.getCurrentUserId());
+                firestoreSingleton.getCurrentUserId(), documentId);
     }
 
-    public void addNoteToTravelLog(String location, String noteContent) {
+    public void addNoteToTravelLog(String location, String locationId, String noteContent) {
         String userId = firestoreSingleton.getCurrentUserId();
 
         Note newNote = new Note(noteContent, userId);
 
-        firestoreSingleton.addNoteToTravelLog(location, userId, newNote, task -> {
+        firestoreSingleton.addNoteToTravelLog(location, userId, locationId, newNote, task -> {
             if (task.isSuccessful()) {
                 toastMessage.setValue("Note added successfully!");
             } else {

@@ -242,12 +242,14 @@ public class FirestoreSingleton {
         return userLiveData;
     }
 
-    public LiveData<List<User>> getCollaboratorsForLocation(String location, String currentUserId) {
+    public LiveData<List<User>> getCollaboratorsForLocation(String location, String currentUserId,
+                                                            String documentId) {
         MutableLiveData<List<User>> collaboratorsLiveData = new MutableLiveData<>();
 
         // travel log matches current user
         firestore.collection("travelLogs")
                 .whereEqualTo("destination", location)
+                .whereEqualTo("documentId", documentId)
                 .whereArrayContains("associatedUsers", currentUserId)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -460,15 +462,16 @@ public class FirestoreSingleton {
         return accommodationLiveData;
     }
 
-    public void addNoteToTravelLog(String location, String currentUserId, Note note,
+    public void addNoteToTravelLog(String location, String currentUserId, String documentId,
+                                   Note note,
                                    OnCompleteListener<Void> listener) {
         firestore.collection("travelLogs")
                 .whereEqualTo("destination", location)
+                .whereEqualTo("documentId", documentId)
                 .whereArrayContains("associatedUsers", currentUserId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        // TODO!: make sure it can differentiate when locations have the same name
                         DocumentSnapshot document = task.getResult().getDocuments().get(0);
                         String travelLogId = document.getId();
 
@@ -492,11 +495,13 @@ public class FirestoreSingleton {
                 });
     }
 
-    public LiveData<List<Note>> getNotesForTravelLog(String location, String currentUserId) {
+    public LiveData<List<Note>> getNotesForTravelLog(String location, String currentUserId,
+                                                     String documentId) {
         MutableLiveData<List<Note>> notesLiveData = new MutableLiveData<>();
 
         firestore.collection("travelLogs")
                 .whereEqualTo("destination", location)
+                .whereEqualTo("documentId", documentId)
                 .whereArrayContains("associatedUsers", currentUserId)
                 .get()
                 .addOnCompleteListener(task -> {
