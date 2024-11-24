@@ -1,3 +1,5 @@
+package example;
+
 import java.util.List;
 
 public class Order {
@@ -13,7 +15,7 @@ public class Order {
         // -------------- Fixed Code Smell #6 ----------------------
         // added null and empty string checks and messages for `items`, `customerName`, and `customerEmail` in the constructor
         if (items == null || items.isEmpty()) {
-            throw new IllegalArgumentException("Item list cannot be null or empty");
+            throw new IllegalArgumentException("example.Item list cannot be null or empty");
         }
         if (customerName == null || customerName.trim().isEmpty()) {
             throw new IllegalArgumentException("Customer name cannot be null or empty");
@@ -29,7 +31,7 @@ public class Order {
 
     // public double calculateTotalPrice() {
     // 	double total = 0.0;
-    // 	for (Item item : items) {
+    // 	for (example.Item item : items) {
     //     	double price = item.getPrice();
     //     	switch (item.getDiscountType()) {
     //         	case PERCENTAGE:
@@ -43,8 +45,8 @@ public class Order {
     //             	break;
     //     	}
     //     	total += price * item.getQuantity();
-    //    	    if (item instanceof TaxableItem) {
-    //             TaxableItem taxableItem = (TaxableItem) item;
+    //    	    if (item instanceof example.TaxableItem) {
+    //             example.TaxableItem taxableItem = (example.TaxableItem) item;
     //             double tax = taxableItem.getTaxRate() / 100.0 * item.getPrice();
     //             total += tax;
     //         }
@@ -64,7 +66,7 @@ public class Order {
         for (Item item : items) {
             double itemTotal = calculateItemDiscount(item) * item.getQuantity(); // new method to calculate discount
             // -------------- Fixed Code Smell #4 ----------------------
-            // Modified usage of calculateTax() as it has been moved to TaxableItem.java
+            // Modified usage of calculateTax() as it has been moved to example.TaxableItem.java
             if (item instanceof TaxableItem) {
                 TaxableItem taxableItem = (TaxableItem) item;
                 itemTotal += taxableItem.calculateItemTax();
@@ -93,10 +95,10 @@ public class Order {
     }
 
     // -------------- Fixed Code Smell #4 ----------------------
-    // Moved to TaxableItem.java to uphold Single Responsibility Principle
-//    private double calculateItemTax(Item item) {
-//        if (item instanceof TaxableItem) {
-//            TaxableItem taxableItem = (TaxableItem) item;
+    // Moved to example.TaxableItem.java to uphold Single Responsibility Principle
+//    private double calculateItemTax(example.Item item) {
+//        if (item instanceof example.TaxableItem) {
+//            example.TaxableItem taxableItem = (example.TaxableItem) item;
 //            return (taxableItem.getTaxRate() / 100.0) * taxableItem.getPrice();
 //        }
 //        return 0.0;
@@ -121,11 +123,11 @@ public class Order {
         }
         message += "Total: " + calculateTotalPrice();
     //  Code Smell: Couplers - Middle Man
-    //  EmailSender.sendEmail(customerEmail, "Order Confirmation", message);
+    //  EmailSender.sendEmail(customerEmail, "example.Order Confirmation", message);
     //
     // Fixed Code Smell:
         System.out.println("Email to: " + customerEmail);
-        System.out.println("Subject: Order Confirmation");
+        System.out.println("Subject: example.Order Confirmation");
         System.out.println("Body: " + message);
     }
 
@@ -146,7 +148,7 @@ public class Order {
         // -------------- Fixed Code Smell #6 ----------------------
         // added null and empty string check for `items` in the appropriate setter
         if (items == null || items.isEmpty()) {
-            throw new IllegalArgumentException("Item list cannot be null or empty");
+            throw new IllegalArgumentException("example.Item list cannot be null or empty");
         }
         // ---------------------------------------------------------
         this.items = items;
@@ -181,7 +183,7 @@ public class Order {
     }
 
     // -------------- Fixed Code Smell #5 ----------------------
-    //`Order` doesn't depend on GiftCardItem subclass
+    //`example.Order` doesn't depend on example.GiftCardItem subclass
     public boolean hasGiftCard() {
         for (Item item : items) {
             if (item.isGiftCard()) {
@@ -193,7 +195,7 @@ public class Order {
     // --------------------------------------------------------------------------
 
    public void printOrder() {
-        System.out.println("Order Details:");
+        System.out.println("example.Order Details:");
         for (Item item : items) {
             System.out.println(item.getName() + " - " + item.getPrice());
         }
