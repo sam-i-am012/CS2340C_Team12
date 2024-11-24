@@ -100,9 +100,9 @@ public class CollabNotesViewModel extends ViewModel {
         });
     }
 
-    public LiveData<List<User>> getCollaboratorsForLocation(String location) {
+    public LiveData<List<User>> getCollaboratorsForLocation(String location, String documentId) {
         return firestoreSingleton.getCollaboratorsForLocation(location,
-                firestoreSingleton.getCurrentUserId());
+                firestoreSingleton.getCurrentUserId(), documentId);
     }
 
     public void addNoteToTravelLog(String location, String noteContent) {

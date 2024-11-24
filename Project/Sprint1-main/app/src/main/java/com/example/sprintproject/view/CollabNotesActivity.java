@@ -80,7 +80,7 @@ public class CollabNotesActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedLocation = (String) parent.getItemAtPosition(position);
-                fetchCollaboratorsForLocation(selectedLocation);
+                fetchCollaboratorsForLocation(selectedLocation, );
 
                 viewModel.getNotesForTravelLog(selectedLocation)
                         .observe(CollabNotesActivity.this, notes -> {
@@ -225,8 +225,8 @@ public class CollabNotesActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchCollaboratorsForLocation(String location) {
-        viewModel.getCollaboratorsForLocation(location).observe(this, collaborators -> {
+    private void fetchCollaboratorsForLocation(String location, String documentId) {
+        viewModel.getCollaboratorsForLocation(location, documentId).observe(this, collaborators -> {
             if (collaborators != null && !collaborators.isEmpty()) {
                 List<String> collaboratorEmails = new ArrayList<>();
                 for (User user : collaborators) {
