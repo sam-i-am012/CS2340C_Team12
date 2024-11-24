@@ -161,8 +161,7 @@ public class CollabNotesActivity extends AppCompatActivity {
                         Toast.makeText(this, "Note sent", Toast.LENGTH_SHORT).show();
 
                         // manually set the selection back to the previous location
-                        int position = ((ArrayAdapter<String>) locationSpinner.getAdapter())
-                                .getPosition(selectedLocation);
+                        int position = locationSpinner.getSelectedItemPosition();
                         locationSpinner.setSelection(position);
 
 
@@ -222,10 +221,16 @@ public class CollabNotesActivity extends AppCompatActivity {
             locationSpinner.setAdapter(adapter);
 
             // after population, set initial selected location
+//            if (selectedLocation != null) {
+//                int position = adapter.getPosition(selectedLocation);
+//                locationSpinner.setSelection(position);
+//            }
+
             if (selectedLocation != null) {
-                for (int i = 0; i < locations.size(); i++) {
-                    if (locations.get(i).getDocumentId().equals(selectedLocation)) {
-                        locationSpinner.setSelection(i);
+                for (Location location : locations) {
+                    if (selectedLocation.equals(location.getLocationName())) {
+                        int position = adapter.getPosition(location);
+                        locationSpinner.setSelection(position);
                         break;
                     }
                 }
