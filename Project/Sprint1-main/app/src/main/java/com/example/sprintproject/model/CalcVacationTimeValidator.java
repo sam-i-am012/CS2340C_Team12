@@ -6,6 +6,10 @@ import java.util.Date;
 
 public class CalcVacationTimeValidator {
 
+    // private constructor to hide the implicit public one
+    private CalcVacationTimeValidator() {
+    }
+
     public static Result validateMissingEntry(String startDate, String endDate, String duration) {
         int missingCount = 0;
         String missingEntry = "None";

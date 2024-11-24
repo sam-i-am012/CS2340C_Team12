@@ -29,14 +29,17 @@ public class FirebaseAuthManager {
 
                         // Fetch existing user data to avoid overwriting fields like startDate,
                         // endDate, duration
-                        return firestore.collection("users").document(userId).get()
+
+                        // defined constant instead of duplicating literal 3 times
+                        String collectionPath = "users";
+                        return firestore.collection(collectionPath).document(userId).get()
                                 .continueWithTask(userTask -> {
                                     if (userTask.isSuccessful()) {
                                         // Check if user already exists in Firestore
                                         if (userTask.getResult().exists()) {
                                             // User already exists, just update the email
                                             // if it's different
-                                            firestore.collection("users").
+                                            firestore.collection(collectionPath).
                                                     document(userId).
                                                     update("email", userEmail);
                                         } else {
@@ -44,7 +47,7 @@ public class FirebaseAuthManager {
                                             // default fields
                                             User newUser = new User(userId, userEmail,
                                                     new ArrayList<>());
-                                            firestore.collection("users")
+                                            firestore.collection(collectionPath)
                                                     .document(userId).set(newUser);
                                         }
 
