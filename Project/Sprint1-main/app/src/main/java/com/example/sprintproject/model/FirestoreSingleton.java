@@ -567,19 +567,33 @@ public class FirestoreSingleton {
         return notesLiveData;
     }
 
-    public void addTravelPost(Post travelPost,
-                              OnCompleteListener<DocumentReference> listener) {
+    public void addTravelPost(Post travelPost, OnCompleteListener<DocumentReference> listener) {
+        // Check for duplicate entry first
         firestore.collection("travel_community")
-                .add(travelPost)
+                .whereEqualTo("postUsername", travelPost.getPostUsername())
+                .whereEqualTo("destination", travelPost.getPostDestination()) // Add more conditions if necessary
+                .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String travelPostId = task.getResult().getId();
-
-                        updateUserAssociatedDestinations(travelPost.getPostUsername(),
-                                travelPostId);
-                    }
-                    if (listener != null) {
-                        listener.onComplete(task);
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        // If a document exists, it's a duplicate, so don't add it
+                        if (listener != null) {
+                            // Create a custom exception to signal the error
+                            Exception duplicateException = new Exception("Duplicate post detected");
+                            listener.onComplete(Tasks.forException(duplicateException));
+                        }
+                    } else {
+                        // If no duplicates found, proceed with adding the travel post
+                        firestore.collection("travel_community")
+                                .add(travelPost)
+                                .addOnCompleteListener(innerTask -> {
+                                    if (innerTask.isSuccessful()) {
+                                        String travelPostId = innerTask.getResult().getId();
+                                        updateUserAssociatedDestinations(travelPost.getPostUsername(), travelPostId);
+                                    }
+                                    if (listener != null) {
+                                        listener.onComplete(innerTask);
+                                    }
+                                });
                     }
                 });
     }
