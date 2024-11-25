@@ -1,6 +1,8 @@
 package com.example.sprintproject.model;
 
-public class Post {
+import java.io.Serializable;
+
+public class Post implements Serializable {
     private String username;
     private String destination;
     private String startDate;

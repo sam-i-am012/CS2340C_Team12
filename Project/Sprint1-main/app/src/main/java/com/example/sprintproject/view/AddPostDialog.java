@@ -16,11 +16,12 @@ import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Post;
 import com.example.sprintproject.viewmodel.AccommodationViewModel;
 import com.example.sprintproject.viewmodel.CommunityViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AddPostDialog extends Dialog {
     private CommunityViewModel viewModel;
     private LifecycleOwner lifecycleOwner;
-    private final FirestoreSingleton firestore = FirestoreSingleton.getInstance();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public AddPostDialog(Context context, CommunityViewModel viewModel) {
         super(context);  // Calls the Dialog constructor
@@ -58,7 +59,7 @@ public class AddPostDialog extends Dialog {
             if (validateInputs(startDateET, endDateET, destinationET, accommodationsET, diningET, notesET)) {
                 // Create a new post object
                 Post newPost = new Post(
-                        firestore.getCurrentUserId(),
+                        mAuth.getCurrentUser().getEmail(),
                         destination,
                         startDate,
                         endDate,

@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sprintproject.R;
-import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.Post;
 
 import java.util.ArrayList;
@@ -22,7 +21,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
     private List<Post> posts;
 
-    public PostAdapter() {
+    public PostAdapter(Context context) {
+        this.context = context;
         this.posts = new ArrayList<>();
     }
 
@@ -53,9 +53,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvDestination.setText(post.getPostDestination());
         holder.tvDuration.setText(post.getPostStartDate() + " - " + post.getPostEndDate());
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, PostDetailsActivity.class);
-            intent.putExtra("POST_DATA", (CharSequence) post);
+            intent.putExtra("POST_DATA", post);
             context.startActivity(intent);
         });
     }

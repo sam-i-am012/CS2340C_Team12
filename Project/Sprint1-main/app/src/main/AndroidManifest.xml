@@ -28,6 +28,9 @@
             android:name=".view.DiningEstablishmentsActivity"
             android:exported="false" />
         <activity
+            android:name=".view.PostDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.DestinationsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />

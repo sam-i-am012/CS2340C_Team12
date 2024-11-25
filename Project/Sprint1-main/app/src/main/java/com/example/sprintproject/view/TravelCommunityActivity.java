@@ -54,7 +54,7 @@ public class TravelCommunityActivity extends AppCompatActivity {
 
         // RecyclerView setup
         recyclerView = findViewById(R.id.travelPostRecyclerView);
-        travelPostAdapter = new PostAdapter();
+        travelPostAdapter = new PostAdapter(this);
         recyclerView.setAdapter(travelPostAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         
