@@ -42,7 +42,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent,
+                false);
         return new ViewHolder(view);
     }
 
@@ -75,7 +76,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvUsername, tvDestination, tvDuration;
+        private TextView tvUsername;
+        private TextView tvDestination;
+        private TextView tvDuration;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

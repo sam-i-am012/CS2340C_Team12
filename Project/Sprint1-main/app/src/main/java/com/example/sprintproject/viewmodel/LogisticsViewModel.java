@@ -1,6 +1,5 @@
 package com.example.sprintproject.viewmodel;
 
-import static com.example.sprintproject.model.InputValidator.isValidEmail;
 
 import android.util.Log;
 import androidx.lifecycle.LiveData;
@@ -9,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Invitation;
-import com.example.sprintproject.model.Note;
 import com.example.sprintproject.model.TravelLog;
 import com.example.sprintproject.model.TripUtils;
 import com.google.firebase.firestore.FirebaseFirestore;

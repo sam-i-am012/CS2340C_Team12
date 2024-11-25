@@ -14,7 +14,8 @@ public class FormValidator {
         return startDate != null && endDate != null && startDate.isBefore(endDate);
     }
 
-    public static boolean isValidTravelLog(String destination, LocalDate startDate, LocalDate endDate) {
+    public static boolean isValidTravelLog(String destination, LocalDate startDate,
+                                           LocalDate endDate) {
         return isValidDestination(destination) && isValidDateRange(startDate, endDate);
     }
 }

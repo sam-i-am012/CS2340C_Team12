@@ -18,8 +18,6 @@ import com.example.sprintproject.R;
 import com.example.sprintproject.model.Location;
 import com.example.sprintproject.viewmodel.AccommodationViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AccommodationsActivity extends AppCompatActivity {
 
@@ -144,7 +142,8 @@ public class AccommodationsActivity extends AppCompatActivity {
                     Log.e("dining", "Selected dining ID: " + selectedDestinationId);
 
                     if (selectedDestinationId != null) {
-                        accommodationViewModel.fetchAccommodationLogsForDestination(selectedDestinationId);
+                        accommodationViewModel
+                                .fetchAccommodationLogsForDestination(selectedDestinationId);
                     }
                 }
 
