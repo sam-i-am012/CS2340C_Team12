@@ -26,4 +26,21 @@ public class CollabNotesTests {
         assertFalse(CollabNotesValidator.isValidEmail("user@domain,com"));
     }
 
+    @Test
+    public void testValidEmail_differentDomains() {
+        // valid email
+        assertTrue(CollabNotesValidator.isValidEmail("plainaddress@gmail.com"));
+        assertTrue(CollabNotesValidator.isValidEmail("plainaddress@gmail.edu"));
+        assertTrue(CollabNotesValidator.isValidEmail("plainaddress@gmail.org"));
+        assertFalse(CollabNotesValidator.isValidEmail("plainaddress@gmail.um"));
+    }
+
+    @Test
+    public void testValidEmail_WhitespaceInputs() {
+        // email with whitespace
+        assertFalse(CollabNotesValidator.isValidEmail("   "));
+        assertTrue(CollabNotesValidator.isValidEmail("   user@domain.com"));
+        assertTrue(CollabNotesValidator.isValidEmail("user@domain.com   "));
+    }
+
 }
