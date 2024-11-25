@@ -39,13 +39,13 @@ public class AddPostDialog extends Dialog {
         // Find views
         EditText startDateET = findViewById(R.id.editTextStartDate);
         EditText endDateET = findViewById(R.id.editTextEndDate);
-        EditText destinationET = findViewById(R.id.editTextDesination);
+        EditText destinationET = findViewById(R.id.editTextDestination);
         EditText accommodationsET = findViewById(R.id.editTextAccommodations);
         EditText diningET = findViewById(R.id.editTextDining);
         EditText notesET = findViewById(R.id.editTextNotes);
         Button addPostBtn = findViewById(R.id.btnAddPostDialog);
 
-        // Handle add accommodation button click
+        // Handle add post button click
         addPostBtn.setOnClickListener(view -> {
             String startDate = startDateET.getText().toString().trim();
             String endDate = endDateET.getText().toString().trim();
@@ -56,18 +56,18 @@ public class AddPostDialog extends Dialog {
 
             // Validate inputs
             if (validateInputs(startDateET, endDateET, destinationET, accommodationsET, diningET, notesET)) {
-                // Create a new Accommodation object
+                // Create a new post object
                 Post newPost = new Post(
                         firestore.getCurrentUserId(),
+                        destination,
                         startDate,
                         endDate,
-                        destination,
                         accommodations,
                         dining,
                         notes
                 );
 
-                // Add the accommodation to the database
+                // Add the post to the database
                 viewModel.addTravelPost(newPost, null);
 
                 // Update the UI and clear input fields
@@ -77,7 +77,7 @@ public class AddPostDialog extends Dialog {
                 Toast.makeText(getContext(), "Post added successfully",
                         Toast.LENGTH_SHORT).show();
 
-                // Dismiss the dialog after adding the accommodation
+                // Dismiss the dialog after adding the post
                 dismiss();
             }
         });

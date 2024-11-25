@@ -17,6 +17,10 @@ public class Post {
         this.diningReservations = diningReservations;
         this.notes = notes;
     }
+
+    public Post() {
+    }
+
     public String getPostUsername() {
         return username;
     }

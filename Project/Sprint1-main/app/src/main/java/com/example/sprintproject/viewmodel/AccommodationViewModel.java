@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccommodationViewModel extends AndroidViewModel {
+    
     private AccommodationsAdapter accommodationsAdapter = new AccommodationsAdapter();
-
     private FirestoreSingleton repository;
     private MutableLiveData<List<Accommodation>> accommodationLogs;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();

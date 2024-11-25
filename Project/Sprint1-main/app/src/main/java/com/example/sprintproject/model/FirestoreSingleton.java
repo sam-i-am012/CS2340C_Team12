@@ -584,10 +584,9 @@ public class FirestoreSingleton {
                 });
     }
 
-    public LiveData<List<Post>> getTravelPostByUser(String userId) {
+    public LiveData<List<Post>> getTravelPosts() {
         //travelCommunityLiveData
-        firestore.collection("travel_community")
-                .whereEqualTo("userId", userId) // query logs for this user
+        firestore.collection("travel_community") // query logs
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         return; // to avoid null pointer

@@ -1,5 +1,6 @@
 package com.example.sprintproject.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sprintproject.R;
+import com.example.sprintproject.model.Accommodation;
 import com.example.sprintproject.model.Post;
 
 import java.util.ArrayList;
@@ -24,10 +26,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         this.posts = new ArrayList<>();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void addPost(Post post) {
+        this.posts.add(0, post); // Add new post at the start
+        notifyDataSetChanged(); // Notify the adapter that data has changed
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updatePosts(List<Post> newPosts) {
+        this.posts.clear();
+        this.posts.addAll(newPosts);
+        notifyDataSetChanged(); // Notify that data has been updated
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
         return new ViewHolder(view);
     }
 
@@ -60,7 +75,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvUsername, tvDestination, tvDuration;
+        private TextView tvUsername, tvDestination, tvDuration;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

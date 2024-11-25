@@ -45,6 +45,7 @@ public class TravelCommunityActivity extends AppCompatActivity {
         initViews();
 
         viewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
+
         addTravelPostButton.setOnClickListener(view -> {
             AddPostDialog addPostDialog = new AddPostDialog(
                     TravelCommunityActivity.this, viewModel);
@@ -60,7 +61,9 @@ public class TravelCommunityActivity extends AppCompatActivity {
         // Observe the LiveData for updates to logs
         viewModel.getTravelPostsLiveData().observe(this, posts -> {
             // update adapter when data changes
-            travelPostAdapter.setPosts(posts);
+            if (posts != null) {
+                travelPostAdapter.setPosts(posts);
+            }
         });
 
         // Navigation button logic
@@ -70,7 +73,7 @@ public class TravelCommunityActivity extends AppCompatActivity {
     private void initViews() {
         startDateET = findViewById(R.id.editTextStartDate);
         endDateET = findViewById(R.id.editTextEndDate);
-        destinationET = findViewById(R.id.editTextDesination);
+        destinationET = findViewById(R.id.editTextDestination);
         accommodationsET = findViewById(R.id.editTextAccommodations);
         diningReservationET = findViewById(R.id.editTextDining);
         notesET = findViewById(R.id.editTextNotes);
