@@ -5,16 +5,12 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.lifecycle.LifecycleOwner;
 
 import com.example.sprintproject.R;
-import com.example.sprintproject.model.Accommodation;
-import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Post;
-import com.example.sprintproject.viewmodel.AccommodationViewModel;
 import com.example.sprintproject.viewmodel.CommunityViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -56,7 +52,8 @@ public class AddPostDialog extends Dialog {
             String notes = notesET.getText().toString().trim();
 
             // Validate inputs
-            if (validateInputs(startDateET, endDateET, destinationET, accommodationsET, diningET, notesET)) {
+            if (validateInputs(startDateET, endDateET, destinationET, accommodationsET, diningET,
+                    notesET)) {
                 // Create a new post object
                 Post newPost = new Post(
                         mAuth.getCurrentUser().getEmail(),
@@ -72,7 +69,8 @@ public class AddPostDialog extends Dialog {
                 viewModel.addTravelPost(newPost, null);
 
                 // Update the UI and clear input fields
-                clearInputFields(startDateET, endDateET, destinationET, accommodationsET, diningET, notesET);
+                clearInputFields(startDateET, endDateET, destinationET, accommodationsET, diningET,
+                        notesET);
 
                 // Show success message
                 Toast.makeText(getContext(), "Post added successfully",
@@ -159,16 +157,16 @@ public class AddPostDialog extends Dialog {
 
         // Check for valid day based on the month
         switch (month) {
-            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-                return day < 1 || day > 31;
-            case 4: case 6: case 9: case 11:
-                return day < 1 || day > 30;
-            case 2:
-                // Leap year check
-                boolean isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-                return day < 1 || day > (isLeapYear ? 29 : 28);
-            default:
-                return true;
+        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+            return day < 1 || day > 31;
+        case 4: case 6: case 9: case 11:
+            return day < 1 || day > 30;
+        case 2:
+            // Leap year check
+            boolean isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+            return day < 1 || day > (isLeapYear ? 29 : 28);
+        default:
+            return true;
         }
     }
 }

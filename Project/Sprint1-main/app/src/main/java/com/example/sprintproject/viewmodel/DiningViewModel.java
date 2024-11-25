@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DiningViewModel extends AndroidViewModel {
     private DiningsAdapter diningAdapter = new DiningsAdapter();

@@ -10,7 +10,8 @@ public class Post implements Serializable {
     private String accommodations;
     private String diningReservations;
     private String notes;
-    public Post(String username, String destination, String startDate, String endDate, String accommodations, String diningReservations, String notes) {
+    public Post(String username, String destination, String startDate, String endDate,
+                String accommodations, String diningReservations, String notes) {
         this.username = username;
         this.destination = destination;
         this.startDate = startDate;

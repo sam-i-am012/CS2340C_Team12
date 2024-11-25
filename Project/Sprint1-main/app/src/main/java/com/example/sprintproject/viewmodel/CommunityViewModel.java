@@ -6,16 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.sprintproject.model.Post;
 import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.model.Result;
-import com.example.sprintproject.view.AccommodationsAdapter;
-import com.example.sprintproject.view.PostAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.List;

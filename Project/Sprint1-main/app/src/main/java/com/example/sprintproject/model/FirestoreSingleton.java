@@ -571,7 +571,7 @@ public class FirestoreSingleton {
         // Check for duplicate entry first
         firestore.collection("travel_community")
                 .whereEqualTo("postUsername", travelPost.getPostUsername())
-                .whereEqualTo("destination", travelPost.getPostDestination()) // Add more conditions if necessary
+                .whereEqualTo("destination", travelPost.getPostDestination())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -588,7 +588,8 @@ public class FirestoreSingleton {
                                 .addOnCompleteListener(innerTask -> {
                                     if (innerTask.isSuccessful()) {
                                         String travelPostId = innerTask.getResult().getId();
-                                        updateUserAssociatedDestinations(travelPost.getPostUsername(), travelPostId);
+                                        updateUserAssociatedDestinations(travelPost.
+                                                getPostUsername(), travelPostId);
                                     }
                                     if (listener != null) {
                                         listener.onComplete(innerTask);
