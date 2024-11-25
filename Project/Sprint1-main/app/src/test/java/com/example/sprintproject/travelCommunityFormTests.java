@@ -33,5 +33,18 @@ public class travelCommunityFormTests {
         // Both invalid
         assertFalse(FormValidator.isValidTravelLog("", startDate, invalidEndDate));
     }
+
+    @Test
+    public void testValidDateRange_SameStartAndEndDate() {
+        LocalDate startDate = LocalDate.of(2024, 11, 1);
+        LocalDate endDate = LocalDate.of(2024, 11, 1);
+        assertFalse(FormValidator.isValidDateRange(startDate, endDate));
+    }
+
+    @Test
+    public void testValidDestination_WithLeadingAndTrailingSpaces() {
+        String destination = "   London  ";
+        assertTrue(FormValidator.isValidDestination(destination));
+    }
 }
 
