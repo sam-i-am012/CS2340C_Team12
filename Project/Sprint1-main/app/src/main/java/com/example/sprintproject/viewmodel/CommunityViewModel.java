@@ -22,7 +22,6 @@ import java.util.List;
 
 public class CommunityViewModel extends AndroidViewModel {
 
-    private PostAdapter postAdapter = new PostAdapter();
     private FirestoreSingleton repository;
     private LiveData<List<Post>> posts;
     private MutableLiveData<Result> resValidationResult = new MutableLiveData<>();
@@ -47,10 +46,6 @@ public class CommunityViewModel extends AndroidViewModel {
                 listener.onComplete(task);
             }
         });
-    }
-
-    public PostAdapter getPostAdapter() {
-        return postAdapter;
     }
 
     public MutableLiveData<Result> getResValidationResult() {

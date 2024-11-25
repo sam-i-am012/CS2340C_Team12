@@ -1,6 +1,8 @@
 package com.example.sprintproject.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,11 +26,20 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         Post post = (Post) getIntent().getSerializableExtra("POST_DATA");
 
-        tvDestination.setText(post.getPostDestination());
-        tvStartDate.setText(post.getPostStartDate());
-        tvEndDate.setText(post.getPostEndDate());
-        tvAccommodations.setText(post.getPostAccommodations());
-        tvDiningReservations.setText(post.getDiningReservations());
-        tvNotes.setText(post.getPostNotes());
+        tvDestination.setText("Destination: " + post.getPostDestination());
+        tvStartDate.setText("Start date: " + post.getPostStartDate());
+        tvEndDate.setText("End date: " + post.getPostEndDate());
+        tvAccommodations.setText("Accommodations: " + post.getPostAccommodations());
+        tvDiningReservations.setText("Dining reservations: " + post.getDiningReservations());
+        tvNotes.setText("Notes: " + post.getPostNotes());
+
+        // Find the root view and set an OnClickListener on it
+        View rootView = findViewById(R.id.root_view);  // Replace with your actual root view ID
+        rootView.setOnClickListener(v -> {
+            // When the screen is clicked, start TravelCommunityActivity
+            Intent intent = new Intent(PostDetailsActivity.this, TravelCommunityActivity.class);
+            startActivity(intent);
+            finish();  // Optionally, finish this activity so that it's removed from the stack
+        });
     }
 }
