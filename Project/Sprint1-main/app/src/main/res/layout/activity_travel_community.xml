@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_add"
+                android:src="@drawable/ic_paper_airplane"
                 app:backgroundTint="@color/bluegray"
                 app:tint="@android:color/white"
                 android:contentDescription="Add post"/>

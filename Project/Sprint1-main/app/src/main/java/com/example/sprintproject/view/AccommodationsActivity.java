@@ -67,8 +67,6 @@ public class AccommodationsActivity extends AppCompatActivity {
         recyclerView.setAdapter(accommodationsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-
         // Observe the LiveData for updates to logs
         accommodationViewModel.getAccommodationLogs().observe(this, accommodations -> {
             // update adapter when data changes
