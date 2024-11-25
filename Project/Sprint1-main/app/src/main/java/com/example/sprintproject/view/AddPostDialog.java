@@ -84,7 +84,6 @@ public class AddPostDialog extends Dialog {
         });
     }
 
-
     // Validate input fields
     private boolean validateInputs(EditText startDateET, EditText endDateET, EditText destinationET,
                                    EditText accommodationsET, EditText diningET, EditText notesET) {

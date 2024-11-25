@@ -63,5 +63,18 @@ public class travelCommunityFormTests {
         assertFalse(FormValidator.isValidDateRange(null, LocalDate.of(2024, 11, 10)));
         assertFalse(FormValidator.isValidDateRange(LocalDate.of(2024, 11, 10), null));
     }
+
+    @Test
+    public void testValidDestination_ValidCases() {
+        assertTrue(FormValidator.isValidDestination("Paris"));
+        assertTrue(FormValidator.isValidDestination(" New York "));
+    }
+
+    @Test
+    public void testValidDestination_InvalidCases() {
+        assertFalse(FormValidator.isValidDestination(null));
+        assertFalse(FormValidator.isValidDestination(""));
+        assertFalse(FormValidator.isValidDestination("   "));
+    }
 }
 
