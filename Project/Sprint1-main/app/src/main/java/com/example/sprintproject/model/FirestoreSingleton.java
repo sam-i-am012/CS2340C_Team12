@@ -227,10 +227,18 @@ public class FirestoreSingleton {
             @Override
             public void onChanged(List<Post> posts) {
                 if (posts.size() < 2) {
-                    addTravelPost(new Post(user1, "New York", "2023-12-05", "2023-12-15",
-                            "Hilton Hotel", "Lombardi's Pizza", "Almost got robbed by a Mickey Mouse"), null);
-                    addTravelPost(new Post(user2, "Paris", "2023-11-25", "2023-12-05",
-                            "Paris Hotel", "Café de Flore", "Saw the Eiffel Tower"), null);
+                    addTravelPost(new Post(user1, "New York",
+                            "2023-12-05",
+                            "2023-12-15",
+                            "Hilton Hotel",
+                            "Lombardi's Pizza",
+                            "Almost got robbed by a Mickey Mouse"), null);
+                    addTravelPost(new Post(user2, "Paris",
+                            "2023-11-25",
+                            "2023-12-05",
+                            "Paris Hotel",
+                            "Café de Flore",
+                            "Saw the Eiffel Tower"), null);
                 }
                 postsLiveData.removeObserver(this);
             }
