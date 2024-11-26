@@ -214,6 +214,30 @@ public class FirestoreSingleton {
         });
     }
 
+    public void populateCommunityDatabase() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            return;
+        }
+
+        String user1 = "George P. Burdell";
+        String user2 = "Buzz";
+        LiveData<List<Post>> postsLiveData = getTravelPosts();
+        postsLiveData.observeForever(new Observer<List<Post>>() {
+            @Override
+            public void onChanged(List<Post> posts) {
+                if (posts.size() < 2) {
+                    addTravelPost(new Post(user1, "New York", "2023-12-05", "2023-12-15",
+                            "Hilton Hotel", "Lombardi's Pizza", "Almost got robbed by a Mickey Mouse"), null);
+                    addTravelPost(new Post(user2, "Paris", "2023-11-25", "2023-12-05",
+                            "Paris Hotel", "Café de Flore", "Saw the Eiffel Tower"), null);
+                }
+                postsLiveData.removeObserver(this);
+            }
+        });
+
+    }
+
     // method to check if an email exists in the users collection
     public Task<QuerySnapshot> checkEmailExists(String email) {
         return firestore.collection("users")

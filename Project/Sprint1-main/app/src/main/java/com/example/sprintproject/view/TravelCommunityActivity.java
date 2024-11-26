@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sprintproject.R;
+import com.example.sprintproject.model.FirestoreSingleton;
 import com.example.sprintproject.viewmodel.CommunityViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -32,11 +33,16 @@ public class TravelCommunityActivity extends AppCompatActivity {
     private ImageButton destinationsButton;
     private ImageButton accommodationsButton;
     private ImageButton logisticsButton;
+    private final FirestoreSingleton firestore = FirestoreSingleton.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_community);
+
+        // prepopulate database
+        firestore.populateCommunityDatabase();
 
         initViews();
 
