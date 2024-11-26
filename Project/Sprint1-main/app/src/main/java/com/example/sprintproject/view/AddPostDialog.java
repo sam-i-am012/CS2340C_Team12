@@ -14,6 +14,9 @@ import com.example.sprintproject.model.Post;
 import com.example.sprintproject.viewmodel.CommunityViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AddPostDialog extends Dialog {
     private CommunityViewModel viewModel;
     private LifecycleOwner lifecycleOwner;
@@ -112,12 +115,21 @@ public class AddPostDialog extends Dialog {
             notesET.setError("Notes are required");
             isValid = false;
         }
+
+        // check for valid date format
         if (isDateFormatInvalid(startDateET.getText().toString().trim())) {
             startDateET.setError("Enter YYYY-MM-DD");
             isValid = false;
         }
         if (isDateFormatInvalid(endDateET.getText().toString().trim())) {
             endDateET.setError("Enter YYYY-MM-DD");
+            isValid = false;
+        }
+
+        // validate that the start date is before the end date
+        if (!isDateValid(startDateET.getText().toString(), endDateET.getText().toString())) {
+            startDateET.setError("Start date must be before end date");
+            endDateET.setError("End date must be after start date");
             isValid = false;
         }
 
@@ -168,5 +180,21 @@ public class AddPostDialog extends Dialog {
         default:
             return true;
         }
+    }
+
+    // helper method to validate the date range
+    private boolean isDateValid(String startDateString, String endDateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date startDate = sdf.parse(startDateString);
+            Date endDate = sdf.parse(endDateString);
+
+            // compare the dates
+            assert startDate != null; // make sure entry isn't null
+            return startDate.before(endDate);
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 }
