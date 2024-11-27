@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'jacoco'
 }
 
 android {
@@ -22,11 +23,16 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled true // Enable test coverage for debug builds
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         viewBinding true
     }
@@ -47,24 +53,63 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    // added dependencies for firebase auth stuff
-    // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
-
-    // Add the dependency for the Firebase Authentication library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-auth")
-
-    // Add the dependencies for firestore stuff
     implementation 'com.google.firebase:firebase-firestore:25.1.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.6'
 
-    // AndroidX Test dependencies
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5' // JUnit 4
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1' // Espresso UI testing
-    androidTestImplementation 'androidx.test:core:1.5.0' // Core testing library
-    androidTestImplementation 'androidx.test:runner:1.5.0' // Test runner
-    androidTestImplementation 'androidx.test:rules:1.5.0' // Test rules
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test:core:1.5.0'
+    androidTestImplementation 'androidx.test:runner:1.5.0'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
+
+// JaCoCo configuration
+jacoco {
+    toolVersion = "0.8.10" // Set JaCoCo version
+}
+
+def fileFilter = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        'android/**/*.*'
+]
+
+def jacocoTestReport = tasks.create("jacocoTestReport", JacocoReport) {
+    dependsOn = ["testDebugUnitTest"] // Depends on unit tests
+
+    group = "Reporting"
+    description = "Generate JaCoCo coverage report."
+
+    reports {
+        xml.required.set(true) // XML for SonarQube or other tools
+        html.required.set(true) // Human-readable HTML report
+    }
+
+    classDirectories.setFrom(fileTree(dir: "$buildDir/intermediates/javac/debug", excludes: fileFilter))
+    sourceDirectories.setFrom(files(["src/main/java", "src/main/kotlin"]))
+    executionData.setFrom(fileTree(dir: "$buildDir", includes: ["**/*.exec", "**/*.ec"]))
+}
+
+// Task to generate coverage for UI tests (optional, for instrumented tests)
+//tasks.create("jacocoInstrumentedTestReport", JacocoReport) {
+//    dependsOn = ["connectedDebugAndroidTest"] // For instrumented tests
+//
+//    group = "Reporting"
+//    description = "Generate JaCoCo coverage report for instrumented tests."
+//
+//    reports {
+//        xml.required.set(true)
+//        html.required.set(true)
+//    }
+//
+//    classDirectories.setFrom(fileTree(dir: "$buildDir/intermediates/javac/debug", excludes: fileFilter))
+//    sourceDirectories.setFrom(files(["src/main/java", "src/main/kotlin"]))
+//    executionData.setFrom(fileTree(dir: "$buildDir", includes: ["**/*.exec", "**/*.ec"]))
+//}
