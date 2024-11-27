@@ -41,6 +41,7 @@ public class FirestoreSingleton {
     private MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Post>> travelCommunityLiveData = new MutableLiveData<List<Post>>();
     private FirebaseAuth auth;
+    private final String users = "users";
 
     private FirestoreSingleton() {
         firestore = FirebaseFirestore.getInstance();
@@ -63,7 +64,7 @@ public class FirestoreSingleton {
     public LiveData<Integer> getDurationForUser(String userId) {
         MutableLiveData<Integer> durationLiveData = new MutableLiveData<>();
 
-        firestore.collection("users").document(userId).get()
+        firestore.collection(users).document(userId).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         DocumentSnapshot document = task.getResult();
@@ -166,7 +167,7 @@ public class FirestoreSingleton {
 
     // adds new travel log ID to the asssociatedDestinations array field for specific user
     private void updateUserAssociatedDestinations(String userId, String travelLogId) {
-        firestore.collection("users").document(userId)
+        firestore.collection(users).document(userId)
                 .update("associatedDestinations", FieldValue.arrayUnion(travelLogId));
     }
 
@@ -187,7 +188,7 @@ public class FirestoreSingleton {
                     }
 
                     // update the user's associated destinations with only the valid destinations
-                    firestore.collection("users").document(userId)
+                    firestore.collection(users).document(userId)
                             .update("associatedDestinations", validDestinations)
                             .addOnCompleteListener(onCompleteListener);
                 });
@@ -248,7 +249,7 @@ public class FirestoreSingleton {
 
     // method to check if an email exists in the users collection
     public Task<QuerySnapshot> checkEmailExists(String email) {
-        return firestore.collection("users")
+        return firestore.collection(users)
                 .whereEqualTo("email", email)
                 .get();
     }
@@ -256,7 +257,7 @@ public class FirestoreSingleton {
     public LiveData<User> getUserById(String userId) {
         MutableLiveData<User> userLiveData = new MutableLiveData<>();
 
-        firestore.collection("users").document(userId)
+        firestore.collection(users).document(userId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
@@ -297,7 +298,7 @@ public class FirestoreSingleton {
                         userIds = new ArrayList<>(new HashSet<>(userIds));
 
                         if (!userIds.isEmpty()) {
-                            firestore.collection("users")
+                            firestore.collection(users)
                                     .whereIn("userId", userIds)
                                     .get()
                                     .addOnSuccessListener(querySnapshot -> {
@@ -372,7 +373,7 @@ public class FirestoreSingleton {
         updates.put("duration", duration);
 
         // Perform the update with all fields at once
-        firestore.collection("users").document(userId).update(updates)
+        firestore.collection(users).document(userId).update(updates)
                 .addOnSuccessListener(aVoid -> {
                     // Successfully updated the document
                     Log.d("Firestore", "DocumentSnapshot successfully updated!");
@@ -546,7 +547,7 @@ public class FirestoreSingleton {
                             }
 
                             // query users collection to get emails for each user ID
-                            firestore.collection("users")
+                            firestore.collection(users)
                                     .whereIn("userId", new ArrayList<>(userIds))
                                     .get()
                                     .addOnSuccessListener(querySnapshot -> {
