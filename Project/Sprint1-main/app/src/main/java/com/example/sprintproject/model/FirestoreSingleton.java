@@ -35,13 +35,13 @@ import java.util.Set;
 public class FirestoreSingleton {
     private static FirestoreSingleton instance;
     private FirebaseFirestore firestore;
-    private MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
-    private MutableLiveData<List<User>> userLiveData = new MutableLiveData<>();
-    private MutableLiveData<List<Dining>> diningLiveData = new MutableLiveData<>();
-    private MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
+//    private MutableLiveData<List<TravelLog>> travelLogsLiveData = new MutableLiveData<>();
+//    private MutableLiveData<List<User>> userLiveData = new MutableLiveData<>();
+//    private MutableLiveData<List<Dining>> diningLiveData = new MutableLiveData<>();
+//    private MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Post>> travelCommunityLiveData = new MutableLiveData<List<Post>>();
     private FirebaseAuth auth;
-    private final String users = "users";
+    private final static String users = "users";
 
     private FirestoreSingleton() {
         firestore = FirebaseFirestore.getInstance();
@@ -458,9 +458,9 @@ public class FirestoreSingleton {
     }
     public LiveData<List<Accommodation>> getAccommodationLogsByUser(String destinationId) {
         MutableLiveData<List<Accommodation>> accommodationLiveData = new MutableLiveData<>();
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
 
-        firestore.collection("accommodation")
+        fireStore.collection("accommodation")
                 .whereEqualTo("travelDestination", destinationId) // query logs for this user
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
