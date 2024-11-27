@@ -117,14 +117,6 @@ public class AccommodationsActivity extends AppCompatActivity {
         });
     }
 
-    private void clearInputFields() {
-        locationET.setText("");
-        checkInTimeET.setText("");
-        checkOutTimeET.setText("");
-        hotelET.setText("");
-    }
-
-
     private void populateLocationSpinner(Spinner locationSpinner) {
         accommodationViewModel.getUserLocations().observe(this, locations -> {
             ArrayAdapter<Location> adapter = new ArrayAdapter<>(this,
