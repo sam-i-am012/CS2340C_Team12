@@ -145,6 +145,7 @@ public class DiningEstablishmentsActivity extends AppCompatActivity {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
+                    //empty method
                 }
             });
         });

@@ -65,121 +65,104 @@ public class DestinationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_destinations);
 
-        initViews(); // helper method to initialize views
+        initViews();
+        setupRecyclerView();
+        initializeViewModel();
+        setupAuthDependentLogic();
+        observeViewModel();
+        setupTravelLogButtons();
+        setupVacationTimeButtons();
+        navButtonsLogic(); // helper method for navigation buttons
+    }
 
-        // populate the database and fetch logs
-        firestore.prepopulateDatabase();
-
-        // RecyclerView
+    private void setupRecyclerView() {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
+    private void initializeViewModel() {
         viewModel = new ViewModelProvider(this).get(DestinationsViewModel.class);
+        viewModel.loadTripDays();
+    }
 
-        // after auth
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+    private void setupAuthDependentLogic() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
             viewModel.fetchTravelLogsForCurrentUser();
             viewModel.fetchLastFiveTravelLogsForCurrentUser();
         }
+    }
 
-        // observe things from the view model
-        viewModelObserver(); // helper method to observe all live data from view model
-        viewModel.loadTripDays();
+    private void observeViewModel() {
+        viewModelObserver(); // Helper method to observe all LiveData from the ViewModel
+    }
 
-        logTravelButton.setOnClickListener(v -> {
-            logTravelBtnVisibility(); // helper method to have the travel log inputs visible
-        });
+    private void setupTravelLogButtons() {
+        logTravelButton.setOnClickListener(v -> logTravelBtnVisibility());
 
-        cancelButton.setOnClickListener(v -> {
-            // Hide dialog elements
-            for (TextView textView : Arrays.asList(travelLocationTV, estimatedStartTV,
-                    estimatedEndTV)) {
-                textView.setVisibility(View.GONE);
-            }
-            for (EditText editText : Arrays.asList(travelLocationET, estimatedStartET,
-                    estimatedEndET)) {
-                editText.setVisibility(View.GONE);
-            }
-            cancelButton.setVisibility(View.GONE);
-            submitButton.setVisibility(View.GONE);
-        });
+        cancelButton.setOnClickListener(v -> hideTravelLogInputs());
 
-        submitButton.setOnClickListener(v -> {
-            // Create a new TravelLog object and validate it before adding
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user == null) {
-                return;
-            }
+        submitButton.setOnClickListener(v -> handleSubmitTravelLog());
+    }
 
-            String userId = user.getUid();
-            String destination = travelLocationET.getText().toString().trim();
-            String startDate = estimatedStartET.getText().toString().trim();
-            String endDate = estimatedEndET.getText().toString().trim();
+    private void hideTravelLogInputs() {
+        for (TextView textView : Arrays.asList(travelLocationTV, estimatedStartTV, estimatedEndTV)) {
+            textView.setVisibility(View.GONE);
+        }
+        for (EditText editText : Arrays.asList(travelLocationET, estimatedStartET, estimatedEndET)) {
+            editText.setVisibility(View.GONE);
+        }
+        cancelButton.setVisibility(View.GONE);
+        submitButton.setVisibility(View.GONE);
+    }
 
-            if (TravelLogValidator.areFieldsEmpty(destination, startDate, endDate)) {
-                Toast.makeText(getApplicationContext(), "Please fill in all fields",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            } else if (TravelLogValidator.isDateFormatInvalid(startDate)
-                    || TravelLogValidator.isDateFormatInvalid(endDate)
-                    || TravelLogValidator.calculateDays(startDate, endDate) < 0) {
-                Toast.makeText(getApplicationContext(),
-                        "Please enter valid dates (YYYY-MM-DD)",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
+    private void handleSubmitTravelLog() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
 
-            TravelLog newLog = new TravelLog(userId, destination, startDate, endDate,
-                    new ArrayList<>(), new ArrayList<>());
+        String userId = user.getUid();
+        String destination = travelLocationET.getText().toString().trim();
+        String startDate = estimatedStartET.getText().toString().trim();
+        String endDate = estimatedEndET.getText().toString().trim();
 
-            // Add the new log directly to the adapter and update total days
-            adapter.addLog(newLog);
+        if (!validateTravelLogFields(destination, startDate, endDate)) return;
 
-            // Clear the input fields
-            clearInputFields();
+        TravelLog newLog = new TravelLog(userId, destination, startDate, endDate,
+                new ArrayList<>(), new ArrayList<>());
 
-            // Add the log to the ViewModel/database asynchronously
-            viewModel.addTravelLog(newLog);
-        });
+        adapter.addLog(newLog);
+        clearInputFields();
+        viewModel.addTravelLog(newLog);
+    }
 
+    private boolean validateTravelLogFields(String destination, String startDate, String endDate) {
+        if (TravelLogValidator.areFieldsEmpty(destination, startDate, endDate)) {
+            Toast.makeText(getApplicationContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TravelLogValidator.isDateFormatInvalid(startDate)
+                || TravelLogValidator.isDateFormatInvalid(endDate)
+                || TravelLogValidator.calculateDays(startDate, endDate) < 0) {
+            Toast.makeText(getApplicationContext(), "Please enter valid dates (YYYY-MM-DD)", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
 
-        // --------------- calculate vacation time functionality ----------
-        calcVacationTimeButton.setOnClickListener(v -> {
-            if (startDateET.getVisibility() == View.GONE) {
-                // make dialog elements visible
-                for (EditText editText : Arrays.asList(startDateET, endDateET, durationET)) {
-                    editText.setVisibility(View.VISIBLE);
-                }
-                calculateButton.setVisibility(View.VISIBLE);
-            } else {
-                // Hide dialog elements
-                for (EditText editText : Arrays.asList(startDateET, endDateET, durationET)) {
-                    editText.setVisibility(View.GONE);
-                }
-                calculateButton.setVisibility(View.GONE);
-                resultLayout.setVisibility(View.GONE);
-            }
-        });
+    private void setupVacationTimeButtons() {
+        calcVacationTimeButton.setOnClickListener(v -> toggleVacationTimeInputs());
+        calculateButton.setOnClickListener(view -> calculateVacationDaysHelper());
+    }
 
-        calculateButton.setOnClickListener(view -> {
-            // helper method to calculate and give a toast message if there's an error
-            calculateVacationDaysHelper();
-        });
+    private void toggleVacationTimeInputs() {
+        boolean isHidden = startDateET.getVisibility() == View.GONE;
+        int visibility = isHidden ? View.VISIBLE : View.GONE;
 
-        // Set up the Reset button to hide the result layout when clicked
-        // resetButton.setOnClickListener(v -> {
-        //   // Hide result layout
-        //    resultLayout.setVisibility(View.GONE);
-        //    TextView resultText = findViewById(R.id.resultText);
-        //    resultText.setText("XX Days");
-
-        //    startDateET.setText("");
-        //    endDateET.setText("");
-        //    durationET.setText("");
-        // });
-
-        // logic for navigation buttons
-        navButtonsLogic();
+        for (EditText editText : Arrays.asList(startDateET, endDateET, durationET)) {
+            editText.setVisibility(visibility);
+        }
+        calculateButton.setVisibility(visibility);
+        if (!isHidden) resultLayout.setVisibility(View.GONE);
     }
 
     private void calculateVacationDaysHelper() {
