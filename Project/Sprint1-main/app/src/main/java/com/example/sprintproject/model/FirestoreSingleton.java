@@ -39,7 +39,7 @@ public class FirestoreSingleton {
     private FirebaseAuth auth;
     private static final String USERS = "users";
     private static final String TRAVEL_LOGS = "travelLogs";
-    private static final String FIRESTORE = "Firestore";
+    private static final String FIRESTORES = "Firestore";
     private static final String DURATION = "duration";
     private static final String ASSOCIATED_USERS = "associatedUsers";
     private static final String DOCUMENT_ID = "documentId";
@@ -72,30 +72,37 @@ public class FirestoreSingleton {
         firestore.collection(USERS).document(userId).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
-                        DocumentSnapshot document = task.getResult();
-
-                        // check if 'duration' field exists
-                        if (document.exists() && document.contains(DURATION)) {
-                            Object durationObj = document.get(DURATION);
-                            if (durationObj instanceof Number) {
-                                durationLiveData.setValue(((Number) durationObj).intValue());
-                            } else if (durationObj instanceof String) {
-                                try {
-                                    // try parsing duration if it's a string
-                                    int parsedDuration = Integer.parseInt((String) durationObj);
-                                    durationLiveData.setValue(parsedDuration);
-                                } catch (NumberFormatException e) {
-                                    // invalid num
-                                    durationLiveData.setValue(0);
-                                }
-                            }
-                        }
+                        processDocumentForDuration(task.getResult(), durationLiveData);
                     } else {
-                        durationLiveData.setValue(0); // failure happened
+                        durationLiveData.setValue(0); // Failure case
                     }
                 });
 
         return durationLiveData;
+    }
+
+    private void processDocumentForDuration(DocumentSnapshot document, MutableLiveData<Integer> durationLiveData) {
+        if (document.exists() && document.contains(DURATION)) {
+            Object durationObj = document.get(DURATION);
+            durationLiveData.setValue(parseDuration(durationObj));
+        }
+    }
+
+    private int parseDuration(Object durationObj) {
+        if (durationObj instanceof Number) {
+            return ((Number) durationObj).intValue();
+        } else if (durationObj instanceof String) {
+            return parseDurationString((String) durationObj);
+        }
+        return 0; // Default value for unsupported types
+    }
+
+    private int parseDurationString(String durationStr) {
+        try {
+            return Integer.parseInt(durationStr);
+        } catch (NumberFormatException e) {
+            return 0; // Default for invalid string
+        }
     }
 
     public LiveData<List<TravelLog>> getTravelLogsByUser(String userId) {
@@ -343,7 +350,7 @@ public class FirestoreSingleton {
                         // assuming only one trip with the given location, get the first result
                         String tripId = querySnapshot.getDocuments().get(0).getId();
 
-                        Log.d(FIRESTORE, "Found travel log for location: " + location
+                        Log.d(FIRESTORES, "Found travel log for location: " + location
                                 + ", Trip ID: " + tripId);
 
                         // add the userId to the associatedUsers array for travel logs
@@ -351,18 +358,18 @@ public class FirestoreSingleton {
                                 .document(tripId)
                                 .update(ASSOCIATED_USERS, FieldValue.arrayUnion(invitedUserId))
                                 .addOnSuccessListener(aVoid -> {
-                                    Log.d(FIRESTORE, "User added to trip successfully!");
+                                    Log.d(FIRESTORES, "User added to trip successfully!");
 
                                     // Update user's associatedDestinations array to include trip
                                     updateUserAssociatedDestinations(invitedUserId, tripId);
                                 })
-                                .addOnFailureListener(e -> Log.e(FIRESTORE, "Error adding user to trip", e));
+                                .addOnFailureListener(e -> Log.e(FIRESTORES, "Error adding user to trip", e));
                     } else {
-                        Log.w(FIRESTORE, "No travel log found for location: " + location
+                        Log.w(FIRESTORES, "No travel log found for location: " + location
                                 + " with inviting user " + invitingUserId);
                     }
                 })
-                .addOnFailureListener(e -> Log.e(FIRESTORE, "Error finding travel log by location", e));
+                .addOnFailureListener(e -> Log.e(FIRESTORES, "Error finding travel log by location", e));
     }
 
     // Adds startDate, endDate, and duration to their respective locations in a specific user's
@@ -379,10 +386,10 @@ public class FirestoreSingleton {
         firestore.collection(USERS).document(userId).update(updates)
                 .addOnSuccessListener(aVoid ->
                     // Successfully updated the document
-                    Log.d(FIRESTORE, "DocumentSnapshot successfully updated!"))
+                    Log.d(FIRESTORES, "DocumentSnapshot successfully updated!"))
                 .addOnFailureListener(e ->
                     // Failed to update the document
-                    Log.w(FIRESTORE, "Error updating document", e));
+                    Log.w(FIRESTORES, "Error updating document", e));
     }
     public void addDining(Dining dining, OnCompleteListener<DocumentReference> listener) {
         firestore.collection(DINING)
@@ -414,11 +421,11 @@ public class FirestoreSingleton {
                         }
                         diningLogsLiveData.setValue(diningLogs);
                     } else {
-                        Log.e(FIRESTORE, "Error getting dining logs: ", task.getException());
+                        Log.e(FIRESTORES, "Error getting dining logs: ", task.getException());
                         diningLogsLiveData.setValue(Collections.emptyList());
                     }
                 });
-        Log.d(FIRESTORE, "Getting dining log for: " + locationId);
+        Log.d(FIRESTORES, "Getting dining log for: " + locationId);
         return diningLogsLiveData;
     }
 
@@ -561,7 +568,7 @@ public class FirestoreSingleton {
                     notesLiveData.setValue(notes);
                 })
                 .addOnFailureListener(e -> {
-                    Log.d(FIRESTORE, "Failed to fetch user emails", e);
+                    Log.d(FIRESTORES, "Failed to fetch user emails", e);
                     notesLiveData.setValue(new ArrayList<>());
                 });
     }
@@ -609,12 +616,12 @@ public class FirestoreSingleton {
     }
 
     private void handleEmptyNotes(MutableLiveData<List<Note>> notesLiveData) {
-        Log.d(FIRESTORE, "No notes found in the document");
+        Log.d(FIRESTORES, "No notes found in the document");
         notesLiveData.setValue(new ArrayList<>());
     }
 
     private void handleQueryFailure(String location, MutableLiveData<List<Note>> notesLiveData) {
-        Log.d(FIRESTORE, "Query failed or no matching travel log found for: " + location);
+        Log.d(FIRESTORES, "Query failed or no matching travel log found for: " + location);
         notesLiveData.setValue(new ArrayList<>());
     }
 
