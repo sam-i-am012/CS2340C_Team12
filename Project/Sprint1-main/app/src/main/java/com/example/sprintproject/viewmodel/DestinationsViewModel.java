@@ -80,9 +80,9 @@ public class DestinationsViewModel extends ViewModel {
     public void loadTripDays() {
         String currentUserId = repository.getCurrentUserId();
         // Fetch trip data from Firestore and update LiveData accordingly
-        repository.getTravelLogsByUser(currentUserId).observeForever(travelLogs -> {
+        repository.getTravelLogsByUser(currentUserId).observeForever(logs -> {
             int totalDays = 0;
-            for (TravelLog log : travelLogs) {
+            for (TravelLog log : logs) {
                 totalDays += TravelLogValidator.calculateDays(log.getStartDate(), log.getEndDate());
             }
             plannedDaysLiveData.setValue(totalDays);

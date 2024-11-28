@@ -3,6 +3,10 @@ import java.util.List;
 
 
 public class TripUtils {
+
+    public TripUtils() {
+    }
+
     // utility class for trip day calculation
     public static int calculateTotalDays(List<TravelLog> travelLogs) {
         int totalDays = 0;

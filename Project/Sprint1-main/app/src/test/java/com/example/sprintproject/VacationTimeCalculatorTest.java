@@ -28,21 +28,21 @@ public class VacationTimeCalculatorTest {
 
     @Test
     public void testCalculateEntry_EndDateMissing() {
-        String entry2 = "5";            // Add 5 days
+        entry2 = "5";            // Add 5 days
         String result = calculator.calculateEntry(entry1, entry2);
         assertEquals("2024-01-06", result);  // Should return Jan 6
     }
 
     @Test
     public void testCalculateEntry_StartDateMissing() {
-        String entry1 = "5";            // Subtract 5 days
+        entry1 = "5";            // Subtract 5 days
         String result = calculator.calculateEntry(entry1, entry2);
         assertNull(result);
     }
 
     @Test
     public void testCalculateEntry_InvalidDateFormat() {
-        String entry1 = "invalid-date";  // Invalid date
+        entry1 = "invalid-date";  // Invalid date
         assertThrows(NumberFormatException.class, () -> {
             calculator.calculateEntry(entry1, entry2);
         });
@@ -50,7 +50,7 @@ public class VacationTimeCalculatorTest {
 
     @Test
     public void testCalculateEntry_OneDateAndInvalid() {
-        String entry2 = "not-a-number";  // Invalid addition
+        entry2 = "not-a-number";  // Invalid addition
         assertThrows(NumberFormatException.class, () -> {
             calculator.calculateEntry(entry1, entry2);
         });

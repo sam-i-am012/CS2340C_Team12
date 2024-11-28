@@ -112,13 +112,4 @@ public class TravelCommunityActivity extends AppCompatActivity {
             startActivity(accommodationsIntent);
         });
     }
-
-    private void clearInputFields() {
-        startDateET.setText("");
-        endDateET.setText("");
-        destinationET.setText("");
-        accommodationsET.setText("");
-        diningReservationET.setText("");
-        notesET.setText("");
-    }
 }

@@ -17,7 +17,6 @@ import com.example.sprintproject.viewmodel.AccommodationViewModel;
 
 public class AddAccommodationsDialog extends Dialog {
     private AccommodationViewModel accommodationViewModel;
-    private LifecycleOwner lifecycleOwner;
     private final FirestoreSingleton firestore = FirestoreSingleton.getInstance();
     private String selectedDestinationId;
 
@@ -25,7 +24,6 @@ public class AddAccommodationsDialog extends Dialog {
                                    String selectedDestinationId) {
         super(context);  // Calls the Dialog constructor
         this.accommodationViewModel = accommodationViewModel;
-        this.lifecycleOwner = (LifecycleOwner) context;
         this.selectedDestinationId = selectedDestinationId;
     }
 

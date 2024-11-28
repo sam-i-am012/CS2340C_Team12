@@ -27,8 +27,6 @@ public class ReservationValidatorServiceTest {
     public void testValidReservation() {
         String name = "John";
 
-
-
         Result result = reservationValidatorService.validate(name, time, location, website);
 
         assertNotNull(result);
@@ -54,7 +52,7 @@ public class ReservationValidatorServiceTest {
     @Test
     public void testMissingTime() {
         String name = "John";
-        String time = "";
+        time = "";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
@@ -66,8 +64,8 @@ public class ReservationValidatorServiceTest {
     @Test
     public void testInvalidTimeAndWebsite() {
         String name = "John";
-        String time = "25:00 PM";  // invalid time
-        String website = "invalid-url";
+        time = "25:00 PM";  // invalid time
+        website = "invalid-url";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
@@ -79,9 +77,9 @@ public class ReservationValidatorServiceTest {
     public void testAllMissingFields() {
         // Arrange
         String name = "";
-        String time = "";
-        String location = "";
-        String website = "";
+        time = "";
+        location = "";
+        website = "";
 
         // Act
         Result result = reservationValidatorService.validate(name, time, location, website);
@@ -95,7 +93,7 @@ public class ReservationValidatorServiceTest {
     @Test
     public void testInvalidTime() {
         String name = "John";
-        String time = "25:00 PM";  // Invalid time
+        time = "25:00 PM";  // Invalid time
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
@@ -107,7 +105,7 @@ public class ReservationValidatorServiceTest {
     @Test
     public void testInvalidWebsite() {
         String name = "John";
-        String website = "invalid-url";
+        website = "invalid-url";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
@@ -123,8 +121,8 @@ public class ReservationValidatorServiceTest {
     @Test
     public void testMissingWebsite() {
         String name = "John";
-        String time = "";
-        String website = "";
+        time = "";
+        website = "";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
@@ -136,7 +134,7 @@ public class ReservationValidatorServiceTest {
     @Test
     public void testMissingLocation() {
         String name = "John";
-        String location = "";
+        location = "";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
