@@ -10,6 +10,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 
 public class VacationTimeCalculatorTest {
+    private String entry1 = "2024-01-01";
+    private String entry2 = "2024-01-07";
 
     private VacationTimeCalculator calculator;
 
@@ -20,15 +22,12 @@ public class VacationTimeCalculatorTest {
 
     @Test
     public void testCalculateEntry_BothDates() {
-        String entry1 = "2024-01-01";
-        String entry2 = "2024-01-07";
         String result = calculator.calculateEntry(entry1, entry2);
         assertEquals("6", result);  // 6 days between Jan 1 and Jan 7
     }
 
     @Test
     public void testCalculateEntry_EndDateMissing() {
-        String entry1 = "2024-01-01";  // Start date
         String entry2 = "5";            // Add 5 days
         String result = calculator.calculateEntry(entry1, entry2);
         assertEquals("2024-01-06", result);  // Should return Jan 6
@@ -37,7 +36,6 @@ public class VacationTimeCalculatorTest {
     @Test
     public void testCalculateEntry_StartDateMissing() {
         String entry1 = "5";            // Subtract 5 days
-        String entry2 = "2024-01-07";   // End date
         String result = calculator.calculateEntry(entry1, entry2);
         assertNull(result);
     }
@@ -45,7 +43,6 @@ public class VacationTimeCalculatorTest {
     @Test
     public void testCalculateEntry_InvalidDateFormat() {
         String entry1 = "invalid-date";  // Invalid date
-        String entry2 = "2024-01-07";     // Valid end date
         assertThrows(NumberFormatException.class, () -> {
             calculator.calculateEntry(entry1, entry2);
         });
@@ -53,7 +50,6 @@ public class VacationTimeCalculatorTest {
 
     @Test
     public void testCalculateEntry_OneDateAndInvalid() {
-        String entry1 = "2024-01-01";  // Valid date
         String entry2 = "not-a-number";  // Invalid addition
         assertThrows(NumberFormatException.class, () -> {
             calculator.calculateEntry(entry1, entry2);
