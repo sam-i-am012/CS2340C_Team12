@@ -40,7 +40,6 @@ public class AccommodationViewModel extends AndroidViewModel {
     public void fetchAccommodationLogsForDestination(String travelId) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            String userId = user.getUid();
             repository.getAccommodationLogsByUser(travelId).observeForever(accommodations -> {
                 accommodationLogs.setValue(accommodations);
                 Log.d("Accommodation", "travel id: " + travelId);

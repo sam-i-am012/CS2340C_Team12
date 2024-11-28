@@ -13,6 +13,10 @@ import org.junit.Test;
 
 public class ReservationValidatorServiceTest {
     private ReservationValidatorService reservationValidatorService;
+    private String location = "Restaurant";
+    private String website = "https://www.restaurant.com";
+    private String time = "12:00 PM";
+    private String errorMessage_notFilledOut = "All entries must be filled out";
 
     @Before
     public void setUp() {
@@ -22,9 +26,6 @@ public class ReservationValidatorServiceTest {
     @Test
     public void testValidReservation() {
         String name = "John";
-        String time = "12:00PM";
-        String location = "Restaurant";
-        String website = "https://www.restaurant.com";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
@@ -40,37 +41,31 @@ public class ReservationValidatorServiceTest {
     @Test
     public void testMissingName() {
         String name = "";
-        String time = "12:00 PM";
-        String location = "Restaurant";
-        String website = "https://www.restaurant.com";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
         assertNotNull(result);
         assertFalse(result.isSuccess());
-        assertEquals("All entries must be filled out", result.getMessage());
+        assertEquals(errorMessage_notFilledOut, result.getMessage());
     }
 
     @Test
     public void testMissingTime() {
         String name = "John";
-        String time = "";
-        String location = "Restaurant";
-        String website = "https://www.restaurant.com";
+        time = "";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
         assertNotNull(result);
         assertFalse(result.isSuccess());
-        assertEquals("All entries must be filled out", result.getMessage());
+        assertEquals(errorMessage_notFilledOut, result.getMessage());
     }
 
     @Test
     public void testInvalidTimeAndWebsite() {
         String name = "John";
-        String time = "25:00 PM";  // invalid time
-        String location = "Restaurant";
-        String website = "invalid-url";
+        time = "25:00 PM";  // invalid time
+        website = "invalid-url";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
@@ -82,9 +77,9 @@ public class ReservationValidatorServiceTest {
     public void testAllMissingFields() {
         // Arrange
         String name = "";
-        String time = "";
-        String location = "";
-        String website = "";
+        time = "";
+        location = "";
+        website = "";
 
         // Act
         Result result = reservationValidatorService.validate(name, time, location, website);
@@ -92,15 +87,13 @@ public class ReservationValidatorServiceTest {
         // Assert
         assertNotNull(result);
         assertFalse(result.isSuccess());
-        assertEquals("All entries must be filled out", result.getMessage());
+        assertEquals(errorMessage_notFilledOut, result.getMessage());
     }
 
     @Test
     public void testInvalidTime() {
         String name = "John";
-        String time = "25:00 PM";  // Invalid time
-        String location = "Restaurant";
-        String website = "https://www.restaurant.com";
+        time = "25:00 PM";  // Invalid time
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
@@ -112,9 +105,7 @@ public class ReservationValidatorServiceTest {
     @Test
     public void testInvalidWebsite() {
         String name = "John";
-        String time = "12:00 PM";
-        String location = "Restaurant";
-        String website = "invalid-url";
+        website = "invalid-url";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
@@ -130,28 +121,25 @@ public class ReservationValidatorServiceTest {
     @Test
     public void testMissingWebsite() {
         String name = "John";
-        String time = "";
-        String location = "Restaurant";
-        String website = "";
+        time = "";
+        website = "";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
         assertNotNull(result);
         assertFalse(result.isSuccess());
-        assertEquals("All entries must be filled out", result.getMessage());
+        assertEquals(errorMessage_notFilledOut, result.getMessage());
     }
 
     @Test
     public void testMissingLocation() {
         String name = "John";
-        String time = "12:00 PM";
-        String location = "";
-        String website = "https://www.restaurant.com";
+        location = "";
 
         Result result = reservationValidatorService.validate(name, time, location, website);
 
         assertNotNull(result);
         assertFalse(result.isSuccess());
-        assertEquals("All entries must be filled out", result.getMessage());
+        assertEquals(errorMessage_notFilledOut, result.getMessage());
     }
 }

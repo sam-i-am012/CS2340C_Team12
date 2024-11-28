@@ -5,6 +5,8 @@ import java.time.LocalDate;
 
 // used for the travel community screen
 public class FormValidator {
+    private FormValidator() {
+    }
 
     public static boolean isValidDestination(String destination) {
         return destination != null && !destination.trim().isEmpty();

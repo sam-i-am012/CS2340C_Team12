@@ -7,6 +7,10 @@ import java.util.Date;
 import java.util.Locale;
 
 public class TravelLogValidator {
+
+    private TravelLogValidator() {
+    }
+
     public static boolean areFieldsEmpty(String destination, String startDate, String endDate) {
         return TextUtils.isEmpty(destination) || TextUtils.isEmpty(startDate)
                 || TextUtils.isEmpty(endDate);

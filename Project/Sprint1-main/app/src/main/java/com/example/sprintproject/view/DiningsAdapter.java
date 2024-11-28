@@ -96,12 +96,7 @@ public class DiningsAdapter extends RecyclerView.Adapter<DiningsAdapter.DiningVi
 
     // Sorting the reservation list
     public void sortDiningsByTimeDescending() {
-        Collections.sort(dinings, new Comparator<Dining>() {
-            @Override
-            public int compare(Dining d1, Dining d2) {
-                return d2.getTime().compareTo(d1.getTime());
-            }
-        });
+        Collections.sort(dinings, (d1, d2) -> d2.getTime().compareTo(d1.getTime()));
         notifyDataSetChanged(); // Notify the adapter of the change
     }
 

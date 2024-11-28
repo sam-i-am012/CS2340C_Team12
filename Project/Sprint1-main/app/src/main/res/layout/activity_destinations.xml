@@ -246,16 +246,6 @@
                     android:text="XX\ndays"
                     android:textSize="25sp" />
 
-<!--                &lt;!&ndash; Reset Button &ndash;&gt;-->
-<!--                <Button-->
-<!--                    android:id="@+id/resetButton"-->
-<!--                    android:layout_width="104dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:backgroundTint="@color/bluegray"-->
-<!--                    android:text="Reset"-->
-<!--                    android:textColor="@android:color/white"-->
-<!--                    android:textSize="16sp" />-->
             </LinearLayout>
 
             <!-- Add the RecyclerView here -->

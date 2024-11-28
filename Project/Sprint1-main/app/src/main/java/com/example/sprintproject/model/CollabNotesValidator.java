@@ -2,6 +2,8 @@ package com.example.sprintproject.model;
 
 public class CollabNotesValidator {
 
+    private CollabNotesValidator() {
+    }
 
     // check if email is valid
     public static boolean isValidEmail(String email) {

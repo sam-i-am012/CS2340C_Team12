@@ -25,12 +25,6 @@ public class AccommodationsActivity extends AppCompatActivity {
     private AccommodationsAdapter accommodationsAdapter;
     private RecyclerView recyclerView;
 
-    private EditText locationET;
-    private EditText checkInTimeET;
-    private EditText checkOutTimeET;
-    private EditText hotelET;
-    private Spinner rooms;
-    private Spinner roomType;
     private ImageButton diningEstablishmentsButton;
     private ImageButton destinationsButton;
     private ImageButton logisticsButton;
@@ -82,12 +76,6 @@ public class AccommodationsActivity extends AppCompatActivity {
         logisticsButton = findViewById(R.id.logisticsButton);
         travelCommunityButton = findViewById(R.id.travelCommunityButton);
         addAccommodationButton = findViewById(R.id.addAccommodationButton);
-        locationET = findViewById(R.id.editTextAccommodationLocation);
-        checkInTimeET = findViewById(R.id.editTextAccommodationCheckInTime);
-        checkOutTimeET = findViewById(R.id.editTextAccommodationCheckOutTime);
-        hotelET = findViewById(R.id.editTextHotelName);
-        rooms = findViewById(R.id.numberOfRoomsSpinner);
-        roomType = findViewById(R.id.roomTypeSpinner);
     }
 
     private void navButtonsLogic() {

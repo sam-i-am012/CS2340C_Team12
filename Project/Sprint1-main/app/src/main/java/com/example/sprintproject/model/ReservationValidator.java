@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ReservationValidator {
+
+    private ReservationValidator() {
+    }
+
     public static Result noMissingEntries(String name, String time, String location,
                                           String website) {
         if (name.isEmpty() || time.isEmpty() || location.isEmpty() || website.isEmpty()) {

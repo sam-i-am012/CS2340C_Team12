@@ -183,14 +183,14 @@ public class CollabNotesActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.invite_user_popup, null);
 
         final EditText emailInput = dialogView.findViewById(R.id.emailInput);
-        final Spinner locationSpinner = dialogView.findViewById(R.id.locationSpinner);
+        final Spinner collaboratorSpinner = dialogView.findViewById(R.id.locationSpinner);
 
         // Observe locations from the ViewModel and populate the spinner
         viewModel.getUserLocations().observe(this, locations -> {
             ArrayAdapter<Location> adapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, locations);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            locationSpinner.setAdapter(adapter);
+            collaboratorSpinner.setAdapter(adapter);
         });
 
         // Build the dialog
@@ -200,11 +200,11 @@ public class CollabNotesActivity extends AppCompatActivity {
                 .setView(dialogView)
                 .setPositiveButton("Invite", (dialog, whichButton) -> {
                     String email = emailInput.getText().toString();
-                    Location selectedLocation = (Location) locationSpinner.getSelectedItem();
+                    Location collabLocationSpinner = (Location) collaboratorSpinner.getSelectedItem();
 
-                    if (!email.isEmpty() && selectedLocation != null) {
+                    if (!email.isEmpty() && collabLocationSpinner != null) {
                         // Call ViewModel to handle invitation logic
-                        viewModel.inviteUserToTrip(email, selectedLocation.getLocationName());
+                        viewModel.inviteUserToTrip(email, collabLocationSpinner.getLocationName());
                     } else {
                         Toast.makeText(CollabNotesActivity.this,
                                 "Please enter a valid email and select a location",

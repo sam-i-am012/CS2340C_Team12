@@ -19,13 +19,11 @@ import java.util.Date;
 
 public class AddPostDialog extends Dialog {
     private CommunityViewModel viewModel;
-    private LifecycleOwner lifecycleOwner;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public AddPostDialog(Context context, CommunityViewModel viewModel) {
         super(context);  // Calls the Dialog constructor
         this.viewModel = viewModel;
-        this.lifecycleOwner = (LifecycleOwner) context;
     }
 
     @Override

@@ -51,7 +51,6 @@ public class DestinationsActivity extends AppCompatActivity {
     private EditText estimatedEndET;
     private Button cancelButton;
     private Button submitButton;
-    private Button resetButton;
     private View resultLayout;
 
     private RecyclerView recyclerView;
@@ -375,7 +374,6 @@ public class DestinationsActivity extends AppCompatActivity {
         estimatedEndET = findViewById(R.id.estimatedEndET);
         cancelButton = findViewById(R.id.cancelButton);
         submitButton = findViewById(R.id.submitButton);
-        // resetButton = findViewById(R.id.resetButton);
         resultLayout = findViewById(R.id.resultLayout);
     }
 
