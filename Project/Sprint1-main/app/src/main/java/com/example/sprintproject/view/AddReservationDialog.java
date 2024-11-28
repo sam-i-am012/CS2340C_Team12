@@ -55,18 +55,18 @@ public class AddReservationDialog extends Dialog {
         addReservationButton.setOnClickListener(view -> {
             String name = nameET.getText().toString().trim();
             String timeEntry = timeET.getText().toString().trim();
-            String location = locationET.getText().toString().trim();
-            String website = websiteET.getText().toString().trim();
+            String locationEntry = locationET.getText().toString().trim();
+            String websiteEntry = websiteET.getText().toString().trim();
 
 
-            diningViewModel.validateNewReservation(name, timeEntry, location, website);
+            diningViewModel.validateNewReservation(name, timeEntry, locationEntry, websiteEntry);
 
             // Observe reservation result
             diningViewModel.getResValidationResult().observe(lifecycleOwner, result -> {
                 Toast.makeText(getContext(), result.getMessage(),
                         Toast.LENGTH_SHORT).show();
                 if (result.isSuccess()) {
-                    Dining dining = new Dining(location, website, name, timeEntry,
+                    Dining dining = new Dining(locationEntry, websiteEntry, name, timeEntry,
                             firestore.getCurrentUserId(), selectedLocation);
 
                     // Add reservation to database

@@ -2,7 +2,7 @@ package com.example.sprintproject.model;
 
 public class InputValidator {
 
-    public InputValidator() {
+    private InputValidator() {
     }
 
     // check if email is valid

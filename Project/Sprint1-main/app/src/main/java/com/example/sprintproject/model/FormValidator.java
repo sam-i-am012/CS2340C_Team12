@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 // used for the travel community screen
 public class FormValidator {
-    public FormValidator() {
+    private FormValidator() {
     }
 
     public static boolean isValidDestination(String destination) {

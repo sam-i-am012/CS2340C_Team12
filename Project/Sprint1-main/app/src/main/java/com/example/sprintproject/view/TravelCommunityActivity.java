@@ -21,13 +21,6 @@ public class TravelCommunityActivity extends AppCompatActivity {
     private CommunityViewModel viewModel;
     private PostAdapter travelPostAdapter;
     private RecyclerView recyclerView;
-
-    private EditText startDateET;
-    private EditText endDateET;
-    private EditText destinationET;
-    private EditText accommodationsET;
-    private EditText diningReservationET;
-    private EditText notesET;
     private FloatingActionButton addTravelPostButton;
     private ImageButton diningEstablishmentsButton;
     private ImageButton destinationsButton;
@@ -73,12 +66,6 @@ public class TravelCommunityActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        startDateET = findViewById(R.id.editTextStartDate);
-        endDateET = findViewById(R.id.editTextEndDate);
-        destinationET = findViewById(R.id.editTextDestination);
-        accommodationsET = findViewById(R.id.editTextAccommodations);
-        diningReservationET = findViewById(R.id.editTextDining);
-        notesET = findViewById(R.id.editTextNotes);
         addTravelPostButton = findViewById(R.id.addPostButton);
         diningEstablishmentsButton = findViewById(R.id.diningEstablishmentsButton);
         destinationsButton = findViewById(R.id.destinationsButton);

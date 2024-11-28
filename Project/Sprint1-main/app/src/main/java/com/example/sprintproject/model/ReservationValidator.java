@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class ReservationValidator {
 
-    public ReservationValidator() {
+    private ReservationValidator() {
     }
 
     public static Result noMissingEntries(String name, String time, String location,

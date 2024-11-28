@@ -4,7 +4,7 @@ import java.util.List;
 
 public class TripUtils {
 
-    public TripUtils() {
+    private TripUtils() {
     }
 
     // utility class for trip day calculation
