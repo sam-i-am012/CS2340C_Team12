@@ -16,6 +16,13 @@ public class AccommodationValidatorTest {
     private String checkOut;
     private String location;
     private String hotel;
+    private String locationName = "New York";
+    private String hotelName = "Grand Hotel";
+    private String hotelName2 = "Hotel Paradise";
+    private String checkInTime = "2024-11-27 14:00";
+    private String checkoutTime = "2024-11-30 11:00";
+    private String roomType = "Deluxe";
+    private String userId = "user123";
 
     @Before
     public void setUp() {
@@ -29,8 +36,8 @@ public class AccommodationValidatorTest {
         // check out is empty
         checkIn = "5:00";
         checkOut = "";
-        location = "New York";
-        hotel = "Grand Hotel";
+        location = locationName;
+        hotel = hotelName;
 
         boolean result = AccommodationValidator.validateInputs(checkIn, checkOut, location, hotel);
 
@@ -55,8 +62,8 @@ public class AccommodationValidatorTest {
         //  all fields are filled
         checkIn = "2024-12-01";
         checkOut = "2024-12-07";
-        location = "New York";
-        hotel = "Grand Hotel";
+        location = locationName;
+        hotel = hotelName;
 
         boolean result = AccommodationValidator.validateInputs(checkIn, checkOut, location, hotel);
 
@@ -68,39 +75,34 @@ public class AccommodationValidatorTest {
         // check in is empty
         checkIn = "";
         checkOut = "2024-12-07";
-        location = "New York";
-        hotel = "Grand Hotel";
+        location = locationName;
+        hotel = hotelName;
 
         boolean result = AccommodationValidator.validateInputs(checkIn, checkOut, location, hotel);
 
         assertFalse(result);
     }
 
-//    @Test
-//    public void testDefaultConstructor() {
-//        Accommodation accommodation = new Accommodation();
-//        assertNotNull(accommodation);
-//    }
 
     @Test
     public void testParameterizedConstructor() {
         Accommodation accommodation = new Accommodation(
-                "Hotel Paradise",
-                "New York",
-                "2024-11-27 14:00",
-                "2024-11-30 11:00",
+                hotelName2,
+                locationName,
+                checkInTime,
+                checkoutTime,
                 2,
-                "Deluxe",
-                "user123"
+                roomType,
+                userId
         );
 
-        assertEquals("Hotel Paradise", accommodation.getHotel());
-        assertEquals("New York", accommodation.getLocation());
-        assertEquals("2024-11-27 14:00", accommodation.getCheckInTime());
-        assertEquals("2024-11-30 11:00", accommodation.getCheckOutTime());
+        assertEquals(hotelName2, accommodation.getHotel());
+        assertEquals(locationName, accommodation.getLocation());
+        assertEquals(checkInTime, accommodation.getCheckInTime());
+        assertEquals(checkoutTime, accommodation.getCheckOutTime());
         assertEquals(2, accommodation.getNumRooms());
-        assertEquals("Deluxe", accommodation.getRoomType());
-        assertEquals("user123", accommodation.getUserId());
+        assertEquals(roomType, accommodation.getRoomType());
+        assertEquals(userId, accommodation.getUserId());
     }
 
     @Test
@@ -108,32 +110,32 @@ public class AccommodationValidatorTest {
         Accommodation accommodation = new Accommodation();
 
         // Test hotel
-        accommodation.setHotel("Hotel Paradise");
-        assertEquals("Hotel Paradise", accommodation.getHotel());
+        accommodation.setHotel(hotelName2);
+        assertEquals(hotelName2, accommodation.getHotel());
 
         // Test location
-        accommodation.setLocation("New York");
-        assertEquals("New York", accommodation.getLocation());
+        accommodation.setLocation(locationName);
+        assertEquals(locationName, accommodation.getLocation());
 
         // Test check-in time
-        accommodation.setCheckInTime("2024-11-27 14:00");
-        assertEquals("2024-11-27 14:00", accommodation.getCheckInTime());
+        accommodation.setCheckInTime(checkInTime);
+        assertEquals(checkInTime, accommodation.getCheckInTime());
 
         // Test check-out time
-        accommodation.setCheckOutTime("2024-11-30 11:00");
-        assertEquals("2024-11-30 11:00", accommodation.getCheckOutTime());
+        accommodation.setCheckOutTime(checkoutTime);
+        assertEquals(checkoutTime, accommodation.getCheckOutTime());
 
         // Test number of rooms
         accommodation.setNumRooms(2);
         assertEquals(2, accommodation.getNumRooms());
 
         // Test room type
-        accommodation.setRoomType("Deluxe");
-        assertEquals("Deluxe", accommodation.getRoomType());
+        accommodation.setRoomType(roomType);
+        assertEquals(roomType, accommodation.getRoomType());
 
         // Test user ID
-        accommodation.setUserId("user123");
-        assertEquals("user123", accommodation.getUserId());
+        accommodation.setUserId(userId);
+        assertEquals(userId, accommodation.getUserId());
 
         // Test travel destination
         accommodation.setTravelDestination("California");
