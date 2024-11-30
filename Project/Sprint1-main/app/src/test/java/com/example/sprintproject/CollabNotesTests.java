@@ -12,7 +12,7 @@ import org.junit.Test;
 public class CollabNotesTests {
 
     @Test
-    public void testValidEmail_ValidInputs() {
+    public void testValidEmailValidInputs() {
         // valid email
         assertTrue(CollabNotesValidator.isValidEmail("test@example.com"));
         assertTrue(CollabNotesValidator.isValidEmail("user.name@domain.com"));
@@ -27,7 +27,7 @@ public class CollabNotesTests {
     }
 
     @Test
-    public void testValidEmail_differentDomains() {
+    public void testValidEmailDifferentDomains() {
         // valid email
         assertTrue(CollabNotesValidator.isValidEmail("plainaddress@gmail.com"));
         assertTrue(CollabNotesValidator.isValidEmail("plainaddress@gmail.edu"));
@@ -36,7 +36,7 @@ public class CollabNotesTests {
     }
 
     @Test
-    public void testValidEmail_WhitespaceInputs() {
+    public void testValidEmailWhitespaceInputs() {
         // email with whitespace
         assertFalse(CollabNotesValidator.isValidEmail("   "));
         assertTrue(CollabNotesValidator.isValidEmail("   user@domain.com"));

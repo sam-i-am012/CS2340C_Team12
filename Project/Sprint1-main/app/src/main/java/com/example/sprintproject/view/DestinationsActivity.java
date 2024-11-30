@@ -290,9 +290,7 @@ public class DestinationsActivity extends AppCompatActivity {
 
     private void viewModelObserver() {
         // observe getTravelLogs
-        viewModel.getTravelLogs().observe(this, travelLogs -> {
-            adapterAll = new TravelLogAdapter(travelLogs);
-        });
+        viewModel.getTravelLogs().observe(this, travelLogs -> adapterAll = new TravelLogAdapter(travelLogs));
 
         // observe getPlannedDaysLiveData
         viewModel.getPlannedDaysLiveData().observe(this, new Observer<Integer>() {

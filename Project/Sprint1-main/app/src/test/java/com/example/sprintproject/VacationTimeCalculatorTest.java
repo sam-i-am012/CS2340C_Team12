@@ -21,38 +21,36 @@ public class VacationTimeCalculatorTest {
     }
 
     @Test
-    public void testCalculateEntry_BothDates() {
+    public void testCalculateEntryBothDates() {
         String result = calculator.calculateEntry(entry1, entry2);
         assertEquals("6", result);  // 6 days between Jan 1 and Jan 7
     }
 
     @Test
-    public void testCalculateEntry_EndDateMissing() {
+    public void testCalculateEntryEndDateMissing() {
         entry2 = "5";            // Add 5 days
         String result = calculator.calculateEntry(entry1, entry2);
         assertEquals("2024-01-06", result);  // Should return Jan 6
     }
 
     @Test
-    public void testCalculateEntry_StartDateMissing() {
+    public void testCalculateEntryStartDateMissing() {
         entry1 = "5";            // Subtract 5 days
         String result = calculator.calculateEntry(entry1, entry2);
         assertNull(result);
     }
 
     @Test
-    public void testCalculateEntry_InvalidDateFormat() {
+    public void testCalculateEntryInvalidDateFormat() {
         entry1 = "invalid-date";  // Invalid date
-        assertThrows(NumberFormatException.class, () -> {
-            calculator.calculateEntry(entry1, entry2);
-        });
+        assertThrows(NumberFormatException.class, () ->
+            calculator.calculateEntry(entry1, entry2));
     }
 
     @Test
-    public void testCalculateEntry_OneDateAndInvalid() {
+    public void testCalculateEntryOneDateAndInvalid() {
         entry2 = "not-a-number";  // Invalid addition
-        assertThrows(NumberFormatException.class, () -> {
-            calculator.calculateEntry(entry1, entry2);
-        });
+        assertThrows(NumberFormatException.class, () ->
+            calculator.calculateEntry(entry1, entry2));
     }
 }

@@ -43,14 +43,10 @@ public class LogisticsActivity extends AppCompatActivity {
         });
 
         // observe the planned days
-        viewModel.getPlannedDaysLiveData().observe(this, plannedDays -> {
-            currentPlannedDays = plannedDays;
-        });
+        viewModel.getPlannedDaysLiveData().observe(this, plannedDays -> currentPlannedDays = plannedDays);
 
         // observe allocated days
-        viewModel.getAllocatedLiveData().observe(this, allocatedDays -> {
-            currentAllocatedDays = allocatedDays;
-        });
+        viewModel.getAllocatedLiveData().observe(this, allocatedDays -> currentAllocatedDays = allocatedDays);
 
         // observe the invitation live data
         viewModel.getInvitationLiveData().observe(this, invitation -> {
@@ -164,12 +160,10 @@ public class LogisticsActivity extends AppCompatActivity {
                 .setTitle("Trip Invitation")
                 .setMessage("You have been invited to a trip to " + invitation.getTripLocation()
                 + " with " + invitation.getInvitingUserEmail())
-                .setPositiveButton("Accept", (dialog, which) -> {
-                    viewModel.acceptInvitation(invitation);
-                })
-                .setNegativeButton("Reject", (dialog, which) -> {
-                    viewModel.updateInvitationStatus(invitation.getInvitationId(), "rejected");
-                })
+                .setPositiveButton("Accept", (dialog, which) ->
+                        viewModel.acceptInvitation(invitation))
+                .setNegativeButton("Reject", (dialog, which) ->
+                        viewModel.updateInvitationStatus(invitation.getInvitationId(), "rejected"))
                 .setCancelable(false) // prevent closing dialog without action
                 .show();
     }

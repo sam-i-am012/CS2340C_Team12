@@ -42,10 +42,9 @@ public class CollabNotesViewModel extends ViewModel {
     public LiveData<List<Note>> getNotesForTravelLog(String location, String locationId) {
         String currentUserId = firestoreSingleton.getCurrentUserId();
         firestoreSingleton.getNotesForTravelLog(location, currentUserId,
-                locationId).observeForever(notes -> {
+                locationId).observeForever(notes ->
                     // update the live data
-                    notesLiveData.setValue(notes);
-                });
+                    notesLiveData.setValue(notes));
         return notesLiveData;
     }
 
@@ -90,13 +89,11 @@ public class CollabNotesViewModel extends ViewModel {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection("invitations")
                         .add(invitationData)
-                        .addOnSuccessListener(documentReference -> {
+                        .addOnSuccessListener(documentReference ->
                             toastMessage.setValue("Invitation sent to " + email + " for location "
-                                    + location);
-                        })
-                        .addOnFailureListener(e -> {
-                            toastMessage.setValue("Error sending invitation: " + e.getMessage());
-                        });
+                                    + location))
+                        .addOnFailureListener(e ->
+                            toastMessage.setValue("Error sending invitation: " + e.getMessage()));
             } else {
                 toastMessage.setValue("No account found for this email.");
             }

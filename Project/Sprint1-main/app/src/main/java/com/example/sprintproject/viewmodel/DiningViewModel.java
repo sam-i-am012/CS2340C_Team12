@@ -61,19 +61,17 @@ public class DiningViewModel extends AndroidViewModel {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
-            repository.getDiningByUser(userId).observeForever(dinings -> {
+            repository.getDiningByUser(userId).observeForever(dinings ->
                 // Update LiveData with fetched reservations
-                diningLogs.setValue(dinings);
-            });
+                diningLogs.setValue(dinings));
         }
     }
 
     public void fetchDiningLogsForLocation(String locationId) {
         Log.d("Dining", "fetching dining logs for location: " + locationId);
-        repository.getDiningLogsByUserAndLocation(locationId).observeForever(dinings -> {
+        repository.getDiningLogsByUserAndLocation(locationId).observeForever(dinings ->
             // update LiveData with fetched reservations
-            diningLogsByLocation.setValue(dinings);
-        });
+            diningLogsByLocation.setValue(dinings));
     }
 
     public LiveData<List<Dining>> getDiningLogs() {

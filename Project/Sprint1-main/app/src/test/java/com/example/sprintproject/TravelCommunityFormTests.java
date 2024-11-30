@@ -9,9 +9,9 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 
-public class travelCommunityFormTests {
+public class TravelCommunityFormTests {
     @Test
-    public void testValidTravelLog_ValidCase() {
+    public void testValidTravelLogValidCase() {
         LocalDate startDate = LocalDate.of(2024, 11, 1);
         LocalDate endDate = LocalDate.of(2024, 11, 10);
         String destination = "Tokyo";
@@ -20,7 +20,7 @@ public class travelCommunityFormTests {
     }
 
     @Test
-    public void testValidTravelLog_InvalidCases() {
+    public void testValidTravelLogInvalidCases() {
         // Invalid destination
         LocalDate startDate = LocalDate.of(2024, 11, 1);
         LocalDate endDate = LocalDate.of(2024, 11, 10);
@@ -35,27 +35,27 @@ public class travelCommunityFormTests {
     }
 
     @Test
-    public void testValidDateRange_SameStartAndEndDate() {
+    public void testValidDateRangeSameStartAndEndDate() {
         LocalDate startDate = LocalDate.of(2024, 11, 1);
         LocalDate endDate = LocalDate.of(2024, 11, 1);
         assertFalse(FormValidator.isValidDateRange(startDate, endDate));
     }
 
     @Test
-    public void testValidDestination_WithLeadingAndTrailingSpaces() {
+    public void testValidDestinationWithLeadingAndTrailingSpaces() {
         String destination = "   London  ";
         assertTrue(FormValidator.isValidDestination(destination));
     }
     
     @Test
-    public void testValidDateRange_ValidCases() {
+    public void testValidDateRangeValidCases() {
         LocalDate startDate = LocalDate.of(2024, 11, 1);
         LocalDate endDate = LocalDate.of(2024, 11, 10);
         assertTrue(FormValidator.isValidDateRange(startDate, endDate));
     }
 
     @Test
-    public void testValidDateRange_InvalidCases() {
+    public void testValidDateRangeInvalidCases() {
         LocalDate startDate = LocalDate.of(2024, 11, 10);
         LocalDate endDate = LocalDate.of(2024, 11, 1);
         assertFalse(FormValidator.isValidDateRange(startDate, endDate));
@@ -65,13 +65,13 @@ public class travelCommunityFormTests {
     }
 
     @Test
-    public void testValidDestination_ValidCases() {
+    public void testValidDestinationValidCases() {
         assertTrue(FormValidator.isValidDestination("Paris"));
         assertTrue(FormValidator.isValidDestination(" New York "));
     }
 
     @Test
-    public void testValidDestination_InvalidCases() {
+    public void testValidDestinationInvalidCases() {
         assertFalse(FormValidator.isValidDestination(null));
         assertFalse(FormValidator.isValidDestination(""));
         assertFalse(FormValidator.isValidDestination("   "));

@@ -16,7 +16,7 @@ public class ReservationValidatorServiceTest {
     private String location = "Restaurant";
     private String website = "https://www.restaurant.com";
     private String time = "12:00 PM";
-    private String errorMessage_notFilledOut = "All entries must be filled out";
+    private String errorMessageNotFilledOut = "All entries must be filled out";
 
     @Before
     public void setUp() {
@@ -46,7 +46,7 @@ public class ReservationValidatorServiceTest {
 
         assertNotNull(result);
         assertFalse(result.isSuccess());
-        assertEquals(errorMessage_notFilledOut, result.getMessage());
+        assertEquals(errorMessageNotFilledOut, result.getMessage());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class ReservationValidatorServiceTest {
 
         assertNotNull(result);
         assertFalse(result.isSuccess());
-        assertEquals(errorMessage_notFilledOut, result.getMessage());
+        assertEquals(errorMessageNotFilledOut, result.getMessage());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class ReservationValidatorServiceTest {
         // Assert
         assertNotNull(result);
         assertFalse(result.isSuccess());
-        assertEquals(errorMessage_notFilledOut, result.getMessage());
+        assertEquals(errorMessageNotFilledOut, result.getMessage());
     }
 
     @Test
@@ -128,7 +128,7 @@ public class ReservationValidatorServiceTest {
 
         assertNotNull(result);
         assertFalse(result.isSuccess());
-        assertEquals(errorMessage_notFilledOut, result.getMessage());
+        assertEquals(errorMessageNotFilledOut, result.getMessage());
     }
 
     @Test
@@ -140,6 +140,6 @@ public class ReservationValidatorServiceTest {
 
         assertNotNull(result);
         assertFalse(result.isSuccess());
-        assertEquals(errorMessage_notFilledOut, result.getMessage());
+        assertEquals(errorMessageNotFilledOut, result.getMessage());
     }
 }
