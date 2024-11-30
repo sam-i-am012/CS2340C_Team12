@@ -12,32 +12,32 @@ import com.example.sprintproject.model.InputValidator;
  */
 public class InputValidatorTest {
     @Test
-    public void testIsValidEmail_InvalidEmailWithSpaces() {
+    public void testIsValidEmailInvalidEmailWithSpaces() {
         assertFalse(InputValidator.isValidEmail("  "));
     }
 
     @Test
-    public void testIsValidPassword_ValidPassword() {
+    public void testIsValidPasswordValidPassword() {
         assertTrue(InputValidator.isValidPassword("securepassword123"));
     }
 
     @Test
-    public void testIsValidPassword_EmptyPassword() {
+    public void testIsValidPasswordEmptyPassword() {
         assertFalse(InputValidator.isValidPassword(""));
     }
 
     @Test
-    public void testIsValidPassword_NullPassword() {
+    public void testIsValidPasswordNullPassword() {
         assertFalse(InputValidator.isValidPassword(null));
     }
 
     @Test
-    public void testIsValidEmail_EmptyEmail() {
+    public void testIsValidEmailEmptyEmail() {
         assertFalse(InputValidator.isValidEmail(""));
     }
 
     @Test
-    public void testIsValidEmail_NullEmail() {
+    public void testIsValidEmailNullEmail() {
         assertFalse(InputValidator.isValidEmail(null));
     }
 }

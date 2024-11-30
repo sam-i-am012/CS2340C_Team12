@@ -22,20 +22,19 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class AccommodationsActivity extends AppCompatActivity {
 
     private AccommodationViewModel accommodationViewModel;
-    private AccommodationsAdapter accommodationsAdapter;
-    private RecyclerView recyclerView;
-
     private ImageButton diningEstablishmentsButton;
     private ImageButton destinationsButton;
     private ImageButton logisticsButton;
     private ImageButton travelCommunityButton;
     private FloatingActionButton addAccommodationButton;
-    private Spinner locationSpinner;
     private String selectedDestinationId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RecyclerView recyclerView;
+        Spinner locationSpinner;
+        AccommodationsAdapter accommodationsAdapter;
         setContentView(R.layout.activity_accommodations); // The main layout
 
         initViews();
@@ -61,10 +60,9 @@ public class AccommodationsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Observe the LiveData for updates to logs
-        accommodationViewModel.getAccommodationLogs().observe(this, accommodations -> {
+        accommodationViewModel.getAccommodationLogs().observe(this, accommodations ->
             // update adapter when data changes
-            accommodationsAdapter.setAccommodations(accommodations);
-        });
+            accommodationsAdapter.setAccommodations(accommodations));
 
         // Navigation button logic
         navButtonsLogic();
